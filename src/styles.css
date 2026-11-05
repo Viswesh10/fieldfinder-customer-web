@@ -1,0 +1,1020 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap');
+:root{font-family:'DM Sans',Arial,sans-serif;color:#111827;background:#f7faf6;font-synthesis:none;text-rendering:optimizeLegibility;--ink:#111827;--muted:#4b5563;--line:#dce4da;--green:#b9f36b;--green-dark:#244a24;--pale:#eff7e8;--panel:#fff;--red:#b42318;--amber:#92400e}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f7faf6;color:var(--ink);font-size:15px;font-weight:600;line-height:1.5}button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #8cc84b;outline-offset:2px}.customer-shell{min-height:100vh;padding-bottom:27px}.topbar{height:76px;position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 34px}.brand{display:flex;align-items:center;gap:11px;font-family:Manrope,sans-serif;font-size:21px;font-weight:800;letter-spacing:-.7px;color:#111827}.brand-mark{width:39px;height:39px;border-radius:12px;background:var(--green);display:grid;place-items:center;color:#1c3218}.brand small{display:block;font:800 9px 'DM Sans';letter-spacing:1.8px;color:#4b5563;margin-top:2px}.brand-dot{color:#65a832}.topbar-right{display:flex;align-items:center;gap:20px}.demo-pill,.listing-count,.demo-tag{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;border-radius:30px;padding:8px 12px;font-size:12px;color:#374151;font-weight:700}.demo-pill i,.listing-count i{width:7px;height:7px;border-radius:50%;background:#78b83b}.profile-mini{display:flex;align-items:center;gap:9px;font-size:13px}.avatar,.side-avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#e6f2d9;color:#315b20;font-weight:800}.logout-btn{display:flex;align-items:center;gap:7px;padding:9px 13px;border:0;border-radius:8px;background:#182820;color:#fff;font-size:12px;font-weight:800}.mobile-menu{display:none;border:1px solid var(--line);border-radius:8px;background:#fff;padding:8px;color:#111827}.app-layout{display:flex;min-height:calc(100vh - 76px)}.sidebar{width:252px;flex:0 0 252px;background:#fff;border-right:1px solid var(--line);padding:28px 16px 24px;display:flex;flex-direction:column}.side-eyebrow,.side-label{font-size:10px;letter-spacing:1.5px;font-weight:800;color:#596579;padding:0 10px}.side-profile{display:flex;align-items:center;gap:10px;padding:13px 10px;margin:16px 0 30px;border:1px solid var(--line);border-radius:12px;background:#fbfdf9}.side-profile div{flex:1;min-width:0}.side-profile strong,.side-profile small{display:block}.side-profile strong{font-size:13px}.side-profile small{font-size:11px;color:#596579;margin-top:2px}.side-profile>svg{color:#65a832}.side-label{margin:0 0 9px}.sidebar nav{display:grid;gap:5px}.nav-item{height:46px;display:flex;align-items:center;gap:11px;padding:0 12px;background:transparent;border:0;border-radius:9px;text-align:left;color:#273449;font-size:14px;font-weight:700}.nav-item span{flex:1}.nav-item b{font-size:11px;background:#e5f1db;color:#315b20;border-radius:20px;padding:3px 7px}.nav-item:hover,.nav-item.active{background:#edf6e5;color:#193d1b;box-shadow:inset 3px 0 #a8e85e}.sidebar-help{margin-top:auto;border:1px solid var(--line);border-radius:12px;padding:14px;background:#fbfdf9;color:#253044}.sidebar-help strong{display:block;margin-top:9px;font-size:13px}.sidebar-help p{margin:5px 0 8px;font-size:12px;line-height:1.55;color:#4b5563}.sidebar-help span{font-size:10px;font-weight:800;color:#527a31}.sidebar-foot{margin:18px 8px 0;color:#667085;font-size:10px;font-weight:700;letter-spacing:1px}.main-content{flex:1;min-width:0;max-width:1600px;padding:27px 36px 80px;margin:0 auto}.breadcrumb{display:flex;gap:10px;align-items:center;color:#667085;font-size:12px;font-weight:600;margin:0 0 24px}.breadcrumb strong{color:#111827;font-weight:800}.page-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:24px}.section-kicker{display:block;color:#527d21;font-size:11px;letter-spacing:1.6px;font-weight:800;margin-bottom:7px}.page-heading h1{font:800 32px/1.2 Manrope,sans-serif;letter-spacing:-1px;margin:0;color:#101828}.page-heading p{margin:9px 0 0;color:#475467;font-size:15px;font-weight:600}.hero-banner{display:flex;align-items:center;justify-content:space-between;min-height:278px;border-radius:19px;padding:34px 40px;margin-bottom:34px;background:linear-gradient(135deg,#f1f8e9,#e4f1d9 55%,#d8ebca);border:1px solid #c9ddb9;overflow:hidden}.hero-copy{position:relative;z-index:1}.hero-tag{font-size:11px;letter-spacing:1.7px;color:#365314;font-weight:800}.hero-copy h2{font:800 43px/1.08 Manrope,sans-serif;letter-spacing:-1.8px;color:#111827;margin:13px 0 8px}.hero-copy h2 em{color:#244a24;font-style:normal}.hero-copy p{font-size:15px;color:#374151;font-weight:600;margin:0 0 18px}.primary-btn,.secondary-btn{min-height:43px;padding:11px 16px;display:inline-flex;align-items:center;justify-content:center;gap:9px;border-radius:9px;font-size:13px;font-weight:800}.primary-btn{border:1px solid #a7df5a;background:var(--green);color:#172516}.primary-btn:hover{background:#a8eb51}.secondary-btn{border:1px solid #cbd5c0;background:#fff;color:#1f2937}.secondary-btn:hover{background:#f1f7eb;border-color:#9dbd7b}.primary-btn.full,.secondary-btn.full{width:100%}.hero-art{width:260px;min-width:220px;height:210px;display:grid;place-items:center;position:relative}.hero-circle{width:184px;height:184px;border-radius:50%;background:linear-gradient(145deg,#b9f36b,#8bc34f);color:#1d3a19;display:grid;place-items:center;box-shadow:0 15px 40px #527c3d30;transform:rotate(-10deg)}.hero-stamp{position:absolute;color:#365314;font-size:11px;font-weight:800;letter-spacing:1.7px}.stamp-top{top:12px;right:4px}.stamp-bottom{bottom:8px;left:6px}.directory-section{scroll-margin-top:95px}.section-title-row{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:15px}.section-title-row h2{font:800 21px Manrope;margin:0;color:#111827}.section-title-row p{margin:4px 0 0;color:#596579;font-size:13px;font-weight:600}.search-field{min-width:290px;display:flex;align-items:center;gap:9px;background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:0 11px;color:#596579}.search-field input{width:100%;height:43px;border:0;outline:0;background:transparent;color:#111827;font-size:14px;font-weight:600}.search-field input::placeholder{color:#667085}.search-field button{border:0;background:transparent;color:#667085;padding:5px}.filter-toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:12px 0}.sport-filters{display:flex;flex-wrap:wrap;gap:8px}.sport-filters button,.booking-filters button{display:inline-flex;align-items:center;gap:6px;padding:9px 13px;border-radius:30px;border:1px solid #d0d5dd;background:#fff;color:#344054;font-size:12px;font-weight:800}.sport-filters button.selected,.booking-filters button.selected{background:#203a29;border-color:#203a29;color:#fff}.area-select{height:39px;display:flex;align-items:center;gap:8px;border:1px solid #d0d5dd;border-radius:9px;background:#fff;padding:0 10px;color:#596579}.area-select select{border:0;background:transparent;color:#1f2937;font-size:12px;font-weight:700;max-width:185px;outline:none}.venue-result-line{display:flex;justify-content:space-between;gap:12px;color:#667085;font-size:11px;font-weight:600;margin:12px 0}.venue-result-line b{color:#111827;font-weight:800}.venue-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.venue-card{min-width:0;overflow:hidden;text-align:left;padding:0;border:1px solid #d9e0e7;border-radius:14px;background:#fff;color:#111827;transition:transform .18s ease,box-shadow .18s ease}.venue-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px #1f293710;border-color:#b8cba8}.venue-photo{height:190px;background:#e7eee3;position:relative;overflow:hidden}.venue-photo img{width:100%;height:100%;object-fit:cover;display:block}.photo-badge{position:absolute;left:12px;top:12px;background:#fffE;color:#233326;border-radius:5px;padding:5px 8px;font-size:9px;font-weight:800;letter-spacing:.7px}.photo-arrow{position:absolute;right:12px;bottom:12px;width:34px;height:34px;border-radius:50%;background:var(--green);color:#173b20;display:grid;place-items:center}.venue-info{padding:14px}.venue-area{display:flex;align-items:center;gap:6px;color:#596579;font-size:12px;font-weight:600}.venue-info h3{font:800 17px Manrope,sans-serif;margin:7px 0;color:#101828}.venue-summary{min-height:38px;margin:0 0 11px;color:#4b5563;font-size:12px;font-weight:500;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.sport-tags{display:flex;flex-wrap:wrap;gap:6px}.sport-tags span{background:#eaf2e4;color:#29431e;border-radius:5px;padding:5px 8px;font-size:10px;font-weight:800}.venue-card-foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e8edf1;padding-top:11px;margin-top:13px;color:#475467;font-size:12px;font-weight:700}.venue-card-foot svg{color:#639a31}.find-players-banner{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:35px 0 18px;padding:23px 25px;border:1px solid #d4e3c8;border-radius:14px;background:#f1f8e9}.find-players-banner h2{margin:0;font:800 20px Manrope;color:#111827}.find-players-banner p{margin:5px 0 0;color:#475467;font-size:13px}.availability-note{display:flex;gap:10px;align-items:flex-start;padding:13px 15px;border:1px solid #d7e3d0;border-radius:10px;background:#fbfdf9;color:#475467;font-size:12px;font-weight:600;line-height:1.55;margin-top:20px}.availability-note svg{flex:0 0 auto;color:#54822a;margin-top:1px}.availability-note b{color:#253d1f}.empty-state{grid-column:1/-1;display:grid;justify-items:center;text-align:center;padding:42px 18px;border:1px dashed #cbd5e1;border-radius:12px;background:#fff;color:#475467}.empty-state strong{font-size:16px;color:#111827;margin-top:8px}.empty-state p{font-size:13px;margin:4px 0 15px}.modal-backdrop{position:fixed;inset:0;z-index:60;background:#0c1511a8;backdrop-filter:blur(4px);display:grid;place-items:center;padding:20px}.booking-modal{position:relative;width:min(1020px,100%);max-height:92vh;overflow:auto;display:grid;grid-template-columns:.78fr 1.22fr;background:#fff;border-radius:18px;box-shadow:0 24px 80px #10182840}.modal-close{position:absolute;right:13px;top:13px;z-index:5;width:36px;height:36px;border:1px solid #d7dee6;border-radius:50%;background:#fff;color:#17212f;display:grid;place-items:center}.modal-close svg{width:18px}.booking-modal-photo{position:relative;min-height:100%;background:#e6eee2}.booking-modal-photo img{position:sticky;top:0;width:100%;height:100%;min-height:550px;max-height:92vh;object-fit:cover}.booking-modal-photo>span{position:absolute;left:20px;top:20px;background:#fff;color:#1f2937;padding:7px 10px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:1px}.booking-modal-content{padding:30px 30px 26px;overflow-y:auto}.modal-heading h2{font:800 25px Manrope;margin:4px 0 7px;color:#111827}.modal-heading p{display:flex;gap:6px;align-items:flex-start;margin:0;color:#4b5563;font-size:12px;font-weight:600}.venue-description{color:#475467;font-size:13px;line-height:1.55;margin:13px 0}.modal-sports{margin:10px 0 14px}.demo-info{display:flex;align-items:center;gap:8px;background:#f4f8ee;border:1px solid #dbe8cf;border-radius:8px;padding:10px;color:#40543a;font-size:11px;font-weight:600}.booking-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:17px 0}.booking-fields label,.player-search-panel label{display:grid;gap:6px;color:#253044;font-size:12px;font-weight:800}.booking-fields input,.booking-fields select,.player-search-panel select{height:42px;width:100%;border:1px solid #cbd5e1;border-radius:8px;padding:0 11px;background:#fff;color:#111827;font-size:13px;font-weight:700}.slot-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin:17px 0 9px}.slot-heading strong,.slot-heading small{display:block}.slot-heading strong{color:#111827;font-size:14px;font-weight:800}.slot-heading small{color:#667085;font-size:11px;margin-top:2px}.slot-legend{display:flex;align-items:center;gap:5px;color:#667085;font-size:10px}.slot-legend i{width:7px;height:7px;border-radius:50%;background:#65a832}.slot-legend .busy-dot{margin-left:6px;background:#d0d5dd}.slot-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.slot-grid button{min-height:39px;padding:7px 4px;border:1px solid #b9d9a0;border-radius:7px;background:#f6fbf1;color:#31531f;font-size:11px;font-weight:800}.slot-grid button.chosen{background:#203a29;color:#fff;border-color:#203a29}.slot-grid button.unavailable{background:#f2f4f7;color:#98a2b3;border-color:#eaecf0;text-decoration:line-through}.slot-grid button small{display:block;font-size:9px;text-decoration:none}.price-coupon{margin:16px 0;padding:13px;border:1px solid #e0e6dc;border-radius:10px;background:#fcfdfb}.coupon-input{display:flex;gap:7px;margin-bottom:9px}.coupon-input input{flex:1;min-width:0;height:36px;border:1px solid #cbd5e1;border-radius:7px;padding:0 10px;font-size:12px;color:#111827}.coupon-input button{padding:0 12px;border:0;border-radius:7px;background:#e8f2de;color:#27451e;font-size:11px;font-weight:800}.coupon-error,.coupon-success{display:flex;align-items:center;gap:5px;font-size:10px;margin:3px 0 8px}.coupon-error{color:#b42318}.coupon-success{color:#287342}.price-line,.price-total{display:flex;justify-content:space-between;gap:12px;color:#475467;font-size:12px;padding:4px 0}.price-line strong{color:#111827}.discount-line,.discount-line strong{color:#24733a}.price-total{border-top:1px solid #e5e7eb;margin-top:6px;padding-top:10px;color:#111827;font-size:14px;font-weight:800}.price-total strong{font-size:20px;color:#111827}.rate-note{display:block;margin-top:5px;color:#667085;font-size:10px;line-height:1.45}.checkout-layer{z-index:80}.checkout-modal{position:relative;width:min(520px,100%);background:#fff;border-radius:17px;padding:28px;box-shadow:0 24px 80px #10182840}.checkout-modal h2{font:800 25px Manrope;margin:0;color:#111827}.checkout-sub{margin:6px 0 17px;color:#596579;font-size:13px}.checkout-venue{display:flex;justify-content:space-between;gap:15px;padding:13px;background:#f6f9f3;border:1px solid #e0e8d9;border-radius:9px}.checkout-venue strong,.checkout-venue span{display:block}.checkout-venue strong{font-size:13px;color:#111827}.checkout-venue span{font-size:11px;color:#596579;margin-top:4px}.checkout-venue>b{font-size:16px;color:#111827;white-space:nowrap}.checkout-breakdown{padding:12px 2px}.checkout-breakdown>div{display:flex;justify-content:space-between;padding:5px 0;color:#475467;font-size:12px}.checkout-breakdown b{color:#111827}.checkout-breakdown .discount-text{color:#24733a}.checkout-breakdown .total-row{border-top:1px solid #e5e7eb;margin-top:6px;padding-top:11px;color:#111827;font-weight:800}.total-row strong{font-size:20px}.checkout-modal h3{font-size:14px;color:#111827;margin:8px 0}.payment-options{display:grid;gap:8px}.payment-options button{display:flex;align-items:center;gap:12px;text-align:left;border:1px solid #d7dee6;border-radius:9px;padding:11px;background:#fff;color:#344054}.payment-options button.active{border-color:#75a94e;background:#f4faed}.payment-options button>svg{width:20px;color:#54822a}.payment-options span{flex:1}.payment-options b,.payment-options small{display:block}.payment-options b{font-size:12px;color:#111827}.payment-options small{font-size:10px;color:#667085;margin-top:2px}.payment-options button>i{width:14px;height:14px;border-radius:50%;border:2px solid #98a2b3}.payment-options button.active>i{border:4px solid #5b9238}.payment-disclaimer{display:flex;gap:8px;background:#fff8e8;color:#805b19;border:1px solid #f1dfb3;border-radius:8px;padding:10px;margin:13px 0;font-size:11px;font-weight:600}.payment-disclaimer svg{flex:0 0 auto}.booking-filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 17px}.customer-booking-list{display:grid;gap:12px}.customer-booking-card{display:flex;justify-content:space-between;gap:20px;padding:19px;background:#fff;border:1px solid #dce3eb;border-radius:13px}.booking-ref{color:#5b7d39;font-size:10px;font-weight:800;letter-spacing:1px}.booking-card-main h3{margin:5px 0;font:800 17px Manrope;color:#111827}.booking-card-main p{display:flex;gap:6px;align-items:center;margin:0;color:#596579;font-size:12px}.booking-facts{display:flex;flex-wrap:wrap;gap:15px;margin-top:13px}.booking-facts span{display:flex;align-items:center;gap:5px;color:#344054;font-size:12px;font-weight:700}.booking-card-side{display:flex;flex-direction:column;align-items:flex-end;gap:6px;min-width:180px}.booking-card-side>strong{font:800 19px Manrope;color:#111827}.booking-card-side small{font-size:10px;color:#667085}.status-pill{padding:5px 9px;border-radius:30px;font-size:10px;font-weight:800}.status-pill.pending{background:#fff4d6;color:#875c12}.status-pill.confirmed{background:#dcfce7;color:#166534}.status-pill.cancelled{background:#fee2e2;color:#991b1b}.text-danger{border:0;background:transparent;color:#b42318;font-size:11px;font-weight:800;text-decoration:underline}.player-search-panel{display:grid;grid-template-columns:1.2fr .65fr 1fr;gap:12px;padding:15px;background:#fff;border:1px solid var(--line);border-radius:12px}.player-search-panel .search-field{min-width:0;height:42px}.player-search-panel .search-field input{height:38px}.player-results-heading{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:22px 0 13px}.player-results-heading h2{font:800 18px Manrope;margin:0;color:#111827}.player-results-heading p{font-size:12px;color:#596579;margin:4px 0 0}.player-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.player-card{padding:17px;border:1px solid #dce4da;border-radius:12px;background:#fff}.player-card-top{display:flex;justify-content:space-between;align-items:center}.player-avatar,.profile-big-avatar{width:44px;height:44px;border-radius:50%;background:#e6f2d9;color:#315b20;display:grid;place-items:center;font-weight:800}.level-tag{padding:5px 8px;border-radius:20px;background:#f2f4f7;color:#475467;font-size:10px;font-weight:800}.player-card h3{margin:12px 0 4px;font:800 16px Manrope;color:#111827}.player-area{display:flex;align-items:center;gap:5px;color:#667085;font-size:12px;margin:0 0 10px}.player-detail{display:flex;align-items:center;gap:8px;color:#344054;font-size:12px;margin:9px 0}.player-note{min-height:35px;color:#667085;font-size:11px;margin:10px 0}.player-card .secondary-btn{margin-top:8px}.demo-caption{display:block;margin-top:8px;color:#667085;font-size:9px;text-align:center}.tournament-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}.tournament-week{margin:22px 0 30px}.week-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.week-heading h2{font:800 21px Manrope;color:#111827;margin:0}.week-heading>span{font-size:11px;color:#667085;font-weight:700}.tournament-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.tournament-card{display:flex;gap:14px;padding:16px;border:1px solid #dce4da;border-radius:12px;background:#fff}.tournament-icon{width:44px;height:44px;flex:0 0 auto;border-radius:11px;background:#e7f1dd;color:#315b20;display:grid;place-items:center}.tournament-icon.cricket{background:#fff1d5;color:#98651b}.tournament-icon.badminton{background:#e6f2fb;color:#28628c}.tournament-content{flex:1;min-width:0}.tournament-tags{display:flex;gap:6px}.tournament-tags span{font-size:9px;font-weight:800;border-radius:20px;padding:4px 7px;background:#f2f4f7;color:#475467}.tournament-content h3{font:800 15px Manrope;color:#111827;margin:8px 0}.tournament-location,.tournament-meta span{display:flex;align-items:center;gap:6px;color:#596579;font-size:11px}.tournament-meta{display:flex;gap:14px;flex-wrap:wrap;margin-top:9px}.tournament-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid #edf0f2;padding-top:11px;margin-top:11px}.tournament-bottom strong,.tournament-bottom small{display:block}.tournament-bottom strong{font-size:14px;color:#111827}.tournament-bottom small{font-size:10px;color:#667085}.profile-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:15px}.profile-card{padding:22px;background:#fff;border:1px solid var(--line);border-radius:13px}.profile-big-avatar{width:60px;height:60px;font-size:23px}.profile-card h2{font:800 21px Manrope;margin:12px 0 2px;color:#111827}.profile-card>p{margin:0;color:#667085;font-size:12px}.profile-info{display:grid;gap:9px;margin:18px 0}.profile-info span{display:flex;gap:8px;align-items:center;color:#344054;font-size:12px}.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.profile-stat{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:8px;padding:17px;background:#fff;border:1px solid var(--line);border-radius:12px}.profile-stat svg{color:#5b8d34}.profile-stat strong{font:800 20px Manrope;color:#111827}.profile-stat span{font-size:11px;color:#667085}.toast{position:fixed;z-index:100;right:22px;bottom:48px;display:flex;align-items:center;gap:9px;padding:13px 16px;border-radius:10px;background:#172c20;color:#fff;box-shadow:0 12px 30px #10182830;font-size:13px;font-weight:700;max-width:min(420px,calc(100vw - 30px))}.demo-ribbon{position:fixed;left:0;right:0;bottom:0;z-index:29;display:flex;align-items:center;justify-content:center;gap:7px;height:27px;background:#f3f7ee;border-top:1px solid #dce7d2;color:#4a6538;font-size:10px;font-weight:800;letter-spacing:.3px}.auth-screen{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;background:#f7faf6}.auth-decoration{min-height:100vh;position:relative;overflow:hidden;background:linear-gradient(140deg,#192f22,#284c2e 55%,#426a32);display:flex;align-items:center;padding:7vw;color:#fff}.auth-orb{position:absolute;border-radius:50%;background:#a6e95d18;border:1px solid #c1e99d30}.orb-one{width:520px;height:520px;right:-160px;top:-140px}.orb-two{width:340px;height:340px;left:-130px;bottom:-140px}.auth-left-copy{position:relative;z-index:1;max-width:540px}.auth-brand{color:#fff;margin-bottom:78px}.auth-brand small{color:#d0dec9}.auth-left-copy .kicker{font-size:11px;color:#c5ed9d;font-weight:800;letter-spacing:2px}.auth-left-copy h1{font:800 clamp(38px,4.4vw,62px)/1.05 Manrope;color:#fff;letter-spacing:-2px;margin:17px 0}.auth-left-copy h1 em{color:#c6f58c;font-style:normal}.auth-left-copy>p{font-size:16px;line-height:1.7;color:#e1eadc;max-width:440px}.auth-feature{display:flex;align-items:center;gap:10px;color:#eef4e9;font-size:13px;font-weight:700;margin-top:15px}.auth-feature span{width:30px;height:30px;border-radius:9px;background:#ffffff18;display:grid;place-items:center;color:#c6f58c}.auth-panel-wrap{display:grid;place-items:center;padding:35px}.auth-panel{width:min(460px,100%);padding:34px;background:#fff;border:1px solid #e0e7dc;border-radius:17px;box-shadow:0 18px 50px #1b30200d}.auth-mobile-brand{display:none;align-items:center;gap:10px;font:800 18px Manrope;margin-bottom:20px}.form-kicker{font-size:10px;color:#527d21;letter-spacing:1.6px;font-weight:800}.auth-panel h2{font:800 29px Manrope;margin:7px 0 5px;color:#111827}.auth-subtitle{font-size:13px;color:#596579;margin:0 0 18px}.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:5px;background:#f2f5ef;border-radius:9px;margin-bottom:18px}.auth-tabs button{height:39px;border:0;border-radius:7px;background:transparent;color:#475467;font-size:12px;font-weight:800}.auth-tabs button.active{background:#fff;color:#1a391c;box-shadow:0 1px 4px #10182815}.form-field{display:grid;gap:6px;margin:12px 0;color:#253044;font-size:12px;font-weight:800}.form-field>span small{font-size:10px;color:#667085;font-weight:600}.input-wrap{height:44px;display:flex;align-items:center;gap:9px;padding:0 11px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;color:#667085}.input-wrap:focus-within{border-color:#7cae50;box-shadow:0 0 0 3px #8cc84b22}.input-wrap input{height:100%;width:100%;min-width:0;border:0;outline:0;background:transparent;color:#111827;font-size:13px;font-weight:600}.input-wrap input::placeholder{color:#98a2b3}.show-password{border:0;background:transparent;color:#667085;padding:4px}.auth-panel .primary-btn{margin-top:8px}.form-error,.form-success{padding:9px 11px;border-radius:7px;font-size:11px;font-weight:700;margin:10px 0}.form-error{background:#fff1f0;border:1px solid #ffd1cc;color:#a4261b}.form-success{background:#f0f9eb;border:1px solid #cfe7bc;color:#356423}.demo-login{display:grid;gap:5px;background:#f7faf4;border:1px solid #e1ead8;border-radius:8px;padding:11px 12px;margin-top:15px;color:#344054;font-size:11px}.demo-login strong{color:#263f20;font-size:12px}.demo-login b{color:#111827}.demo-login small{margin-top:3px;color:#667085;line-height:1.4}.auth-terms{font-size:10px;line-height:1.5;color:#667085;margin:13px 0 0}.modal-backdrop .primary-btn:disabled{opacity:.45}
+@media(max-width:1100px){.venue-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.main-content{padding:25px 24px 75px}.sidebar{width:225px;flex-basis:225px}.hero-copy h2{font-size:39px}}
+@media(max-width:760px){.topbar{height:65px;padding:0 14px}.topbar-right{gap:8px}.demo-pill,.profile-mini strong,.logout-btn{display:none}.mobile-menu{display:grid}.app-layout{min-height:calc(100vh - 65px)}.sidebar{position:fixed;top:65px;bottom:27px;left:0;z-index:35;transform:translateX(-105%);transition:transform .2s;box-shadow:12px 0 30px #10182810}.sidebar.open{transform:translateX(0)}.main-content{padding:19px 15px 72px}.breadcrumb{margin-bottom:18px}.page-heading{display:block;margin-bottom:18px}.page-heading h1{font-size:27px}.page-heading p{font-size:13px}.listing-count{margin-top:12px}.hero-banner{min-height:230px;padding:22px 20px}.hero-copy h2{font-size:33px}.hero-copy p{font-size:12px;max-width:230px}.hero-art{width:130px;min-width:110px;height:160px}.hero-circle{width:112px;height:112px}.hero-circle svg{width:52px}.hero-stamp{font-size:8px}.section-title-row{display:grid}.search-field{min-width:0;width:100%}.filter-toolbar{align-items:flex-start;flex-direction:column}.venue-grid,.player-grid,.tournament-grid{grid-template-columns:1fr}.venue-photo{height:205px}.venue-result-line{font-size:10px}.booking-modal{display:block;max-height:94vh}.booking-modal-photo{height:150px;min-height:0}.booking-modal-photo img{height:150px;min-height:0;position:relative;max-height:none}.booking-modal-content{padding:22px 17px}.slot-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.booking-fields{grid-template-columns:1fr 1fr}.customer-booking-card{display:block}.booking-card-side{align-items:flex-start;margin-top:15px;min-width:0}.player-search-panel{grid-template-columns:1fr}.tournament-toolbar{align-items:flex-start;flex-direction:column}.profile-grid{grid-template-columns:1fr}.profile-stats{grid-template-columns:1fr 1fr}.auth-screen{grid-template-columns:1fr}.auth-decoration{display:none}.auth-panel-wrap{min-height:100vh;padding:18px}.auth-panel{padding:24px 19px}.auth-mobile-brand{display:flex}.demo-ribbon{font-size:9px}.find-players-banner{align-items:flex-start;flex-direction:column}}
+@media(max-width:390px){.hero-art{display:none}.booking-fields{grid-template-columns:1fr}.profile-stats{grid-template-columns:1fr}.slot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+
+.verification-hint{display:inline-flex;margin-top:7px;color:#805b19;background:#fff6df;border:1px solid #f0dfb5;border-radius:5px;padding:3px 6px;font-size:9px;font-weight:800;letter-spacing:.2px}
+.find-players-link{display:inline-flex;align-items:center;gap:7px;margin:2px 0 13px;padding:7px 10px;border:1px solid #cfddc5;border-radius:7px;background:#f5faef;color:#2f5521;font-size:11px;font-weight:800}
+.find-players-link:hover{background:#eaf5df;border-color:#9cbd82}
+
+/* Google Maps directions actions */
+.venue-card-wrap {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 7px;
+}
+.venue-card-wrap > .venue-card {
+  width: 100%;
+  flex: 1 1 auto;
+}
+.venue-directions-link,
+.venue-modal-directions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid #cbdcc0;
+  border-radius: 8px;
+  background: #f1f8e9;
+  color: #23451d !important;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 800;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.venue-directions-link:hover,
+.venue-modal-directions:hover {
+  background: #e5f2d9;
+  border-color: #8fb875;
+  transform: translateY(-1px);
+}
+.venue-directions-link {
+  align-self: flex-start;
+  margin: 0 0 4px 2px;
+}
+.venue-modal-directions {
+  width: 100%;
+  margin: 0 0 10px;
+}
+
+/* FieldFinder motion polish: subtle page entrances, tactile cards and accessible motion */
+@keyframes ff-customer-enter {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes ff-customer-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes ff-customer-float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0); }
+  50% { transform: translate3d(0, -9px, 0) rotate(2deg); }
+}
+.customer-shell .main-content > * {
+  animation: ff-customer-enter .48s cubic-bezier(.2,.72,.25,1) both;
+}
+.customer-shell .main-content > *:nth-child(2) { animation-delay: .045s; }
+.customer-shell .main-content > *:nth-child(3) { animation-delay: .09s; }
+.customer-shell .main-content > *:nth-child(4) { animation-delay: .135s; }
+.customer-shell .main-content > *:nth-child(5) { animation-delay: .18s; }
+.customer-shell .venue-card,
+.customer-shell .customer-booking-card,
+.customer-shell .player-card,
+.customer-shell .tournament-card,
+.customer-shell .profile-card,
+.customer-shell .profile-stat {
+  transition: transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .25s ease,
+              border-color .25s ease, background-color .25s ease;
+}
+.customer-shell .venue-card:hover {
+  transform: translateY(-7px);
+  border-color: #a9c892;
+  box-shadow: 0 18px 38px rgba(31, 66, 25, .13);
+}
+.customer-shell .venue-photo img {
+  transition: transform .65s cubic-bezier(.2,.7,.2,1), filter .35s ease;
+  will-change: transform;
+}
+.customer-shell .venue-card:hover .venue-photo img {
+  transform: scale(1.055);
+  filter: saturate(1.06);
+}
+.customer-shell .venue-card-foot svg { transition: transform .22s ease; }
+.customer-shell .venue-card:hover .venue-card-foot svg { transform: translateX(4px); }
+.customer-shell .customer-booking-card:hover,
+.customer-shell .player-card:hover,
+.customer-shell .tournament-card:hover,
+.customer-shell .profile-card:hover,
+.customer-shell .profile-stat:hover {
+  transform: translateY(-4px);
+  border-color: #c3d9b4;
+  box-shadow: 0 13px 30px rgba(31, 66, 25, .08);
+}
+.customer-shell .venue-card-wrap,
+.customer-shell .player-card,
+.customer-shell .tournament-card,
+.customer-shell .customer-booking-card {
+  animation: ff-customer-enter .48s cubic-bezier(.2,.72,.25,1) both;
+}
+.customer-shell .venue-card-wrap:nth-child(2),
+.customer-shell .player-card:nth-child(2),
+.customer-shell .tournament-card:nth-child(2) { animation-delay: .04s; }
+.customer-shell .venue-card-wrap:nth-child(3),
+.customer-shell .player-card:nth-child(3),
+.customer-shell .tournament-card:nth-child(3) { animation-delay: .08s; }
+.customer-shell .venue-card-wrap:nth-child(4),
+.customer-shell .player-card:nth-child(4),
+.customer-shell .tournament-card:nth-child(4) { animation-delay: .12s; }
+.customer-shell .venue-card-wrap:nth-child(5),
+.customer-shell .player-card:nth-child(5),
+.customer-shell .tournament-card:nth-child(5) { animation-delay: .16s; }
+.customer-shell .hero-banner {
+  box-shadow: 0 12px 32px rgba(54, 92, 35, .055);
+  transition: transform .28s ease, box-shadow .28s ease;
+}
+.customer-shell .hero-banner:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 38px rgba(54, 92, 35, .095);
+}
+.customer-shell .hero-circle { transition: transform .4s cubic-bezier(.2,.7,.2,1); }
+.customer-shell .hero-banner:hover .hero-circle { transform: rotate(-7deg) scale(1.055); }
+.customer-shell .hero-stamp { transition: transform .3s ease; }
+.customer-shell .hero-banner:hover .stamp-top { transform: translateY(-4px) rotate(-4deg); }
+.customer-shell .nav-item,
+.customer-shell .primary-btn,
+.customer-shell .secondary-btn,
+.customer-shell .logout-btn,
+.customer-shell .filter-toolbar button,
+.customer-shell .booking-filters button,
+.customer-shell .modal-close,
+.customer-shell .venue-directions-link,
+.customer-shell .venue-modal-directions,
+.customer-shell .find-players-link {
+  transition: color .2s ease, background-color .2s ease, border-color .2s ease,
+              box-shadow .2s ease, transform .2s cubic-bezier(.2,.7,.2,1);
+}
+.customer-shell .nav-item:hover { transform: translateX(3px); }
+.customer-shell .primary-btn:hover,
+.customer-shell .secondary-btn:hover,
+.customer-shell .logout-btn:hover,
+.customer-shell .venue-directions-link:hover,
+.customer-shell .venue-modal-directions:hover,
+.customer-shell .find-players-link:hover { transform: translateY(-2px); box-shadow: 0 7px 16px rgba(31, 66, 25, .1); }
+.customer-shell button:active { transform: translateY(0) scale(.98); }
+.customer-shell .auth-screen { animation: ff-customer-fade .45s ease both; }
+.customer-shell .auth-panel { animation: ff-customer-enter .55s cubic-bezier(.2,.72,.25,1) both; }
+.customer-shell .auth-orb { animation: ff-customer-float 10s ease-in-out infinite; }
+.customer-shell .auth-orb.orb-two { animation-delay: -5s; }
+.customer-shell .modal-backdrop { animation: ff-customer-fade .18s ease both; }
+.customer-shell .booking-modal,
+.customer-shell .checkout-modal { animation: ff-customer-enter .26s cubic-bezier(.2,.7,.2,1) both; }
+.customer-shell .toast { animation: ff-customer-enter .28s cubic-bezier(.2,.7,.2,1) both; }
+.customer-shell :focus-visible { outline: 3px solid rgba(117, 168, 75, .45); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .customer-shell *, .customer-shell *::before, .customer-shell *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* Customer app motion extension: animate the standalone sign-in screen too,
+   and add a little more tactile feedback to discovery and booking controls. */
+@keyframes ff-customer-auth-copy {
+  from { opacity: 0; transform: translateX(-14px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes ff-customer-soft-glow {
+  0%, 100% { opacity: .45; transform: scale(1); }
+  50% { opacity: .8; transform: scale(1.06); }
+}
+.auth-screen {
+  animation: ff-customer-fade .45s ease both;
+}
+.auth-decoration {
+  isolation: isolate;
+}
+.auth-decoration::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(circle at 78% 24%, rgba(190, 239, 135, .16), transparent 34%);
+  animation: ff-customer-soft-glow 8s ease-in-out infinite;
+}
+.auth-left-copy > * {
+  animation: ff-customer-auth-copy .55s cubic-bezier(.2,.72,.25,1) both;
+}
+.auth-left-copy > *:nth-child(2) { animation-delay: .06s; }
+.auth-left-copy > *:nth-child(3) { animation-delay: .11s; }
+.auth-left-copy > *:nth-child(4) { animation-delay: .16s; }
+.auth-left-copy > *:nth-child(5) { animation-delay: .21s; }
+.auth-left-copy > *:nth-child(6) { animation-delay: .26s; }
+.auth-panel {
+  animation: ff-customer-enter .58s cubic-bezier(.2,.72,.25,1) both;
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.auth-panel:hover {
+  transform: translateY(-3px);
+  border-color: #d1dfc7;
+  box-shadow: 0 24px 62px rgba(27, 48, 32, .11);
+}
+.auth-feature {
+  transition: transform .22s ease, color .22s ease;
+}
+.auth-feature:hover {
+  transform: translateX(5px);
+  color: #d8f4bd;
+}
+.auth-feature span {
+  transition: transform .22s ease, background-color .22s ease;
+}
+.auth-feature:hover span {
+  transform: rotate(-6deg) scale(1.08);
+  background: rgba(255, 255, 255, .24);
+}
+.auth-tabs button,
+.sport-filters button,
+.booking-filters button,
+.slot-grid button,
+.payment-options button {
+  transition: transform .2s cubic-bezier(.2,.7,.2,1), box-shadow .2s ease,
+              border-color .2s ease, background-color .2s ease, color .2s ease;
+}
+.auth-tabs button:hover:not(.active),
+.sport-filters button:hover,
+.booking-filters button:hover,
+.slot-grid button:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(31, 66, 25, .09);
+}
+.slot-grid button.chosen {
+  box-shadow: 0 0 0 3px rgba(167, 223, 90, .25);
+}
+.payment-options button:hover {
+  transform: translateY(-2px);
+  border-color: #b3cf9f;
+  box-shadow: 0 8px 18px rgba(31, 66, 25, .07);
+}
+.tournament-card .tournament-icon,
+.profile-big-avatar,
+.player-avatar {
+  transition: transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .25s ease;
+}
+.tournament-card:hover .tournament-icon,
+.player-card:hover .player-avatar,
+.profile-card:hover .profile-big-avatar {
+  transform: rotate(-5deg) scale(1.07);
+  box-shadow: 0 7px 16px rgba(31, 66, 25, .09);
+}
+.demo-login {
+  transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+.demo-login:hover {
+  transform: translateY(-2px);
+  border-color: #c4dcb5;
+  box-shadow: 0 8px 18px rgba(31, 66, 25, .06);
+}
+@media (prefers-reduced-motion: reduce) {
+  .auth-screen *, .auth-screen *::before, .auth-screen *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* Tournament team registration */
+.tournament-card .registration-view-btn { background:#f0f8e9; border-color:#c4dcb3; color:#294c20; }
+.registered-inline { display:flex; align-items:flex-start; gap:7px; margin-top:10px; padding:8px 10px; border:1px solid #d6e8c9; border-radius:8px; background:#f5faef; color:#315b20; font-size:10px; font-weight:800; line-height:1.45; }
+.registered-inline svg { flex:0 0 auto; margin-top:1px; }
+.my-tournament-registrations { margin:30px 0 20px; }
+.my-registration-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.my-registration-card { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:15px; border:1px solid #dce7d5; border-radius:12px; background:#fff; transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease; }
+.my-registration-card:hover { transform:translateY(-3px); border-color:#bfd5ad; box-shadow:0 12px 25px rgba(31,66,25,.08); }
+.registration-ref { color:#68804e; font-size:9px; font-weight:900; letter-spacing:1px; }
+.my-registration-card h3 { margin:4px 0; color:#111827; font:800 15px Manrope,sans-serif; }
+.my-registration-card p { margin:0 0 5px; color:#475467; font-size:11px; }
+.my-registration-card small { color:#667085; font-size:10px; }
+.registration-status { display:inline-flex; align-items:center; gap:5px; flex:0 0 auto; padding:6px 9px; border-radius:30px; background:#edf7e7; color:#315b20; font-size:10px; font-weight:800; }
+.tournament-modal-backdrop { z-index:80; }
+.tournament-registration-modal { width:min(760px,100%); max-height:min(92vh,900px); overflow:auto; border:1px solid #e1e8dc; border-radius:17px; background:#fff; box-shadow:0 28px 80px rgba(8,20,12,.28); padding:25px; animation:ff-customer-enter .28s cubic-bezier(.2,.7,.2,1) both; }
+.tournament-modal-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:17px; }
+.tournament-modal-heading h2 { margin:0; color:#111827; font:800 25px/1.2 Manrope,sans-serif; letter-spacing:-.5px; }
+.tournament-modal-heading p { margin:6px 0 0; color:#596579; font-size:13px; }
+.tournament-modal-heading .section-kicker { margin-bottom:6px; }
+.registration-event-strip { display:flex; align-items:center; flex-wrap:wrap; gap:10px 17px; padding:12px 14px; border:1px solid #e0e9d8; border-radius:10px; background:#f7faf4; color:#344054; font-size:11px; }
+.registration-event-strip span { display:inline-flex; align-items:center; gap:6px; }
+.registration-event-strip svg { color:#5b8d34; }
+.registration-event-strip strong { margin-left:auto; color:#172c20; font-size:12px; }
+.tournament-registration-form { padding-top:17px; }
+.registration-form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px 14px; }
+.registration-field { display:grid; gap:6px; margin:7px 0 10px; color:#253044; font-size:11px; font-weight:800; }
+.registration-field small,.roster-input-row label small { color:#667085; font-size:10px; font-weight:600; }
+.registration-field input,.roster-input-row input { width:100%; min-width:0; height:42px; padding:0 11px; border:1px solid #cbd5e1; border-radius:8px; outline:none; background:#fff; color:#111827; font-size:12px; font-weight:600; transition:border-color .18s ease, box-shadow .18s ease; }
+.registration-field input:focus,.roster-input-row input:focus { border-color:#7cae50; box-shadow:0 0 0 3px rgba(140,200,75,.17); }
+.registration-field input::placeholder,.roster-input-row input::placeholder { color:#98a2b3; }
+.roster-editor { margin-top:13px; padding:14px; border:1px solid #e0e7dc; border-radius:11px; background:#fbfdf9; }
+.roster-editor-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:11px; }
+.roster-editor-heading h3,.roster-summary-heading h3 { margin:0; color:#111827; font:800 14px Manrope,sans-serif; }
+.roster-editor-heading h3 span,.roster-summary-heading span { display:inline-grid; place-items:center; min-width:20px; height:20px; margin-left:5px; padding:0 5px; border-radius:20px; background:#e8f2df; color:#355d25; font:800 10px 'DM Sans',sans-serif; }
+.roster-editor-heading p { margin:4px 0 0; color:#667085; font-size:10px; font-weight:600; }
+.add-roster-btn { display:inline-flex; align-items:center; gap:5px; flex:0 0 auto; padding:7px 10px; border:1px solid #cbdcc0; border-radius:7px; background:#fff; color:#315b20; font-size:10px; font-weight:800; transition:transform .18s ease, box-shadow .18s ease, background .18s ease; }
+.add-roster-btn:hover { transform:translateY(-1px); background:#f0f8e9; box-shadow:0 5px 12px rgba(31,66,25,.07); }
+.roster-input-row { display:grid; grid-template-columns:28px minmax(0,1.2fr) minmax(0,1fr) 30px; align-items:end; gap:9px; padding:9px 0; border-top:1px solid #edf1e9; }
+.roster-number { align-self:center; color:#8a9a7c; font-size:10px; font-weight:900; }
+.roster-input-row label { display:grid; gap:5px; color:#344054; font-size:10px; font-weight:800; }
+.roster-input-row input { height:38px; font-size:11px; }
+.remove-roster-btn { width:29px; height:29px; display:grid; place-items:center; margin-bottom:4px; border:1px solid #e2e8df; border-radius:7px; background:#fff; color:#7c8795; }
+.remove-roster-btn:hover:not(:disabled) { border-color:#f0c2bd; background:#fff5f4; color:#b42318; }
+.remove-roster-btn:disabled { opacity:.35; cursor:not-allowed; }
+.registration-form-note { display:flex; align-items:flex-start; gap:7px; margin-top:15px; color:#667085; font-size:10px; line-height:1.5; }
+.registration-form-note svg { color:#5b8d34; flex:0 0 auto; }
+.registration-form-actions { display:flex; justify-content:flex-end; gap:9px; margin-top:17px; padding-top:14px; border-top:1px solid #edf0f2; }
+.registration-detail-view { padding-top:16px; }
+.registration-success { display:flex; align-items:center; gap:10px; padding:12px 14px; border:1px solid #cfe4c0; border-radius:10px; background:#f1f8eb; color:#315b20; }
+.registration-success > svg { flex:0 0 auto; }
+.registration-success strong,.registration-success small { display:block; }
+.registration-success strong { font-size:13px; }
+.registration-success small { margin-top:2px; color:#59734a; font-size:10px; }
+.registration-detail-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:14px 0; }
+.registration-detail-grid > div { padding:10px 12px; border:1px solid #e5eae2; border-radius:8px; background:#fff; }
+.registration-detail-grid small,.registration-detail-grid strong { display:block; }
+.registration-detail-grid small { color:#667085; font-size:10px; }
+.registration-detail-grid strong { margin-top:3px; color:#172b1e; font-size:12px; overflow-wrap:anywhere; }
+.roster-summary { margin:13px 0; padding:13px; border:1px solid #e2e9de; border-radius:10px; background:#fbfdf9; }
+.roster-summary-heading { display:flex; align-items:center; gap:5px; margin-bottom:8px; }
+.roster-summary-list { display:grid; gap:6px; }
+.roster-summary-list > div { display:flex; align-items:center; gap:9px; padding:7px 8px; border-radius:7px; background:#fff; }
+.roster-summary-index { color:#829176; font-size:10px; font-weight:900; }
+.roster-summary-list strong { color:#253044; font-size:11px; }
+.roster-summary-list small { margin-left:auto; color:#667085; font-size:10px; text-align:right; }
+.roster-empty { margin:0; color:#667085; font-size:11px; }
+@media(max-width:760px) {
+  .my-registration-list { grid-template-columns:1fr; }
+  .tournament-registration-modal { max-height:94vh; padding:19px 15px; }
+  .tournament-modal-heading h2 { font-size:22px; }
+  .registration-form-grid,.registration-detail-grid { grid-template-columns:1fr; }
+  .registration-event-strip { align-items:flex-start; flex-direction:column; gap:7px; }
+  .registration-event-strip strong { margin-left:0; }
+  .roster-input-row { grid-template-columns:22px minmax(0,1fr) minmax(0,1fr) 28px; gap:6px; }
+  .roster-editor { padding:11px; }
+  .roster-editor-heading { align-items:flex-start; }
+  .registration-form-actions { flex-direction:column-reverse; }
+  .registration-form-actions button { width:100%; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .tournament-registration-modal,.my-registration-card,.add-roster-btn { animation-duration:.01ms !important; transition-duration:.01ms !important; }
+}
+
+
+/* New FieldFinder activities, event marquee, Bootstrap account menu and venue media */
+.customer-account-dropdown .dropdown-toggle::after{margin-left:8px;color:#526b47}
+.customer-account-dropdown .dropdown-menu{min-width:190px;padding:7px;border:1px solid #dce4da;border-radius:12px;box-shadow:0 16px 42px rgba(18,38,20,.14);font:600 13px 'DM Sans',sans-serif}
+.customer-account-dropdown .dropdown-item{border-radius:7px;padding:9px 11px;color:#253044;font-weight:700}
+.customer-account-dropdown .dropdown-item:hover{background:#eff7e8;color:#1e3d1d}
+.home-announcement-marquee{display:flex;align-items:center;gap:0;overflow:hidden;min-height:48px;margin:0 0 28px;border:1px solid #d5e4ca;border-radius:11px;background:#fff;box-shadow:0 5px 18px rgba(39,73,27,.045)}
+.marquee-label{height:100%;min-height:46px;display:flex;align-items:center;gap:8px;padding:0 15px;background:#213a2b;color:#fff;font-size:10px;font-weight:900;letter-spacing:1.1px;white-space:nowrap;z-index:1}
+.marquee-window{min-width:0;overflow:hidden;flex:1}
+.marquee-track{display:flex;align-items:center;width:max-content;animation:ff-marquee-scroll 52s linear infinite}
+.marquee-track:hover{animation-play-state:paused}
+.marquee-track>span{display:inline-flex;align-items:center;gap:9px;padding:0 23px;color:#344054;font-size:11px;font-weight:800;white-space:nowrap}
+.marquee-track>span i{width:7px;height:7px;border-radius:50%;background:#79b943;flex:0 0 auto}
+@keyframes ff-marquee-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.adventure-intro-strip{display:flex;align-items:center;gap:10px;padding:14px 16px;margin:0 0 18px;border:1px solid #d4e4ca;border-radius:11px;background:#f1f8e9;color:#31502a;font-size:12px;font-weight:700}
+.adventure-event-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
+.adventure-event-card{min-width:0;overflow:hidden;border:1px solid #dce4da;border-radius:16px;background:#fff;box-shadow:0 7px 22px rgba(20,40,20,.045)}
+.adventure-card-art{height:148px;display:flex;align-items:center;justify-content:space-between;padding:24px 28px;background:linear-gradient(120deg,#eaf5e2,#d7edca);color:#264624}
+.adventure-event-card.trekking .adventure-card-art{background:linear-gradient(120deg,#e6f0ed,#cfe2d6);color:#234d40}.adventure-event-card.cycling .adventure-card-art{background:linear-gradient(120deg,#e8f1e5,#d4e7c9);color:#284d25}
+.adventure-card-art>span{width:76px;height:76px;display:grid;place-items:center;border-radius:24px;background:#ffffffb8;box-shadow:0 8px 24px rgba(33,65,31,.08)}
+.adventure-card-art>b{font-size:11px;letter-spacing:2px;font-weight:900}
+.adventure-card-body{padding:22px}
+.adventure-card-body h2{margin:0;color:#111827;font:800 21px/1.2 Manrope,sans-serif}
+.adventure-card-body>p{min-height:50px;margin:9px 0 15px;color:#596579;font-size:12px;line-height:1.6}
+.adventure-facts{display:grid;gap:8px;margin:13px 0;color:#475467;font-size:11px;font-weight:700}
+.adventure-facts span{display:flex;align-items:center;gap:7px}
+.adventure-options{padding:12px 0;border-top:1px solid #edf0ea}
+.adventure-options>strong{display:block;margin-bottom:8px;color:#344054;font-size:11px}
+.adventure-options>div{display:flex;flex-wrap:wrap;gap:6px}
+.adventure-options span{padding:5px 8px;border-radius:6px;background:#f0f5eb;color:#36562c;font-size:10px;font-weight:800}
+.adventure-card-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:13px;border-top:1px solid #edf0ea}
+.adventure-card-footer>div strong,.adventure-card-footer>div small{display:block}
+.adventure-card-footer>div strong{color:#111827;font-size:16px;font-weight:900}
+.adventure-card-footer>div small{margin-top:2px;color:#667085;font-size:10px}
+.adventure-card-footer button{font-size:11px;padding:9px 12px}
+.venue-media-gallery{margin:17px 0;padding:14px;border:1px solid #e1eadb;border-radius:11px;background:#fbfdf9}
+.gallery-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px}
+.gallery-heading h3{display:flex;align-items:center;gap:7px;margin:0;color:#17251b;font:800 14px Manrope,sans-serif}
+.gallery-heading span{color:#667085;font-size:10px;font-weight:800}
+.venue-media-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.venue-media-item{min-width:0;overflow:hidden;border:1px solid #e1e7dd;border-radius:9px;background:#fff}
+.venue-media-item img,.venue-media-item video{display:block;width:100%;height:145px;object-fit:cover;background:#101828}
+.venue-media-item small{display:block;padding:7px 9px;color:#475467;font-size:10px;font-weight:700;overflow-wrap:anywhere}
+@media(max-width:900px){.adventure-event-grid{grid-template-columns:1fr}.adventure-card-body>p{min-height:0}}
+@media(max-width:760px){.home-announcement-marquee{margin:0 0 21px}.marquee-label{min-height:42px;padding:0 10px;font-size:9px}.marquee-track>span{padding:0 15px;font-size:10px}.adventure-card-art{height:115px;padding:16px 20px}.adventure-card-art>span{width:62px;height:62px}.adventure-card-body{padding:17px}.adventure-card-footer{align-items:flex-start;flex-direction:column}.adventure-card-footer button{width:100%}.venue-media-grid{grid-template-columns:1fr 1fr}.venue-media-item img,.venue-media-item video{height:112px}.customer-account-dropdown .profile-mini strong{display:none}.customer-account-dropdown .profile-mini{padding:0}.customer-account-dropdown .dropdown-menu{right:0;left:auto}}
+@media(max-width:390px){.venue-media-grid{grid-template-columns:1fr}.venue-media-item img,.venue-media-item video{height:160px}.marquee-label{font-size:8px}.adventure-card-body h2{font-size:19px}}
+@media(prefers-reduced-motion:reduce){.marquee-track{animation:none}.marquee-window{overflow-x:auto}}
+
+.customer-account-dropdown .profile-mini{padding:0;border:0;background:transparent;color:#111827}
+
+/* November 2026 refinement: fixed customer navigation, top-level clickable ticker,
+   lower-cost scrolling and expanded trekking trip information. */
+@media (min-width: 761px) {
+  .customer-shell .sidebar {
+    position: sticky;
+    top: 76px;
+    align-self: flex-start;
+    height: calc(100vh - 103px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+}
+.customer-shell .main-content { min-height: calc(100vh - 103px); }
+.customer-shell .home-announcement-marquee {
+  position: relative;
+  z-index: 2;
+  margin: 0 0 23px;
+  contain: layout paint;
+}
+.customer-shell .marquee-window { min-width: 0; }
+.customer-shell .marquee-track {
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+  will-change: transform;
+  animation-duration: 64s;
+}
+.customer-shell .marquee-item {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 46px;
+  padding: 0 22px;
+  border: 0;
+  border-right: 1px solid #edf1e9;
+  border-radius: 0;
+  background: transparent;
+  color: #344054;
+  font: 800 11px 'DM Sans', sans-serif;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color .16s ease, color .16s ease;
+}
+.customer-shell .marquee-item i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #79b943;
+  flex: 0 0 auto;
+}
+.customer-shell .marquee-item svg { color: #719c4c; opacity: .65; }
+.customer-shell .marquee-item:hover,
+.customer-shell .marquee-item:focus-visible {
+  background: #f1f8e9;
+  color: #244a24;
+}
+.customer-shell .marquee-track:hover { animation-play-state: paused; }
+.customer-shell .home-announcement-marquee + .page-heading { margin-top: 0; }
+
+/* Keep scrolling responsive: remove per-card entrance animations that stacked up
+   across the full venue directory; preserve lightweight hover feedback. */
+.customer-shell .main-content > *,
+.customer-shell .venue-card-wrap,
+.customer-shell .player-card,
+.customer-shell .tournament-card,
+.customer-shell .customer-booking-card {
+  animation: none !important;
+}
+.customer-shell .venue-card,
+.customer-shell .customer-booking-card,
+.customer-shell .player-card,
+.customer-shell .tournament-card,
+.customer-shell .profile-card,
+.customer-shell .profile-stat {
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+.customer-shell .venue-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 9px 20px rgba(31,66,25,.09);
+}
+.customer-shell .customer-booking-card:hover,
+.customer-shell .player-card:hover,
+.customer-shell .tournament-card:hover,
+.customer-shell .profile-card:hover,
+.customer-shell .profile-stat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(31,66,25,.07);
+}
+.customer-shell .venue-photo img { transition: transform .24s ease; }
+.customer-shell .venue-card:hover .venue-photo img { transform: scale(1.025); }
+.customer-shell .marquee-track { animation-timing-function: linear; }
+.customer-shell .adventure-event-card { scroll-margin-top: 96px; }
+.customer-shell .tournament-card { scroll-margin-top: 96px; }
+@keyframes ff-announcement-highlight {
+  0% { box-shadow: 0 0 0 0 rgba(139,196,85,0); border-color: #dce4da; }
+  25% { box-shadow: 0 0 0 5px rgba(139,196,85,.2); border-color: #8fbd69; }
+  100% { box-shadow: 0 0 0 0 rgba(139,196,85,0); border-color: #dce4da; }
+}
+.customer-shell .announcement-focus { animation: ff-announcement-highlight 1.8s ease-out 1 !important; }
+
+.trek-detail-panel {
+  margin: 13px 0 2px;
+  border: 1px solid #dce8d3;
+  border-radius: 11px;
+  background: #fbfdf9;
+  overflow: hidden;
+}
+.trek-detail-panel > summary {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 45px;
+  padding: 10px 12px;
+  color: #2c5128;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  list-style: none;
+}
+.trek-detail-panel > summary::-webkit-details-marker { display: none; }
+.trek-detail-panel > summary svg:last-child { margin-left: auto; transition: transform .16s ease; }
+.trek-detail-panel[open] > summary svg:last-child { transform: rotate(180deg); }
+.trek-detail-content { padding: 4px 12px 13px; border-top: 1px solid #e8efe2; }
+.trek-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 13px 0 8px; }
+.trek-section-heading strong { color: #253c25; font-size: 12px; font-weight: 900; }
+.trek-section-heading small { color: #667085; font-size: 10px; font-weight: 700; }
+.trek-itinerary { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.trek-itinerary li { display: grid; grid-template-columns: 105px minmax(0,1fr); gap: 10px; padding: 7px 0; border-bottom: 1px dashed #e5ebdf; }
+.trek-itinerary time { color: #4d7734; font-size: 10px; font-weight: 900; }
+.trek-itinerary li span { color: #475467; font-size: 11px; line-height: 1.45; font-weight: 650; }
+.trek-package-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
+.trek-package { min-width: 0; padding: 10px; border: 1px solid #e1e9da; border-radius: 9px; background: #fff; }
+.trek-package > div { display: flex; flex-direction: column; gap: 4px; }
+.trek-package > div strong { color: #243b24; font-size: 11px; line-height: 1.3; }
+.trek-package > div b { color: #111827; font-size: 13px; }
+.trek-package ul { display: grid; gap: 5px; margin: 8px 0 0; padding-left: 15px; color: #667085; font-size: 10px; line-height: 1.4; }
+.trek-carry-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.trek-carry-list span { display: inline-flex; align-items: center; gap: 5px; padding: 5px 7px; border-radius: 6px; background: #eef6e8; color: #3c5a30; font-size: 10px; font-weight: 750; }
+.trek-disclaimer { margin: 11px 0 0; color: #7a5c21; font-size: 10px; line-height: 1.5; }
+.trek-package-select small { color: #4d7734; font-size: 11px; font-weight: 800; }
+
+@media (max-width: 760px) {
+  .customer-shell .sidebar {
+    position: fixed;
+    top: 65px;
+    bottom: 27px;
+    left: 0;
+    height: auto;
+    width: 252px;
+    align-self: auto;
+    overflow-y: auto;
+  }
+  .customer-shell .home-announcement-marquee { margin-bottom: 18px; }
+  .customer-shell .marquee-item { min-height: 42px; padding: 0 15px; font-size: 10px; }
+  .trek-package-grid { grid-template-columns: 1fr; }
+  .trek-itinerary li { grid-template-columns: 88px minmax(0,1fr); gap: 7px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .customer-shell .marquee-track { animation: none !important; }
+  .customer-shell .marquee-window { overflow-x: auto; }
+  .customer-shell .announcement-focus { animation: none !important; }
+}
+
+/* Polished Bootstrap dropdown controls for Find Players. The Bootstrap
+   dropdown/menu classes are retained, with FieldFinder sizing and colours. */
+.player-search-panel { align-items: end; overflow: visible; }
+.ff-dropdown-field { min-width: 0; display: grid; gap: 7px; position: relative; }
+.ff-dropdown-label { display: block; color: #344054; font-size: 11px; font-weight: 800; line-height: 1.2; }
+.ff-bootstrap-dropdown { position: relative; width: 100%; min-width: 0; }
+.ff-bootstrap-dropdown > .ff-dropdown-toggle {
+  width: 100%; min-height: 44px; display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 0 13px; border: 1px solid #cbd5e1; border-radius: 9px;
+  background: #fff; color: #243044; text-align: left; box-shadow: none;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700;
+  transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease;
+}
+.ff-bootstrap-dropdown > .ff-dropdown-toggle::after { display: none; }
+.ff-bootstrap-dropdown > .ff-dropdown-toggle:hover,
+.ff-bootstrap-dropdown.show > .ff-dropdown-toggle,
+.ff-bootstrap-dropdown > .ff-dropdown-toggle:focus-visible {
+  border-color: #8dbb61; background: #fff; color: #1e3b25; box-shadow: 0 0 0 3px #8cc84b20;
+}
+.ff-dropdown-current { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ff-dropdown-menu.dropdown-menu {
+  position: absolute; inset: calc(100% + 7px) auto auto 0; z-index: 1085;
+  display: none; width: 100%; min-width: 0; max-height: 350px; padding: 7px;
+  overflow: hidden; border: 1px solid #d8e3d2; border-radius: 12px;
+  background: #fff; box-shadow: 0 18px 42px #182b1c20;
+}
+.ff-dropdown-menu.dropdown-menu.show { display: block; }
+.ff-dropdown-search {
+  min-height: 39px; display: flex; align-items: center; gap: 8px; padding: 0 10px;
+  margin-bottom: 6px; border: 1px solid #dce5d7; border-radius: 8px;
+  color: #718096; background: #fbfdf9;
+}
+.ff-dropdown-search:focus-within { border-color: #8dbb61; box-shadow: 0 0 0 3px #8cc84b1c; }
+.ff-dropdown-search input { min-width: 0; width: 100%; height: 35px; padding: 0; border: 0; outline: 0; background: transparent; color: #17212f; font: 600 12px 'DM Sans', sans-serif; box-shadow: none; }
+.ff-dropdown-search input:focus { box-shadow: none; }
+.ff-dropdown-search button { display: grid; place-items: center; padding: 3px; border: 0; background: transparent; color: #667085; }
+.ff-dropdown-options { max-height: 260px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #c7d6bc transparent; }
+.ff-dropdown-item.dropdown-item {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  width: 100%; min-height: 48px; padding: 8px 10px; border: 0; border-radius: 8px;
+  background: #fff; color: #243044; text-align: left; white-space: normal;
+  transition: background-color .13s ease, color .13s ease;
+}
+.ff-dropdown-item.dropdown-item:hover,
+.ff-dropdown-item.dropdown-item:focus-visible { background: #f2f8ec; color: #244a24; }
+.ff-dropdown-item.dropdown-item.selected { background: #edf6e5; color: #244a24; }
+.ff-option-copy { display: grid; gap: 2px; min-width: 0; }
+.ff-option-copy strong { overflow: hidden; text-overflow: ellipsis; font: 700 12px 'DM Sans', sans-serif; }
+.ff-option-copy small { color: #667085; font: 500 10px 'DM Sans', sans-serif; }
+.ff-dropdown-item > svg { flex: 0 0 auto; color: #5c9230; }
+.ff-dropdown-empty { padding: 18px 10px; color: #667085; font-size: 11px; text-align: center; }
+.ff-dropdown-footer { padding: 8px 10px 3px; border-top: 1px solid #edf1e9; color: #7a8493; font-size: 10px; font-weight: 700; }
+@media (max-width: 760px) {
+  .player-search-panel { overflow: visible; }
+  .ff-dropdown-menu.dropdown-menu { max-height: min(340px, 52vh); }
+  .ff-dropdown-options { max-height: min(250px, 38vh); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ff-bootstrap-dropdown > .ff-dropdown-toggle, .ff-dropdown-item.dropdown-item { transition: none; }
+}
+
+/* Verified event listings: organiser-sourced prices, dates and trail details. */
+.customer-shell .adventure-event-card.tournament .adventure-card-art {
+  background: linear-gradient(120deg, #f4efdc, #eadcb4);
+  color: #68501d;
+}
+.customer-shell .adventure-card-footer a.primary-btn {
+  flex: 0 0 auto;
+  text-decoration: none;
+  font-size: 11px;
+  padding: 9px 12px;
+}
+.customer-shell .verified-source-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 11px;
+  color: #667085;
+  font-size: 10px;
+  line-height: 1.4;
+}
+.customer-shell .verified-source-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #426b2a;
+  font-weight: 850;
+  text-decoration: none;
+}
+.customer-shell .verified-source-link a:hover { text-decoration: underline; }
+.customer-shell .verified-event-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 10px 0 12px;
+  padding: 9px 10px;
+  border: 1px solid #eadfbd;
+  border-radius: 8px;
+  background: #fffaf0;
+  color: #72551e;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+.customer-shell .verified-event-note svg { flex: 0 0 auto; margin-top: 1px; }
+.customer-shell .verified-event-list {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding-left: 18px;
+  color: #475467;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.customer-shell .adventure-options .event-category-soldout {
+  background: #fff0ef;
+  color: #a12d24;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+@media (max-width: 760px) {
+  .customer-shell .adventure-card-footer a.primary-btn { width: 100%; }
+  .customer-shell .verified-source-link { align-items: flex-start; }
+}
+
+/* FieldFinder visual refinement: card-led announcement rail, low-cost reveal-on-scroll,
+   and consistent Bootstrap dropdown controls across the customer experience. */
+.customer-shell .home-announcement-marquee {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  min-height: 112px;
+  padding: 8px;
+  border: 1px solid #d8e6cf;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #fbfef8, #f1f8eb);
+  box-shadow: 0 7px 22px rgba(39, 73, 27, .055);
+  overflow: hidden;
+  contain: layout paint;
+}
+.customer-shell .marquee-label {
+  width: 105px;
+  min-width: 105px;
+  min-height: 94px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 11px;
+  padding: 9px 8px;
+  background: #203a29;
+  color: #fff;
+  text-align: center;
+}
+.customer-shell .marquee-label > span { font-size: 10px; font-weight: 900; letter-spacing: 1px; }
+.customer-shell .marquee-label > small { color: #c9ef9b; font-size: 8px; font-weight: 850; letter-spacing: 1.5px; }
+.customer-shell .marquee-window {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+  margin-left: 9px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+.customer-shell .marquee-track {
+  display: flex;
+  align-items: stretch;
+  width: max-content;
+  gap: 0;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  animation: ff-marquee-cards 76s linear infinite;
+}
+.customer-shell .marquee-group {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  padding-right: 10px;
+}
+.customer-shell .marquee-card {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 10px;
+  width: 292px;
+  min-width: 292px;
+  min-height: 88px;
+  padding: 11px 12px;
+  border: 1px solid #dce8d4;
+  border-radius: 12px;
+  background: #fff;
+  color: #243044;
+  text-align: left;
+  white-space: normal;
+  box-shadow: 0 3px 11px rgba(31, 66, 25, .045);
+  transition: border-color .16s ease, background-color .16s ease, box-shadow .16s ease;
+}
+.customer-shell .marquee-card:hover,
+.customer-shell .marquee-card:focus-visible {
+  border-color: #a7ca8e;
+  background: #fbfff7;
+  box-shadow: 0 7px 17px rgba(31, 66, 25, .09);
+}
+.customer-shell .marquee-card-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: #eef7e7;
+  color: #47742d;
+}
+.customer-shell .marquee-card-copy { display: grid; min-width: 0; gap: 2px; }
+.customer-shell .marquee-card-copy small {
+  overflow: hidden;
+  color: #67963c;
+  font: 900 8px/1.3 'DM Sans', sans-serif;
+  letter-spacing: 1.1px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.customer-shell .marquee-card-copy strong {
+  overflow: hidden;
+  color: #17212f;
+  font: 850 12px/1.3 Manrope, sans-serif;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.customer-shell .marquee-card-copy em {
+  display: -webkit-box;
+  overflow: hidden;
+  color: #667085;
+  font: 600 9px/1.35 'DM Sans', sans-serif;
+  font-style: normal;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.customer-shell .marquee-card-arrow { color: #78a84d; }
+.customer-shell .marquee-track:hover,
+.customer-shell .marquee-track:focus-within { animation-play-state: paused; }
+@keyframes ff-marquee-cards {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Reveal each venue once as it approaches the viewport. No staggered animations
+   or permanent will-change hints are used, keeping long lists smooth on phones. */
+.customer-shell .venue-card-wrap.reveal-pending {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  transition: opacity .42s cubic-bezier(.2, .72, .25, 1), transform .42s cubic-bezier(.2, .72, .25, 1);
+}
+.customer-shell .venue-card-wrap.reveal-pending.is-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+.customer-shell .venue-card {
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.customer-shell .venue-card:hover {
+  transform: translate3d(0, -3px, 0);
+  box-shadow: 0 9px 20px rgba(31, 66, 25, .085);
+}
+.customer-shell .venue-photo img {
+  transition: transform .32s cubic-bezier(.2, .7, .2, 1);
+}
+.customer-shell .venue-card:hover .venue-photo img { transform: scale(1.035); }
+.customer-shell .venue-photo img { filter: none !important; }
+
+/* Compact searchable dropdown for area filters; card-like menu rows match the app. */
+.customer-shell .area-filter-dropdown { width: 248px; min-width: 220px; max-width: 100%; }
+.customer-shell .area-filter-dropdown .ff-dropdown-label { text-transform: uppercase; font-size: 9px; letter-spacing: .9px; }
+.customer-shell .ff-bootstrap-dropdown > .ff-dropdown-toggle {
+  min-height: 46px;
+  padding: 0 13px;
+  border: 1px solid #d4dfcd;
+  border-radius: 10px;
+  background: #fff;
+  color: #26364b;
+  box-shadow: 0 2px 7px rgba(26, 55, 29, .035);
+}
+.customer-shell .ff-bootstrap-dropdown > .ff-dropdown-toggle:hover,
+.customer-shell .ff-bootstrap-dropdown.show > .ff-dropdown-toggle,
+.customer-shell .ff-bootstrap-dropdown > .ff-dropdown-toggle:focus-visible {
+  border-color: #91bd6a;
+  background: #fbfff8;
+  box-shadow: 0 0 0 3px rgba(140, 200, 75, .14);
+}
+.customer-shell .ff-dropdown-menu.dropdown-menu {
+  z-index: 1085;
+  padding: 8px;
+  border: 1px solid #dbe7d4;
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 16px 36px rgba(25, 49, 27, .16);
+}
+.customer-shell .ff-dropdown-menu .ff-dropdown-item.dropdown-item {
+  min-height: 44px;
+  margin: 2px 0;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: #fff;
+  color: #28364a;
+}
+.customer-shell .ff-dropdown-menu .ff-dropdown-item.dropdown-item:hover,
+.customer-shell .ff-dropdown-menu .ff-dropdown-item.dropdown-item:focus-visible {
+  border-color: #e0ebd8;
+  background: #f5faef;
+  color: #244a24;
+}
+.customer-shell .ff-dropdown-menu .ff-dropdown-item.dropdown-item.selected {
+  border-color: #d8e8ce;
+  background: #edf6e6;
+  color: #214b23;
+}
+.customer-shell .ff-dropdown-menu .ff-option-copy strong { font-size: 12px; }
+.customer-shell .ff-dropdown-menu .ff-option-copy small { font-size: 10px; }
+.customer-shell .ff-dropdown-search { border-radius: 9px; background: #f9fcf6; }
+.customer-shell .ff-dropdown-menu-inline.dropdown-menu {
+  position: static !important;
+  inset: auto !important;
+  width: 100%;
+  min-width: 0;
+  max-height: none;
+  margin: 7px 0 0 !important;
+  overflow: visible;
+  transform: none !important;
+  box-shadow: 0 7px 18px rgba(25, 49, 27, .08);
+}
+.customer-shell .ff-dropdown-menu-inline:not(.show) { display: none !important; }
+.customer-shell .ff-dropdown-menu-inline.show { display: block !important; }
+.customer-shell .ff-dropdown-menu-inline .ff-dropdown-options { max-height: 168px; }
+.customer-shell .filter-toolbar { align-items: flex-end; }
+.customer-shell .area-filter-dropdown .ff-dropdown-field { gap: 5px; }
+.customer-shell .booking-fields .ff-dropdown-field { min-width: 0; margin: 0; }
+.customer-shell .booking-fields .ff-dropdown-field .ff-dropdown-label { margin-bottom: 0; color: #344054; font-size: 11px; font-weight: 800; }
+.customer-shell .booking-fields > label input[type="date"] {
+  width: 100%; min-width: 0; height: 46px; padding: 0 11px;
+  border: 1px solid #cbd5e1; border-radius: 10px; background: #fff;
+  color: #182230; font-size: 12px; font-weight: 700;
+}
+.customer-shell .registration-dropdown-field { min-width: 0; margin: 7px 0 10px; }
+.customer-shell .registration-dropdown-field .ff-dropdown-label { color: #253044; font-size: 11px; font-weight: 800; }
+.customer-shell .trek-package-select { margin-top: 7px; }
+
+@media (max-width: 760px) {
+  .customer-shell .home-announcement-marquee {
+    display: block;
+    min-height: 0;
+    padding: 7px;
+    margin-bottom: 18px;
+  }
+  .customer-shell .marquee-label {
+    width: auto;
+    min-width: 0;
+    min-height: 35px;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 0 10px;
+    border-radius: 8px;
+  }
+  .customer-shell .marquee-label > small { margin-left: auto; }
+  .customer-shell .marquee-window {
+    display: block;
+    height: auto;
+    margin: 7px 0 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .customer-shell .marquee-window::-webkit-scrollbar { display: none; }
+  .customer-shell .marquee-track { width: max-content; animation: none !important; }
+  .customer-shell .marquee-group[aria-hidden="true"] { display: none; }
+  .customer-shell .marquee-group { gap: 8px; padding-right: 0; }
+  .customer-shell .marquee-card {
+    width: min(78vw, 310px);
+    min-width: min(78vw, 310px);
+    min-height: 76px;
+    scroll-snap-align: start;
+  }
+  .customer-shell .area-filter-dropdown { width: 100%; min-width: 0; }
+  .customer-shell .filter-toolbar { align-items: stretch; }
+  .customer-shell .booking-fields .ff-dropdown-field { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .customer-shell .marquee-track { animation: none !important; }
+  .customer-shell .marquee-window { overflow-x: auto; }
+  .customer-shell .venue-card-wrap.reveal-pending { opacity: 1; transform: none; transition: none; }
+  .customer-shell .venue-card,
+  .customer-shell .venue-photo img,
+  .customer-shell .ff-bootstrap-dropdown > .ff-dropdown-toggle,
+  .customer-shell .ff-dropdown-item.dropdown-item { transition: none !important; }
+}
+
+/* External activity venue details (pickleball, paintball and boxing) */
+.photo-badge{backdrop-filter:blur(8px)}
+.external-venue-panel{margin-top:18px;padding:16px;border:1px solid #d7e6ca;border-radius:13px;background:linear-gradient(145deg,#fbfef8,#f1f8eb);display:grid;gap:13px}
+.external-venue-banner{display:flex;align-items:flex-start;gap:9px;padding:10px 11px;border-radius:9px;background:#e6f2dc;color:#34552a;font-size:11px;font-weight:700;line-height:1.5}
+.external-venue-banner svg{flex:0 0 auto;margin-top:1px}
+.external-venue-fact{display:grid;gap:5px}
+.external-venue-fact>strong{font-size:12px;color:#243b24}
+.external-venue-fact p{margin:0;color:#4b5563;font-size:12px;line-height:1.6;font-weight:600}
+.external-venue-fact ul{margin:0;padding-left:18px;color:#4b5563;font-size:11px;line-height:1.7}
+.external-venue-actions{display:flex;flex-wrap:wrap;gap:8px}
+.external-venue-actions a{text-decoration:none}
+.external-venue-source{color:#667085;font-size:10px;line-height:1.5}
+@media(max-width:560px){.external-venue-panel{padding:13px}.external-venue-actions{display:grid;grid-template-columns:1fr}.external-venue-actions a{width:100%}}
+
+/* Guest-first access: public browsing, customer sign-in only at protected actions. */
+.guest-status{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #dce8d3;border-radius:30px;background:#f8fbf5;color:#45633a;font-size:11px;font-weight:800;white-space:nowrap}
+.guest-status::before{content:"";width:7px;height:7px;border-radius:50%;background:#83b94b}
+.guest-signin-btn{min-height:38px;padding:8px 14px;border:1px solid #c9ddb9;border-radius:9px;background:#eff7e8;color:#233d20;font-size:12px;font-weight:800;transition:background .16s ease,border-color .16s ease,transform .16s ease}
+.guest-signin-btn:hover{background:#e4f2d8;border-color:#9fc77f;transform:translateY(-1px)}
+.guest-side-profile{display:flex;align-items:center;gap:10px;padding:12px 10px;margin:16px 0 30px;border:1px dashed #cdddc2;border-radius:12px;background:#f8fbf5}
+.guest-side-profile>div{min-width:0;display:grid;gap:2px}
+.guest-side-profile strong{font-size:12px;color:#294328}
+.guest-side-profile small{font-size:10px;line-height:1.4;color:#66785d}
+.auth-gate-backdrop{position:fixed;inset:0;z-index:140;display:grid;place-items:center;padding:18px;background:rgba(12,24,16,.58);backdrop-filter:blur(5px);animation:ff-auth-overlay .18s ease both}
+.auth-gate-card{position:relative;width:min(470px,100%);max-height:min(92vh,760px);overflow:auto;padding:30px;background:#fff;border:1px solid #e1e9dc;border-radius:20px;box-shadow:0 28px 90px rgba(5,20,9,.28);animation:ff-auth-card-in .24s cubic-bezier(.2,.72,.25,1) both}
+.auth-gate-close{position:absolute;top:15px;right:15px;width:36px;height:36px;display:grid;place-items:center;border:1px solid #e0e7dc;border-radius:50%;background:#fff;color:#475467}
+.auth-gate-close:hover{background:#f2f7ed;color:#203d22}
+.auth-gate-brand{display:flex;align-items:center;gap:10px;margin-bottom:19px;font:800 19px Manrope,sans-serif;color:#101828}
+.auth-gate-brand>strong>span{color:#65a832}
+.auth-gate-card h2{margin:7px 0 6px;color:#111827;font:800 26px/1.2 Manrope,sans-serif;letter-spacing:-.5px}
+.auth-gate-subtitle{margin:0 35px 17px 0;color:#596579;font-size:12px;line-height:1.6;font-weight:600}
+.auth-gate-card .auth-tabs{margin-bottom:17px}
+.auth-gate-card .form-field{margin:11px 0}
+.auth-gate-submit{margin-top:8px}
+.auth-gate-footnote{display:flex;align-items:flex-start;gap:8px;margin-top:16px;padding:11px 12px;border:1px solid #dce9d3;border-radius:9px;background:#f5faef;color:#52634b;font-size:10px;line-height:1.5;font-weight:600}
+.auth-gate-footnote svg{flex:0 0 auto;color:#527d31}
+.auth-guest-continue{display:block;margin:15px auto 0;padding:6px 10px;border:0;background:transparent;color:#61705d;font-size:11px;font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.auth-guest-continue:hover{color:#254d25}
+@keyframes ff-auth-overlay{from{opacity:0}to{opacity:1}}
+@keyframes ff-auth-card-in{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:760px){.guest-status{display:none}.guest-signin-btn{min-height:34px;padding:7px 10px;font-size:11px}.auth-gate-card{padding:24px 19px;border-radius:16px}.auth-gate-card h2{font-size:23px}}
+@media(prefers-reduced-motion:reduce){.auth-gate-backdrop,.auth-gate-card{animation:none}.guest-signin-btn{transition:none}}
