@@ -1,6 +1,6 @@
-# FieldFinder — Customer Web V7
+# SportiLand — Customer Web V7
 
-This is the standalone Customer website. It uses FieldFinder's existing green, lime, white and charcoal palette. It is separate from the Owner frontend.
+This is the standalone Customer website. It uses SportiLand's existing green, lime, white and charcoal palette. It is separate from the Owner frontend.
 
 ## V7 experience updates
 

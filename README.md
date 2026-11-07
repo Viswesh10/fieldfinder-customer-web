@@ -1,6 +1,6 @@
-# FieldFinder Customer Web — V7
+# SportiLand Customer Web — V7
 
-A separate Vite + React Customer experience for the Madurai region. It retains the FieldFinder green, lime, white and charcoal colour system and is packaged independently from the Turf Owner frontend.
+A separate Vite + React Customer experience for the Madurai region. It retains the SportiLand green, lime, white and charcoal colour system and is packaged independently from the Turf Owner frontend.
 
 ## Run locally
 
@@ -32,7 +32,7 @@ Venue slot availability, booking confirmations, tournament registrations and sev
 ## Backend integration
 
 - Public venue browsing works without signing in.
-- Customer registration/login uses the shared FieldFinder Spring Boot API when available.
+- Customer registration/login uses the shared SportiLand Spring Boot API when available.
 - Owner-published games, photos and videos require the shared backend; the Customer app reads the public turf feed and refreshes periodically.
 - The API base defaults to the same host as the browser on port `8080`. To use a hosted backend, create `.env` from `.env.example` and set `VITE_API_BASE_URL`.
 
@@ -48,3 +48,11 @@ Use the new **Continue as demo customer** option in the sign-in dialog. It creat
 ## V8 animation performance update
 
 The event stack now uses cached scroll geometry, requestAnimationFrame-coalesced updates, a small nearby-image loading window, and limited compositor promotion. Reveal animations are one-shot to avoid replaying and janking on reverse scroll. See `../ANIMATION_PERFORMANCE_NOTES.md`.
+
+
+## Latest customer UX updates
+
+- The top navigation now uses **Home** instead of **Discover**. The separate Home control was removed; the Back control remains.
+- The signed-in customer menu includes a **Terms & Conditions** entry with the complete Rain & Weather Refund Policy. The same policy is linked from venue and checkout details.
+- Venue details, checkout, My Bookings, and the QR pass display roof status and the applicable rain-refund rule. The UI reads `roofType`, `roofStatus`, `roofingType`, `coverageType`, `shelterType`, `isRoofed`, `roofed`, or `isCovered` from venue data. It intentionally shows **Not confirmed / Pending venue confirmation** when no roofing field is present; it does not guess the venue's construction.
+- Shop product cards and cart thumbnails now use product-specific photos. See `SHOP_PRODUCT_IMAGE_SOURCES.md` for the source links. Images load from their third-party source hosts, so an internet connection is needed to display them. Check image licensing before using the storefront for commercial sales.

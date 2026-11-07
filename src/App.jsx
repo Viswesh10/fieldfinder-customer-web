@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, useRef } from 'react'
 import {
   Activity, ArrowRight, ArrowUpRight, BadgeCheck, Banknote, Bike, CalendarDays,
-  CalendarRange, Check, ChevronDown, ChevronLeft, ChevronRight, Clock3, CreditCard, Filter, Home,
+  CalendarRange, Check, ChevronDown, ChevronLeft, ChevronRight, Clock3, CreditCard, Filter, FileText,
   IndianRupee, LocateFixed, LogOut, MapPin, Menu, Minus, Plus, Search,
   ShieldCheck, SlidersHorizontal, Sparkles, Star, Ticket, Trophy, UserRound,
   UserRoundPlus, Users, Wallet, X, Zap, Mail, Phone, PhoneCall, Globe, LockKeyhole, Eye,
@@ -20,20 +20,35 @@ const INVITE_KEY = 'playerInvites'
 const SPORTS = ['All', 'Football', 'Cricket', 'Badminton', 'Running', 'Pickleball', 'Paintball', 'Boxing']
 const SHOP_CATEGORIES = ['All gear', 'Cricket', 'Football', 'Badminton', 'Pickleball', 'Boxing', 'Training']
 const SHOP_PRODUCTS = [
-  { id: 'cricket-bat-pro', name: 'Pro Cricket Bat', category: 'Cricket', price: 2899, compareAt: 3499, badge: 'Bestseller', icon: Trophy, tone: 'bat', description: 'Practice and match-ready bat for club play.' },
-  { id: 'cricket-tennis-ball', name: 'Tennis Cricket Ball · 3 Pack', category: 'Cricket', price: 299, compareAt: 399, badge: 'Popular', icon: CircleHelp, tone: 'ball', description: 'Bright, durable balls for turf and street cricket.' },
-  { id: 'cricket-leather-ball', name: 'Leather Cricket Ball', category: 'Cricket', price: 549, compareAt: 699, badge: '', icon: CircleHelp, tone: 'leather', description: 'Practice-grade leather ball for net sessions.' },
-  { id: 'cricket-stumps', name: 'Portable Cricket Stumps', category: 'Cricket', price: 649, compareAt: 799, badge: '', icon: Package, tone: 'stumps', description: 'Lightweight set for backyard and practice games.' },
-  { id: 'football-match-ball', name: 'Training Football', category: 'Football', price: 899, compareAt: 1199, badge: 'Popular', icon: Trophy, tone: 'football', description: 'All-round ball for turf and outdoor practice.' },
-  { id: 'badminton-racket', name: 'Carbon Badminton Racket', category: 'Badminton', price: 1599, compareAt: 1999, badge: '', icon: Activity, tone: 'racket', description: 'Lightweight frame for regular court sessions.' },
-  { id: 'shuttlecock-pack', name: 'Feather Shuttlecocks · 6 Pack', category: 'Badminton', price: 499, compareAt: 599, badge: '', icon: Activity, tone: 'shuttle', description: 'Practice pack for club and academy play.' },
-  { id: 'pickleball-paddle', name: 'Pickleball Paddle', category: 'Pickleball', price: 1299, compareAt: 1599, badge: 'New', icon: CircleHelp, tone: 'paddle', description: 'Comfort-grip paddle for beginner and regular play.' },
-  { id: 'pickleball-balls', name: 'Outdoor Pickleballs · 3 Pack', category: 'Pickleball', price: 349, compareAt: 449, badge: '', icon: CircleHelp, tone: 'pickleball', description: 'Perforated outdoor balls for court sessions.' },
-  { id: 'boxing-gloves', name: 'Training Boxing Gloves', category: 'Boxing', price: 1199, compareAt: 1499, badge: 'Popular', icon: Dumbbell, tone: 'gloves', description: 'Training gloves for bag work and fitness drills.' },
-  { id: 'skipping-rope', name: 'Speed Skipping Rope', category: 'Training', price: 299, compareAt: 399, badge: '', icon: Activity, tone: 'rope', description: 'Adjustable rope for warm-ups and conditioning.' },
-  { id: 'training-cones', name: 'Agility Cones · 10 Pack', category: 'Training', price: 399, compareAt: 499, badge: '', icon: Zap, tone: 'cones', description: 'Set up footwork, sprint and coordination drills.' }
+  { id: 'cricket-bat-pro', name: 'Pro Cricket Bat', category: 'Cricket', price: 2899, compareAt: 3499, badge: 'Bestseller', icon: Trophy, tone: 'bat', description: 'Practice and match-ready bat for club play.' , image: 'https://www.gray-nicolls.co.uk/cdn/shop/files/CAAB26EnglishWillowBatsLegendPLATINUMEdition_FaceRight.jpg?v=1760957000&width=1600'},
+  { id: 'cricket-tennis-ball', name: 'Tennis Cricket Ball · 3 Pack', category: 'Cricket', price: 299, compareAt: 399, badge: 'Popular', icon: CircleHelp, tone: 'ball', description: 'Bright, durable balls for turf and street cricket.' , image: 'https://instamart-media-assets.swiggy.com/swiggy/image/upload/fl_lossy%2Cf_auto%2Cq_auto%2Cw_1200%2Ch_630/NI_CATALOG/IMAGES/CIW/2026/6/29/35bb450e-27e5-4e42-98a7-c6ef7e6d61bc_12877.jpg'},
+  { id: 'cricket-leather-ball', name: 'Leather Cricket Ball', category: 'Cricket', price: 549, compareAt: 699, badge: '', icon: CircleHelp, tone: 'leather', description: 'Practice-grade leather ball for net sessions.' , image: 'https://www.martinberrillsports.com/cdn/shop/products/MB_205_20_c_a91cdc73-5c35-4c06-94de-06f877c3b749_2904x2904.jpg?v=1612542116'},
+  { id: 'cricket-stumps', name: 'Portable Cricket Stumps', category: 'Cricket', price: 649, compareAt: 799, badge: '', icon: Package, tone: 'stumps', description: 'Lightweight set for backyard and practice games.' , image: 'https://i.ebayimg.com/00/s/MTI4MFgxMjgw/z/SaIAAOSwcJVd5kZm/%24_57.JPG?set_id=8800005007'},
+  { id: 'football-match-ball', name: 'Training Football', category: 'Football', price: 899, compareAt: 1199, badge: 'Popular', icon: Trophy, tone: 'football', description: 'All-round ball for turf and outdoor practice.' , image: 'https://contents.mediadecathlon.com/p3058727/a7f27ceb620736212f66b086690624a4/p3058727.jpg?f=3000x0&format=auto&quality=70'},
+  { id: 'badminton-racket', name: 'Carbon Badminton Racket', category: 'Badminton', price: 1599, compareAt: 1999, badge: '', icon: Activity, tone: 'racket', description: 'Lightweight frame for regular court sessions.' , image: 'https://contents.mediadecathlon.com/p2817590/k%245e10f61639a2384e78dfdb53a17fbb6a/picture.jpg?f=3000x0&format=auto'},
+  { id: 'shuttlecock-pack', name: 'Feather Shuttlecocks · 6 Pack', category: 'Badminton', price: 499, compareAt: 599, badge: '', icon: Activity, tone: 'shuttle', description: 'Practice pack for club and academy play.' , image: 'https://i.ebayimg.com/images/g/msgAAeSwAg9poMbb/s-l400.jpg'},
+  { id: 'pickleball-paddle', name: 'Pickleball Paddle', category: 'Pickleball', price: 1299, compareAt: 1599, badge: 'New', icon: CircleHelp, tone: 'paddle', description: 'Comfort-grip paddle for beginner and regular play.' , image: 'https://pickleballnation.com/cdn/shop/files/gamma-micron-5-0-pickleball-paddle-FRONT_grande.jpg?v=1736125514'},
+  { id: 'pickleball-balls', name: 'Outdoor Pickleballs · 3 Pack', category: 'Pickleball', price: 349, compareAt: 449, badge: '', icon: CircleHelp, tone: 'pickleball', description: 'Perforated outdoor balls for court sessions.' , image: 'https://thepickleparlour.com/cdn/shop/files/69aaa4be3aa59_1772790974.jpg?v=1775104293&width=1024'},
+  { id: 'boxing-gloves', name: 'Training Boxing Gloves', category: 'Boxing', price: 1199, compareAt: 1499, badge: 'Popular', icon: Dumbbell, tone: 'gloves', description: 'Training gloves for bag work and fitness drills.' , image: 'https://www.everlast.com/cdn/shop/files/P00004050_Black_Back2-0318.jpg?v=1752075125&width=1920'},
+  { id: 'skipping-rope', name: 'Speed Skipping Rope', category: 'Training', price: 299, compareAt: 399, badge: '', icon: Activity, tone: 'rope', description: 'Adjustable rope for warm-ups and conditioning.' , image: 'https://www.littleblokefitness.com.au/cdn/shop/files/1RMEliteSpeedRope-Black_3b5bb14c-ec32-4563-b60c-0160e05dcb9e.jpg?v=1714623493'},
+  { id: 'training-cones', name: 'Agility Cones · 10 Pack', category: 'Training', price: 399, compareAt: 499, badge: '', icon: Zap, tone: 'cones', description: 'Set up footwork, sprint and coordination drills.' , image: 'https://i.ebayimg.com/images/g/JjIAAOSw379cZabJ/s-l400.jpg'}
 ]
 const money = value => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(value || 0)
+
+function getVenueRoofInfo(venue) {
+  const explicit = venue?.roofType ?? venue?.roofStatus ?? venue?.roofingType ?? venue?.coverageType ?? venue?.shelterType ?? venue?.roofing
+  const isRoofed = venue?.isRoofed ?? venue?.roofed ?? venue?.isCovered
+  const raw = String(explicit ?? '').trim().toLowerCase()
+  let status = 'Not confirmed'
+  if (isRoofed === true || /roofed|covered|indoor|enclosed/.test(raw)) status = 'Roofed'
+  else if (isRoofed === false || /non.?roof|uncovered|^open$|open.?air|outdoor.?open/.test(raw)) status = 'Non-Roofed'
+  const refundPercent = status === 'Non-Roofed' ? 50 : status === 'Roofed' ? 0 : null
+  return {
+    status,
+    refundPercent,
+    refundLabel: refundPercent === 50 ? '50% if rain makes the turf unplayable' : refundPercent === 0 ? '0% for rain alone' : 'Pending venue confirmation'
+  }
+}
 
 const cleanMapLocation = value => {
   const text = String(value || '').trim()
@@ -56,7 +71,7 @@ const googleMapsDirectionsUrl = venue => {
     .filter(Boolean)
     .filter((part, index, all) => all.findIndex(item => item.toLowerCase() === part.toLowerCase()) === index)
   const destination = uniqueDestinationParts.join(', ')
-  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving&utm_source=fieldfinder&utm_campaign=venue_directions`
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving&utm_source=sportiland&utm_campaign=venue_directions`
 }
 const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` }
 const dateISO = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
@@ -98,7 +113,7 @@ const buildAdventureEvents = () => [
       'Ride name: ARTHAM 400. The official page links to the route map and publishes the current event fee as ₹1,500.',
       'Read the Audax India and ACP rules and route instructions before registering. This is a long-distance endurance ride and requires appropriate preparation.'
     ],
-    registrationNote: 'Registration is handled by Audax India. FieldFinder does not collect the entry fee or confirm a rider entry.',
+    registrationNote: 'Registration is handled by Audax India. SportiLand does not collect the entry fee or confirm a rider entry.',
     officialUrl: 'https://www.audaxindia.in/event-e-10514',
     registrationUrl: 'https://www.audaxindia.in/event-e-10514',
     actionLabel: 'Open official registration', sourceLabel: 'Audax India Randonneurs · event page'
@@ -333,7 +348,7 @@ function App() {
   const adventureEvents = useMemo(() => buildAdventureEvents(), [])
 
   // Browsing is public. Restore a server-authenticated customer only when a valid
-  // HttpOnly FieldFinder session cookie already exists.
+  // HttpOnly SportiLand session cookie already exists.
   useEffect(() => {
     let active = true
     backendRequest('/api/auth/me')
@@ -378,6 +393,17 @@ function App() {
   useEffect(() => writeDemo('shopCart', shopCart), [shopCart])
   useEffect(() => writeDemo('shopOrders', shopOrders), [shopOrders])
   useEffect(() => { if (!toast) return; const timer = setTimeout(() => setToast(''), 3000); return () => clearTimeout(timer) }, [toast])
+  useEffect(() => {
+    const openTerms = () => {
+      pageHistoryRef.current.push(page)
+      setSelectedVenue(null)
+      setCheckout(false)
+      setPage('terms')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+    window.addEventListener('sportiland:open-terms', openTerms)
+    return () => window.removeEventListener('sportiland:open-terms', openTerms)
+  }, [page])
   useEffect(() => {
     const shell = document.querySelector('.experiment-shell')
     if (!shell) return undefined
@@ -445,11 +471,11 @@ function App() {
   function updateAuth(key, value) { setAuthForm(prev => ({ ...prev, [key]: value })) }
   function continueAsDemoCustomer() {
     const demoAccount = {
-      id: 'fieldfinder-demo-customer',
+      id: 'sportiland-demo-customer',
       role: 'CUSTOMER',
       username: 'demo_customer',
       name: 'Demo Customer',
-      email: 'demo.customer@fieldfinder.local',
+      email: 'demo.customer@sportiland.local',
       demo: true
     }
     writeDemo('demoCustomerSession', demoAccount)
@@ -491,7 +517,7 @@ function App() {
         })
         account = result?.user
       }
-      if (!account || account.role !== 'CUSTOMER') throw new Error('A valid customer account was not returned by FieldFinder.')
+      if (!account || account.role !== 'CUSTOMER') throw new Error('A valid customer account was not returned by SportiLand.')
       setUser(account)
       setAuthModalOpen(false)
       setAuthForm({ username: '', email: '', password: '' })
@@ -501,7 +527,7 @@ function App() {
       pendingAuthAction.current = null
       if (continueAction) continueAction(account)
     } catch (error) {
-      setAuthError(error.message || 'Unable to complete authentication. Check that the FieldFinder backend is running.')
+      setAuthError(error.message || 'Unable to complete authentication. Check that the SportiLand backend is running.')
     }
   }
 
@@ -574,6 +600,7 @@ function App() {
   function completeBooking() {
     if (!user || !selectedVenue || !selectedTime) return
     const price = getPrice()
+    const roofInfo = getVenueRoofInfo(selectedVenue)
     const booking = {
       id: `FF-${String(Date.now()).slice(-7)}`, customerId: user.id, customerName: user.name,
       venueId: selectedVenue.id, venueName: selectedVenue.name, area: selectedVenue.area,
@@ -582,6 +609,7 @@ function App() {
       discount: price.discount, total: price.total, paymentMethod,
       paymentStatus: paymentMethod === 'Pay at venue (demo)' ? 'Pending' : 'Demo payment complete',
       status: 'Awaiting owner confirmation', createdAt: new Date().toISOString(),
+      roofStatus: roofInfo.status, rainRefundPercent: roofInfo.refundPercent, rainRefundLabel: roofInfo.refundLabel,
       qrToken: createBookingPassToken()
     }
     setBookings(prev => [booking, ...prev])
@@ -656,7 +684,7 @@ function App() {
     if (!user || !shopCart.length) return
     const items = shopCart.map(item => {
       const product = SHOP_PRODUCTS.find(product => product.id === item.productId)
-      return { productId: item.productId, name: product?.name || 'FieldFinder item', quantity: item.quantity, unitPrice: product?.price || 0, lineTotal: (product?.price || 0) * item.quantity }
+      return { productId: item.productId, name: product?.name || 'SportiLand item', quantity: item.quantity, unitPrice: product?.price || 0, lineTotal: (product?.price || 0) * item.quantity }
     })
     const order = {
       id: `FF-SH-${String(Date.now()).slice(-8)}`, customerId: user.id, customerName: user.name || user.username,
@@ -692,13 +720,14 @@ function App() {
   }
 
   const nav = [
-    { id: 'discover', label: 'Discover venues', icon: Search },
+    { id: 'discover', label: 'Home', icon: Search },
     { id: 'bookings', label: 'My bookings', icon: CalendarDays },
     { id: 'players', label: 'Find players', icon: Users },
     { id: 'tournaments', label: 'Tournaments', icon: Trophy },
     { id: 'events', label: 'Events & adventures', icon: Route },
     { id: 'shop', label: 'Shop', icon: ShoppingBag },
-    { id: 'profile', label: 'My profile', icon: UserRound }
+    { id: 'profile', label: 'My profile', icon: UserRound },
+    { id: 'terms', label: 'Terms & Conditions', icon: FileText }
   ]
 
   function navigateBack() {
@@ -720,7 +749,7 @@ function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
     if (id === 'bookings' || id === 'profile') {
-      openCustomerAuth(go, 'Sign in or create a customer account to view your personal FieldFinder activity.')
+      openCustomerAuth(go, 'Sign in or create a customer account to view your personal SportiLand activity.')
     } else go()
   }
   function chooseExperimentSport(item) {
@@ -736,16 +765,15 @@ function App() {
   return <div className="customer-shell experiment-shell">
     <div className="experiment-scroll-progress" aria-hidden="true"/>
     <header className="experiment-topbar">
-      <button className="experiment-brand" type="button" onClick={() => navigatePage('discover')} aria-label="FieldFinder home">
+      <button className="experiment-brand" type="button" onClick={() => navigatePage('discover')} aria-label="SportiLand home">
         <span className="brand-mark"><Trophy size={22}/></span>
-        <span className="experiment-brand-copy">fieldfinder<span className="brand-dot">.</span><small>PLAY MORE. PLAN LESS.</small></span>
+        <span className="experiment-brand-copy">SportiLand<span className="brand-dot">.</span><small>PLAY MORE. PLAN LESS.</small></span>
       </button>
       <div className="experiment-page-controls" aria-label="Page navigation">
         <button className="experiment-page-control" type="button" onClick={navigateBack} disabled={pageHistoryRef.current.length === 0} aria-label="Go back" title="Go back"><ChevronLeft size={16}/><span>Back</span></button>
-        <button className="experiment-page-control home-control" type="button" onClick={() => navigatePage('discover')} aria-label="Go to home" title="Home"><Home size={15}/><span>Home</span></button>
       </div>
       <nav className="experiment-nav" aria-label="Main navigation">
-        <button className={`experiment-nav-link ${page === 'discover' ? 'active' : ''}`} onClick={() => navigatePage('discover')}>Discover</button>
+        <button className={`experiment-nav-link ${page === 'discover' ? 'active' : ''}`} onClick={() => navigatePage('discover')}>Home</button>
         <div className={`experiment-sports-nav ${sportsMenuOpen ? 'open' : ''}`}>
           <button className="experiment-nav-link" type="button" aria-expanded={sportsMenuOpen} onClick={() => setSportsMenuOpen(value => !value)}>Sports <ChevronDown size={15}/></button>
           {sportsMenuOpen && <div className="experiment-mega-menu">
@@ -760,27 +788,28 @@ function App() {
       </nav>
       <div className="experiment-top-actions">
         <button className="experiment-search-shortcut" type="button" onClick={() => { if (page !== 'discover') navigatePage('discover'); window.setTimeout(() => document.getElementById('venue-search')?.focus(), 80) }}><Search size={16}/><span>Search venues</span><kbd>/</kbd></button>
-        {user ? <div className="dropdown customer-account-dropdown experiment-account"><button className="profile-mini dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span className="avatar">{(user.name || user.username || 'C').slice(0,1).toUpperCase()}</span><strong>{user.name || user.username}</strong></button><ul className="dropdown-menu dropdown-menu-end"><li><button className="dropdown-item" type="button" onClick={() => navigatePage('profile')}>My profile</button></li><li><button className="dropdown-item" type="button" onClick={() => navigatePage('bookings')}>My bookings</button></li><li><hr className="dropdown-divider"/></li><li><button className="dropdown-item text-danger" type="button" onClick={logout}>Sign out</button></li></ul></div> : <><span className="guest-status">Browsing as guest</span><button className="guest-signin-btn" type="button" onClick={() => openCustomerAuth()}>Sign in</button></>}
+        {user ? <div className="dropdown customer-account-dropdown experiment-account"><button className="profile-mini dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span className="avatar">{(user.name || user.username || 'C').slice(0,1).toUpperCase()}</span><strong>{user.name || user.username}</strong></button><ul className="dropdown-menu dropdown-menu-end"><li><button className="dropdown-item" type="button" onClick={() => navigatePage('profile')}>My profile</button></li><li><button className="dropdown-item" type="button" onClick={() => navigatePage('bookings')}>My bookings</button></li><li><button className="dropdown-item" type="button" onClick={() => navigatePage('terms')}>Terms &amp; Conditions</button></li><li><hr className="dropdown-divider"/></li><li><button className="dropdown-item text-danger" type="button" onClick={logout}>Sign out</button></li></ul></div> : <><span className="guest-status">Browsing as guest</span><button className="guest-signin-btn" type="button" onClick={() => openCustomerAuth()}>Sign in</button></>}
         <button className="experiment-mobile-toggle" type="button" aria-label={mobileNav ? 'Close navigation' : 'Open navigation'} aria-expanded={mobileNav} onClick={() => setMobileNav(value => !value)}>{mobileNav ? <X size={21}/> : <Menu size={21}/>}</button>
       </div>
     </header>
     {mobileNav && <div className="experiment-mobile-panel">
-      <div className="experiment-mobile-caption">EXPLORE FIELDFINDER</div>
-      {[{id:'discover',label:'Discover'},{id:'events',label:'Events & adventures'},{id:'tournaments',label:'Tournaments'},{id:'players',label:'Find players'},{id:'shop',label:'Shop'},{id:'bookings',label:'My bookings'},{id:'profile',label:'My profile'}].map(item => <button key={item.id} type="button" onClick={() => navigatePage(item.id)}>{item.label}<ArrowUpRight size={16}/></button>)}
+      <div className="experiment-mobile-caption">EXPLORE SportiLand</div>
+      {[{id:'discover',label:'Home'},{id:'events',label:'Events & adventures'},{id:'tournaments',label:'Tournaments'},{id:'players',label:'Find players'},{id:'shop',label:'Shop'},{id:'bookings',label:'My bookings'},{id:'profile',label:'My profile'},{id:'terms',label:'Terms & Conditions'}].map(item => <button key={item.id} type="button" onClick={() => navigatePage(item.id)}>{item.label}<ArrowUpRight size={16}/></button>)}
       <div className="experiment-mobile-caption">SPORTS</div>
       <div className="experiment-mobile-sports">{SPORTS.slice(1).map(item => <button key={item} type="button" onClick={() => chooseExperimentSport(item)}>{item}</button>)}</div>
     </div>}
     <main className="experiment-main">
-      {page !== 'discover' && <div className="experiment-breadcrumb"><button onClick={() => navigatePage('discover')}>FieldFinder</button><span>/</span><strong>{nav.find(n => n.id === page)?.label}</strong></div>}
+      {page !== 'discover' && <div className="experiment-breadcrumb"><button onClick={() => navigatePage('discover')}>SportiLand</button><span>/</span><strong>{nav.find(n => n.id === page)?.label}</strong></div>}
       {page === 'discover' && <DiscoverPage venues={filteredVenues} total={venues.length} search={search} setSearch={setSearch} sport={sport} setSport={setSport} areas={areas} area={area} setArea={setArea} onOpen={openVenue} onGoPlayers={() => navigatePage('players')} adventureEvents={adventureEvents} onNavigateAnnouncement={navigateFromAnnouncement} onGoPage={navigatePage} />}
       {page === 'bookings' && user && <BookingsPage bookings={filteredBookings} filter={bookingFilter} setFilter={setBookingFilter} onCancel={cancelBooking} onOpenPass={openBookingPass} />}
       {page === 'players' && <PlayersPage venues={venues} selectedVenueId={playerVenueId} setSelectedVenueId={setPlayerVenueId} sport={playerSport} setSport={setPlayerSport} search={playerSearch} setSearch={setPlayerSearch} invited={myInviteIds} onInvite={sendInvite} />}
       {page === 'tournaments' && <TournamentsPage events={tournaments} sport={tournamentSport} setSport={setTournamentSport} registrations={tournamentRegistrations.filter(r => r.customerId === user?.id)} onRegister={registerTournament} onRequireAuth={openCustomerAuth} focusAnnouncement={announcementTarget?.page === 'tournaments' ? announcementTarget : null} />}
       {page === 'events' && <AdventureEventsPage events={adventureEvents} focusAnnouncement={announcementTarget?.page === 'events' ? announcementTarget : null} />}
       {page === 'shop' && <ShopPage products={SHOP_PRODUCTS} cart={shopCart} onAdd={addShopItem} onQuantity={updateShopQuantity} onRemove={removeShopItem} onCheckout={beginShopCheckout} onContinueShopping={() => navigatePage('discover')} orders={shopOrders.filter(order => order.customerId === user?.id)} />}
+      {page === 'terms' && <TermsConditionsPage />}
       {page === 'profile' && user && <ProfilePage user={user} bookings={customerBookings} invites={invites.filter(i => i.customerId === user.id)} onLogout={logout} />}
     </main>
-    <footer className="experiment-footer"><div className="experiment-footer-brand"><span className="brand-mark"><Trophy size={20}/></span><strong>fieldfinder<span>.</span></strong></div><p>Find your place to play. Meet your team. Make time for the game.</p><div className="experiment-footer-links"><button onClick={() => navigatePage('discover')}>Discover</button><button onClick={() => navigatePage('events')}>Events</button><button onClick={() => navigatePage('tournaments')}>Tournaments</button><button onClick={() => navigatePage('players')}>Find players</button><button onClick={() => navigatePage('shop')}>Shop</button></div><small>© 2026 FieldFinder · Madurai region</small></footer>
+    <footer className="experiment-footer"><div className="experiment-footer-brand"><span className="brand-mark"><Trophy size={20}/></span><strong>SportiLand<span>.</span></strong></div><p>Find your place to play. Meet your team. Make time for the game.</p><div className="experiment-footer-links"><button onClick={() => navigatePage('discover')}>Home</button><button onClick={() => navigatePage('events')}>Events</button><button onClick={() => navigatePage('tournaments')}>Tournaments</button><button onClick={() => navigatePage('players')}>Find players</button><button onClick={() => navigatePage('shop')}>Shop</button><button onClick={() => navigatePage('terms')}>Terms & Conditions</button></div><small>© 2026 SportiLand · Madurai region</small></footer>
     {selectedVenue && <BookingModal venue={selectedVenue} onFindPlayers={() => { setPlayerVenueId(selectedVenue.id); setPlayerSport((selectedVenue.sports || ['All'])[0]); setSelectedVenue(null); navigatePage('players') }} date={bookingDate} setDate={value => { setBookingDate(value); setSelectedTime(''); setAppliedCoupon(null); setCouponError('') }} duration={duration} setDuration={value => { setDuration(value); setAppliedCoupon(null); setCouponError('') }} selectedTime={selectedTime} setSelectedTime={setSelectedTime} slots={slotOptions(selectedVenue, bookingDate, duration)} coupon={coupon} setCoupon={setCoupon} appliedCoupon={appliedCoupon} couponError={couponError} applyCoupon={applyCoupon} price={getPrice()} onClose={() => { setSelectedVenue(null); setCheckout(false) }} onContinue={startBooking} />}
     {bookingPass && <BookingPassModal booking={bookingPass} onClose={() => setBookingPass(null)} />}
     {checkout && selectedVenue && <CheckoutModal venue={selectedVenue} date={bookingDate} time={selectedTime} duration={duration} price={getPrice()} paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} onBack={() => setCheckout(false)} onConfirm={completeBooking} />}
@@ -977,7 +1006,7 @@ function HomeAnnouncementMarquee({ adventureEvents, onNavigate }) {
             <span className="experiment-stack-shade" aria-hidden="true"/>
             <span className="experiment-stack-card-top"><span><EventIcon size={14}/>{event.kind}</span><b>{String(index + 1).padStart(2, '0')} <i>/ {String(adventureEvents.length).padStart(2, '0')}</i></b></span>
             <span className="experiment-stack-card-copy">
-              <small>{event.organiser || 'FIELDfinder · LOCAL EXPERIENCE'}</small>
+              <small>{event.organiser || 'SportiLand · LOCAL EXPERIENCE'}</small>
               <strong>{event.title}</strong>
               <span className="experiment-stack-card-meta"><span><CalendarDays size={14}/>{event.dateLabel || (event.date ? prettyDate(event.date) : 'Date to be selected')}</span><span><MapPin size={14}/>{event.location}</span></span>
               <span className="experiment-stack-card-action">View event details <ArrowUpRight size={16}/></span>
@@ -1094,7 +1123,7 @@ function ShopPage({ products, cart, onAdd, onQuantity, onRemove, onCheckout, onC
   const count = cartItems.reduce((sum, item) => sum + item.quantity, 0)
   return <div className="shop-page">
     <div className="shop-hero" data-exp-reveal>
-      <div><span className="section-kicker">FIELDfinder SHOP · GAME DAY ESSENTIALS</span><h1>Gear up for<br/><em>your next game.</em></h1><p>Shop the everyday essentials for turf, court, training and outdoor play.</p><div className="shop-benefits"><span><Truck size={15}/> Demo delivery preview</span><span><ShieldCheck size={15}/> Secure checkout planned</span><span><Package size={15}/> Curated sports essentials</span></div></div>
+      <div><span className="section-kicker">SportiLand SHOP · GAME DAY ESSENTIALS</span><h1>Gear up for<br/><em>your next game.</em></h1><p>Shop the everyday essentials for turf, court, training and outdoor play.</p><div className="shop-benefits"><span><Truck size={15}/> Demo delivery preview</span><span><ShieldCheck size={15}/> Secure checkout planned</span><span><Package size={15}/> Curated sports essentials</span></div></div>
       <div className="shop-hero-art"><span className="shop-hero-orbit"/><div className="shop-hero-product"><ShoppingBag size={68}/><small>PLAY MORE · SHOP SMART</small></div><b className="shop-hero-sticker">READY<br/>SET<br/>PLAY</b></div>
     </div>
     <div className="shop-heading-row"><div><span className="section-kicker">THE EQUIPMENT SHELF</span><h2>Find your game-day gear.</h2><p>Demo catalogue · sample products and prices for the frontend prototype.</p></div><span className="shop-cart-count"><ShoppingCart size={16}/>{count} items in cart</span></div>
@@ -1105,14 +1134,14 @@ function ShopPage({ products, cart, onAdd, onQuantity, onRemove, onCheckout, onC
           const Icon = product.icon
           const inCart = cart.find(item => item.productId === product.id)?.quantity || 0
           return <article className="shop-product-card" key={product.id}>
-            <div className={`shop-product-art tone-${product.tone}`}><span className="shop-product-badge">{product.badge || product.category}</span><Icon size={56} strokeWidth={1.55}/><small>FIELDFINDER</small></div>
+            <div className={`shop-product-art tone-${product.tone}`}><span className="shop-product-badge">{product.badge || product.category}</span><img className="shop-product-photo" src={product.image} alt={product.name} loading="lazy" decoding="async" referrerPolicy="no-referrer" onError={event => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.classList.add("image-failed") }}/><Icon size={56} strokeWidth={1.55}/><small>SportiLand</small></div>
             <div className="shop-product-info"><span className="shop-product-category">{product.category}</span><h3>{product.name}</h3><p>{product.description}</p><div className="shop-product-price"><strong>{money(product.price)}</strong><del>{money(product.compareAt)}</del><small>Demo price</small></div><button type="button" className={`primary-btn shop-add-btn ${inCart ? 'added' : ''}`} onClick={() => onAdd(product)}>{inCart ? <><Check size={15}/> Add one more · {inCart}</> : <><Plus size={16}/> Add to cart</>}</button></div>
           </article>
         })}{!filtered.length && <div className="shop-empty"><Package size={28}/><strong>No matching gear</strong><p>Try a different search or category.</p><button className="secondary-btn" onClick={() => { setCategory('All gear'); setQuery('') }}>Clear filters</button></div>}</div>
       </div>
       <aside className="shop-cart-panel">
         <div className="shop-cart-heading"><div><span className="section-kicker">YOUR SELECTION</span><h3>Shopping cart</h3></div><span>{count}</span></div>
-        {cartItems.length ? <div className="shop-cart-items">{cartItems.map(item => <div className="shop-cart-item" key={item.productId}><div className={`shop-cart-thumb tone-${item.product.tone}`}><item.product.icon size={21}/></div><div className="shop-cart-item-copy"><strong>{item.product.name}</strong><small>{money(item.product.price)} each</small><div className="shop-quantity-control"><button type="button" onClick={() => onQuantity(item.productId, -1)} aria-label={`Decrease ${item.product.name}`}><Minus size={13}/></button><b>{item.quantity}</b><button type="button" onClick={() => onQuantity(item.productId, 1)} aria-label={`Increase ${item.product.name}`}><Plus size={13}/></button></div></div><div className="shop-cart-item-total"><strong>{money(item.product.price * item.quantity)}</strong><button type="button" onClick={() => onRemove(item.productId)} aria-label={`Remove ${item.product.name}`}><Trash2 size={14}/></button></div></div>)}</div> : <div className="shop-cart-empty"><ShoppingCart size={30}/><strong>Your cart is waiting.</strong><p>Add a few game-day essentials to see them here.</p></div>}
+        {cartItems.length ? <div className="shop-cart-items">{cartItems.map(item => <div className="shop-cart-item" key={item.productId}><div className={`shop-cart-thumb tone-${item.product.tone}`}><img src={item.product.image} alt="" loading="lazy" referrerPolicy="no-referrer" onError={event => { event.currentTarget.style.display = "none" }}/><item.product.icon size={21}/></div><div className="shop-cart-item-copy"><strong>{item.product.name}</strong><small>{money(item.product.price)} each</small><div className="shop-quantity-control"><button type="button" onClick={() => onQuantity(item.productId, -1)} aria-label={`Decrease ${item.product.name}`}><Minus size={13}/></button><b>{item.quantity}</b><button type="button" onClick={() => onQuantity(item.productId, 1)} aria-label={`Increase ${item.product.name}`}><Plus size={13}/></button></div></div><div className="shop-cart-item-total"><strong>{money(item.product.price * item.quantity)}</strong><button type="button" onClick={() => onRemove(item.productId)} aria-label={`Remove ${item.product.name}`}><Trash2 size={14}/></button></div></div>)}</div> : <div className="shop-cart-empty"><ShoppingCart size={30}/><strong>Your cart is waiting.</strong><p>Add a few game-day essentials to see them here.</p></div>}
         <div className="shop-cart-summary"><div><span>Subtotal</span><strong>{money(subtotal)}</strong></div><div><span>Delivery</span><strong>Calculated later</strong></div><div className="shop-cart-total"><span>Estimated total</span><strong>{money(subtotal)}</strong></div><button type="button" className="primary-btn full" disabled={!cartItems.length} onClick={onCheckout}>Continue to checkout <ArrowRight size={16}/></button><small><ShieldCheck size={13}/> Demo checkout only. No payment or shipment is processed.</small></div>
       </aside>
     </div>
@@ -1136,14 +1165,34 @@ function ShopCheckoutModal({ cart, products, user, onClose, onConfirm }) {
     }
     onConfirm({ ...form, name: form.name.trim(), phone: form.phone.trim(), address: form.address.trim(), city: form.city.trim(), pincode: form.pincode.trim(), paymentMethod: payment })
   }
-  return <div className="modal-backdrop shop-checkout-backdrop" onMouseDown={event => event.target === event.currentTarget && onClose()}><section className="shop-checkout-modal" role="dialog" aria-modal="true" aria-label="Shop checkout"><div className="shop-checkout-head"><div><span className="section-kicker">FIELDFINDER SHOP</span><h2>Delivery details</h2><p>Signed in as {user?.name || user?.username}</p></div><button type="button" className="modal-close" onClick={onClose}><X size={18}/></button></div><form onSubmit={submit}><div className="shop-checkout-grid"><label><span>Full name *</span><input value={form.name} onChange={event => update('name', event.target.value)} required maxLength={80}/></label><label><span>Mobile number *</span><input type="tel" value={form.phone} onChange={event => update('phone', event.target.value)} required maxLength={16}/></label><label className="wide"><span>Delivery address *</span><textarea rows="3" value={form.address} onChange={event => update('address', event.target.value)} required maxLength={300}/></label><label><span>City</span><input value={form.city} onChange={event => update('city', event.target.value)} maxLength={50}/></label><label><span>PIN code *</span><input value={form.pincode} onChange={event => update('pincode', event.target.value.replace(/\D/g, '').slice(0,6))} inputMode="numeric" required maxLength={6}/></label></div><label className="shop-payment-choice"><span>Payment preference</span><select value={payment} onChange={event => setPayment(event.target.value)}><option>Cash on delivery (demo)</option><option>UPI payment (demo only)</option></select></label>{error && <div className="form-error" role="alert">{error}</div>}<div className="shop-checkout-summary"><span>{items.reduce((sum,item)=>sum+item.quantity,0)} items · Demo total</span><strong>{money(total)}</strong></div><div className="shop-checkout-actions"><button type="button" className="secondary-btn" onClick={onClose}>Back to cart</button><button type="submit" className="primary-btn">Place demo order <ArrowRight size={16}/></button></div><small className="shop-checkout-disclaimer">This prototype stores a local order record only. No money is charged and no shipment is created.</small></form></section></div>
+  return <div className="modal-backdrop shop-checkout-backdrop" onMouseDown={event => event.target === event.currentTarget && onClose()}><section className="shop-checkout-modal" role="dialog" aria-modal="true" aria-label="Shop checkout"><div className="shop-checkout-head"><div><span className="section-kicker">SportiLand SHOP</span><h2>Delivery details</h2><p>Signed in as {user?.name || user?.username}</p></div><button type="button" className="modal-close" onClick={onClose}><X size={18}/></button></div><form onSubmit={submit}><div className="shop-checkout-grid"><label><span>Full name *</span><input value={form.name} onChange={event => update('name', event.target.value)} required maxLength={80}/></label><label><span>Mobile number *</span><input type="tel" value={form.phone} onChange={event => update('phone', event.target.value)} required maxLength={16}/></label><label className="wide"><span>Delivery address *</span><textarea rows="3" value={form.address} onChange={event => update('address', event.target.value)} required maxLength={300}/></label><label><span>City</span><input value={form.city} onChange={event => update('city', event.target.value)} maxLength={50}/></label><label><span>PIN code *</span><input value={form.pincode} onChange={event => update('pincode', event.target.value.replace(/\D/g, '').slice(0,6))} inputMode="numeric" required maxLength={6}/></label></div><label className="shop-payment-choice"><span>Payment preference</span><select value={payment} onChange={event => setPayment(event.target.value)}><option>Cash on delivery (demo)</option><option>UPI payment (demo only)</option></select></label>{error && <div className="form-error" role="alert">{error}</div>}<div className="shop-checkout-summary"><span>{items.reduce((sum,item)=>sum+item.quantity,0)} items · Demo total</span><strong>{money(total)}</strong></div><div className="shop-checkout-actions"><button type="button" className="secondary-btn" onClick={onClose}>Back to cart</button><button type="submit" className="primary-btn">Place demo order <ArrowRight size={16}/></button></div><small className="shop-checkout-disclaimer">This prototype stores a local order record only. No money is charged and no shipment is created.</small></form></section></div>
+}
+
+function TermsConditionsPage() {
+  return <div className="terms-page" id="terms-and-conditions">
+    <PageHeader kicker="CUSTOMER POLICIES" title="Terms & Conditions" description="Please review the rain and weather refund rules before confirming a booking."/>
+    <article className="terms-policy-card">
+      <span className="section-kicker">SPORTILAND · BOOKING POLICY</span>
+      <h2>Rain & Weather Refund Policy</h2>
+      <p>At SportiLand, we understand that weather conditions can sometimes affect scheduled sports activities. To ensure fairness for both customers and turf owners, the following refund policy applies to bookings affected by rainfall.</p>
+      <section><h3>1. Non-Roofed Turfs</h3><ul><li>If it rains during the scheduled booking and the non-roofed turf becomes unsuitable for playing, the customer will be eligible for a <strong>50% refund of the booking amount</strong>.</li><li>The remaining 50% will be retained to cover operational costs and the reservation of the facility.</li><li>Refund eligibility applies only when rainfall genuinely affects the usability of the turf.</li></ul></section>
+      <section><h3>2. Roofed / Covered Turfs</h3><ul><li>Bookings made at roofed or covered turfs are <strong>not eligible for a rain-related refund</strong>.</li><li>Since these facilities provide protection from rainfall, bookings will remain valid even during rainy weather.</li><li>Customers are expected to proceed with their scheduled booking unless the turf owner declares the facility unsafe or unavailable.</li></ul></section>
+      <section><h3>3. Rain Before the Booking Time</h3><ul><li>If rain occurs before the scheduled booking, the turf owner will assess the ground conditions.</li><li>If a non-roofed turf is declared unsuitable for playing, the customer will be eligible for a 50% refund.</li><li>If the turf remains playable, the booking will proceed as scheduled.</li></ul></section>
+      <section><h3>4. Rain During the Booking</h3><ul><li>If rainfall begins during an active booking and makes a non-roofed turf unplayable, the customer will be eligible for a 50% refund of the total booking amount.</li><li>If the rain does not affect the playing conditions, no refund will be applicable.</li></ul></section>
+      <section><h3>5. Refund Processing</h3><ul><li>Eligible refunds will be processed through the original payment method wherever possible.</li><li>Refund processing time may vary depending on the payment provider or bank.</li><li>Customers may be required to contact customer support or the turf owner to initiate a refund request.</li></ul></section>
+      <section><h3>6. Verification and Final Decision</h3><ul><li>Rain-related refund claims must be verified by the respective turf owner or SportiLand administration.</li><li>Refunds will only be approved when weather conditions genuinely prevent the customer from using the facility.</li><li>SportiLand reserves the right to review and resolve refund disputes based on the booking details and confirmation from the turf owner.</li></ul></section>
+      <section><h3>7. Customer Agreement</h3><p>By completing a booking on SportiLand, customers acknowledge and agree to this Rain & Weather Refund Policy.</p></section>
+      <aside className="terms-important"><strong>Important:</strong> A 50% refund applies to eligible rain-affected bookings at non-roofed turfs only. Roofed or covered turf bookings are not eligible for refunds solely due to rainfall.</aside>
+      <p className="terms-policy-footnote">Venue roofing information is shown in booking details. Where the roof type has not been confirmed by the venue, SportiLand displays “Not confirmed” and the rain-refund percentage remains pending confirmation.</p>
+    </article>
+  </div>
 }
 
 function CustomerAuthModal({ mode, setMode, form, update, onSubmit, onDemo, error, notice, onClose }) {
   return <div className="auth-gate-backdrop" role="presentation" onMouseDown={event => { if (event.target === event.currentTarget) onClose() }}>
     <section className="auth-gate-card" role="dialog" aria-modal="true" aria-labelledby="customer-auth-title">
       <button className="auth-gate-close" type="button" onClick={onClose} aria-label="Continue browsing as guest"><X size={19}/></button>
-      <div className="auth-gate-brand"><span className="brand-mark"><Trophy size={20}/></span><strong>fieldfinder<span>.</span></strong></div>
+      <div className="auth-gate-brand"><span className="brand-mark"><Trophy size={20}/></span><strong>SportiLand<span>.</span></strong></div>
       <span className="form-kicker">CUSTOMER ACCOUNT</span>
       <h2 id="customer-auth-title">{mode === 'login' ? 'Sign in to continue' : 'Create your customer account'}</h2>
       <p className="auth-gate-subtitle">{notice || 'Browse venues freely. Sign in or register only when you are ready to book.'}</p>
@@ -1157,7 +1206,7 @@ function CustomerAuthModal({ mode, setMode, form, update, onSubmit, onDemo, erro
       </form>
       <div className="auth-demo-divider"><span>OR</span></div>
       <button type="button" className="auth-demo-continue" onClick={onDemo}><Sparkles size={16}/><span><strong>Continue as demo customer</strong><small>No account or backend required</small></span><ArrowRight size={17}/></button>
-      <div className="auth-gate-footnote"><ShieldCheck size={15}/><span>Accounts are checked and stored by the FieldFinder backend. Email / SMS OTP verification is not enabled yet, so use an email address you control.</span></div>
+      <div className="auth-gate-footnote"><ShieldCheck size={15}/><span>Accounts are checked and stored by the SportiLand backend. Email / SMS OTP verification is not enabled yet, so use an email address you control.</span></div>
       <button type="button" className="auth-guest-continue" onClick={onClose}>Continue browsing as guest</button>
     </section>
   </div>
@@ -1233,7 +1282,7 @@ function DiscoverPage({ venues, total, search, setSearch, sport, setSport, areas
     </section>
 
     <section className="experiment-shop-promo" data-exp-reveal>
-      <div className="shop-promo-copy"><span className="section-kicker">FIELDFINDER SHOP · GAME DAY ESSENTIALS</span><h2>Got the game.<br/><em>Get the gear.</em></h2><p>Pick up bats, balls, rackets, paddles, gloves and training essentials for your next session.</p><button className="primary-btn" type="button" onClick={() => onGoPage('shop')}>Shop essentials <ShoppingBag size={16}/><ArrowRight size={16}/></button></div>
+      <div className="shop-promo-copy"><span className="section-kicker">SportiLand SHOP · GAME DAY ESSENTIALS</span><h2>Got the game.<br/><em>Get the gear.</em></h2><p>Pick up bats, balls, rackets, paddles, gloves and training essentials for your next session.</p><button className="primary-btn" type="button" onClick={() => onGoPage('shop')}>Shop essentials <ShoppingBag size={16}/><ArrowRight size={16}/></button></div>
       <div className="shop-promo-items" aria-label="Popular sports essentials"><span><Trophy size={19}/> Cricket bat</span><span><CircleHelp size={19}/> Match balls</span><span><Activity size={19}/> Rackets & paddles</span><span><Dumbbell size={19}/> Training gear</span></div>
     </section>
 
@@ -1281,9 +1330,9 @@ function VenueCard({ venue, onClick, revealIndex = 0 }) {
 }
 
 function BookingModal({ venue, onFindPlayers, date, setDate, duration, setDuration, selectedTime, setSelectedTime, slots, coupon, setCoupon, appliedCoupon, couponError, applyCoupon, price, onClose, onContinue }) {
-  return <div className="modal-backdrop" onMouseDown={e => e.target === e.currentTarget && onClose()}><div className="booking-modal"><button className="modal-close" onClick={onClose}><X/></button><div className="booking-modal-photo"><img src={venue.photoUrl || '/assets/venue-illustrations/turf.svg'} onError={e => { e.currentTarget.onerror = null; e.currentTarget.src = venue.photoIllustration ? `/${venue.photoIllustration}` : '/assets/venue-illustrations/turf.svg' }} alt={venue.name}/><span>{venue.photoKind === 'generated-illustration' ? 'ILLUSTRATIVE IMAGE · NOT A VERIFIED VENUE PHOTO' : venue.photoKind === 'activity-illustration' ? 'SPORT PREVIEW · ILLUSTRATION' : 'VENUE DETAILS'}</span></div><div className="booking-modal-content"><div className="modal-heading"><span className="section-kicker">FIELD FINDER VENUE</span><h2>{venue.name}</h2><p><MapPin size={15}/>{venue.address || venue.area}</p></div><a className="venue-modal-directions" href={googleMapsDirectionsUrl(venue)} target="_blank" rel="noopener noreferrer"><MapPinned size={17}/> Get directions in Google Maps <ArrowUpRight size={15}/></a><p className="venue-description">{venue.summary}</p><div className="sport-tags modal-sports">{(venue.sports || []).map(s => <span key={s}>{s}</span>)}</div><button className="find-players-link" type="button" onClick={onFindPlayers}><Users size={15}/> Find players for this game</button>{!venue.externalListing && <div className="demo-info"><ShieldCheck size={16}/><span>Sample availability only. Confirm the slot with the venue before relying on it.</span></div>}
+  return <div className="modal-backdrop" onMouseDown={e => e.target === e.currentTarget && onClose()}><div className="booking-modal"><button className="modal-close" onClick={onClose}><X/></button><div className="booking-modal-photo"><img src={venue.photoUrl || '/assets/venue-illustrations/turf.svg'} onError={e => { e.currentTarget.onerror = null; e.currentTarget.src = venue.photoIllustration ? `/${venue.photoIllustration}` : '/assets/venue-illustrations/turf.svg' }} alt={venue.name}/><span>{venue.photoKind === 'generated-illustration' ? 'ILLUSTRATIVE IMAGE · NOT A VERIFIED VENUE PHOTO' : venue.photoKind === 'activity-illustration' ? 'SPORT PREVIEW · ILLUSTRATION' : 'VENUE DETAILS'}</span></div><div className="booking-modal-content"><div className="modal-heading"><span className="section-kicker">FIELD FINDER VENUE</span><h2>{venue.name}</h2><p><MapPin size={15}/>{venue.address || venue.area}</p></div><a className="venue-modal-directions" href={googleMapsDirectionsUrl(venue)} target="_blank" rel="noopener noreferrer"><MapPinned size={17}/> Get directions in Google Maps <ArrowUpRight size={15}/></a><p className="venue-description">{venue.summary}</p><RainPolicySummary venue={venue}/><div className="sport-tags modal-sports">{(venue.sports || []).map(s => <span key={s}>{s}</span>)}</div><button className="find-players-link" type="button" onClick={onFindPlayers}><Users size={15}/> Find players for this game</button>{!venue.externalListing && <div className="demo-info"><ShieldCheck size={16}/><span>Sample availability only. Confirm the slot with the venue before relying on it.</span></div>}
       {venue.media?.length > 0 && <section className="venue-media-gallery"><div className="gallery-heading"><h3><Images size={17}/> Venue photos & videos</h3><span>{venue.media.length} items</span></div><div className="venue-media-grid">{venue.media.map(item => <div className="venue-media-item" key={item.id}>{item.type === 'VIDEO' ? <video src={mediaUrl(item.url)} controls preload="metadata" playsInline/> : <img src={mediaUrl(item.url)} alt={item.caption || venue.name} loading="lazy"/>}<small>{item.caption || (item.type === 'VIDEO' ? 'Venue video' : 'Venue photo')}</small></div>)}</div></section>}
-      {venue.externalListing ? <section className="external-venue-panel"><div className="external-venue-banner"><ShieldCheck size={17}/><span>Venue-managed activity. FieldFinder does not hold live slots or take payment for this listing.</span></div>
+      {venue.externalListing ? <section className="external-venue-panel"><div className="external-venue-banner"><ShieldCheck size={17}/><span>Venue-managed activity. SportiLand does not hold live slots or take payment for this listing.</span></div>
         {venue.pricingInfo && <div className="external-venue-fact"><strong>Pricing</strong><p>{venue.pricingInfo}</p></div>}
         {venue.openingHours && <div className="external-venue-fact"><strong>Hours / session information</strong><p>{venue.openingHours}</p></div>}
         {venue.venueHighlights?.length > 0 && <div className="external-venue-fact"><strong>What is listed</strong><ul>{venue.venueHighlights.map(item => <li key={item}>{item}</li>)}</ul></div>}
@@ -1297,32 +1346,42 @@ function BookingModal({ venue, onFindPlayers, date, setDate, duration, setDurati
     </div></div></div>
 }
 
+function RainPolicySummary({ venue }) {
+  const info = getVenueRoofInfo(venue)
+  return <section className="rain-policy-summary" aria-label="Roofing and rain refund information">
+    <div className="rain-policy-fact"><span>Roofing type</span><strong className={info.status === 'Not confirmed' ? 'unconfirmed' : ''}>{info.status}</strong></div>
+    <div className="rain-policy-fact"><span>Rain-related refund</span><strong>{info.refundLabel}</strong></div>
+    <p>Rain refunds depend on the venue being genuinely unplayable and owner verification. <a href="#terms-and-conditions" onClick={event => { event.preventDefault(); window.dispatchEvent(new CustomEvent('sportiland:open-terms')) }}>Read the full policy</a>.</p>
+  </section>
+}
+
 function CheckoutModal({ venue, date, time, duration, price, paymentMethod, setPaymentMethod, onBack, onConfirm }) {
-  return <div className="modal-backdrop checkout-layer"><div className="checkout-modal"><button className="modal-close" onClick={onBack}><X/></button><span className="section-kicker">DEMO CHECKOUT</span><h2>Review your booking</h2><p className="checkout-sub">Check the details before completing this demo booking.</p><div className="checkout-venue"><div><strong>{venue.name}</strong><span>{prettyDate(date)} · {prettyTime(time)} · {duration} hour{duration > 1 ? 's' : ''}</span></div><b>{money(price.total)}</b></div><div className="checkout-breakdown"><div><span>Slot subtotal</span><b>{money(price.subtotal)}</b></div><div><span>Discount</span><b className="discount-text">−{money(price.discount)}</b></div><div className="total-row"><span>Total to pay</span><strong>{money(price.total)}</strong></div></div><h3>Choose payment method</h3><div className="payment-options"><button className={paymentMethod === 'UPI demo' ? 'active' : ''} onClick={() => setPaymentMethod('UPI demo')}><Wallet/><span><b>UPI</b><small>Simulated demo payment</small></span><i/></button><button className={paymentMethod === 'Card demo' ? 'active' : ''} onClick={() => setPaymentMethod('Card demo')}><CreditCard/><span><b>Card</b><small>No card details collected</small></span><i/></button><button className={paymentMethod === 'Pay at venue (demo)' ? 'active' : ''} onClick={() => setPaymentMethod('Pay at venue (demo)')}><Banknote/><span><b>Pay at venue</b><small>Mark as pending in demo</small></span><i/></button></div><div className="payment-disclaimer"><ShieldCheck size={17}/><span>This is a payment-interface prototype. No bank, UPI or card transaction will occur.</span></div><button className="primary-btn full" onClick={onConfirm}>{paymentMethod === 'Pay at venue (demo)' ? 'Confirm demo booking' : 'Simulate successful payment'} <ArrowRight size={17}/></button></div></div>
+  return <div className="modal-backdrop checkout-layer"><div className="checkout-modal"><button className="modal-close" onClick={onBack}><X/></button><span className="section-kicker">DEMO CHECKOUT</span><h2>Review your booking</h2><p className="checkout-sub">Check the details before completing this demo booking.</p><div className="checkout-venue"><div><strong>{venue.name}</strong><span>{prettyDate(date)} · {prettyTime(time)} · {duration} hour{duration > 1 ? 's' : ''}</span></div><b>{money(price.total)}</b></div><RainPolicySummary venue={venue}/><div className="checkout-breakdown"><div><span>Slot subtotal</span><b>{money(price.subtotal)}</b></div><div><span>Discount</span><b className="discount-text">−{money(price.discount)}</b></div><div className="total-row"><span>Total to pay</span><strong>{money(price.total)}</strong></div></div><h3>Choose payment method</h3><div className="payment-options"><button className={paymentMethod === 'UPI demo' ? 'active' : ''} onClick={() => setPaymentMethod('UPI demo')}><Wallet/><span><b>UPI</b><small>Simulated demo payment</small></span><i/></button><button className={paymentMethod === 'Card demo' ? 'active' : ''} onClick={() => setPaymentMethod('Card demo')}><CreditCard/><span><b>Card</b><small>No card details collected</small></span><i/></button><button className={paymentMethod === 'Pay at venue (demo)' ? 'active' : ''} onClick={() => setPaymentMethod('Pay at venue (demo)')}><Banknote/><span><b>Pay at venue</b><small>Mark as pending in demo</small></span><i/></button></div><div className="payment-disclaimer"><ShieldCheck size={17}/><span>This is a payment-interface prototype. No bank, UPI or card transaction will occur.</span></div><button className="primary-btn full" onClick={onConfirm}>{paymentMethod === 'Pay at venue (demo)' ? 'Confirm demo booking' : 'Simulate successful payment'} <ArrowRight size={17}/></button></div></div>
 }
 
 function BookingsPage({ bookings, filter, setFilter, onCancel, onOpenPass }) {
-  return <><PageHeader kicker="YOUR ACTIVITY" title="My bookings" description="Review your reservations, open your QR pass and share your booking details."/><div className="booking-filters">{['All','Awaiting owner confirmation','Confirmed','Cancelled'].map(item => <button key={item} className={filter === item ? 'selected' : ''} onClick={() => setFilter(item)}>{item}</button>)}</div><div className="customer-booking-list">{bookings.length ? bookings.map(b => <article className="customer-booking-card" key={b.id}><div className="booking-card-main"><span className="booking-ref">{b.id}</span><h3>{b.venueName}</h3><p><MapPin size={14}/>{b.area}</p><div className="booking-facts"><span><CalendarDays size={14}/>{prettyDate(b.date)}</span><span><Clock3 size={14}/>{prettyTime(b.time)}</span><span><Activity size={14}/>{b.duration} hour{b.duration > 1 ? 's' : ''}</span></div></div><div className="booking-card-side"><strong>{money(b.total)}</strong><span className={`status-pill ${b.status === 'Cancelled' ? 'cancelled' : b.status === 'Confirmed' ? 'confirmed' : 'pending'}`}>{b.status}</span><small>Payment: {b.paymentStatus}</small><button className="booking-pass-open" type="button" onClick={() => onOpenPass(b)}><QrCodeIcon/> View QR pass</button>{b.status !== 'Cancelled' && <button className="text-danger" onClick={() => onCancel(b.id)}>Cancel booking</button>}</div></article>) : <div className="empty-state"><CalendarDays size={30}/><strong>No bookings yet</strong><p>Your booking requests will appear here after checkout.</p></div>}</div><div className="availability-note"><ShieldCheck size={16}/><span>QR passes in this prototype are generated in your browser. Owners can scan and read the pass, but live booking verification requires a shared backend.</span></div></>
+  return <><PageHeader kicker="YOUR ACTIVITY" title="My bookings" description="Review your reservations, open your QR pass and share your booking details."/><div className="booking-filters">{['All','Awaiting owner confirmation','Confirmed','Cancelled'].map(item => <button key={item} className={filter === item ? 'selected' : ''} onClick={() => setFilter(item)}>{item}</button>)}</div><div className="customer-booking-list">{bookings.length ? bookings.map(b => <article className="customer-booking-card" key={b.id}><div className="booking-card-main"><span className="booking-ref">{b.id}</span><h3>{b.venueName}</h3><p><MapPin size={14}/>{b.area}</p><div className="booking-facts"><span><CalendarDays size={14}/>{prettyDate(b.date)}</span><span><Clock3 size={14}/>{prettyTime(b.time)}</span><span><Activity size={14}/>{b.duration} hour{b.duration > 1 ? 's' : ''}</span></div></div><div className="booking-card-side"><strong>{money(b.total)}</strong><span className={`status-pill ${b.status === 'Cancelled' ? 'cancelled' : b.status === 'Confirmed' ? 'confirmed' : 'pending'}`}>{b.status}</span><small>Payment: {b.paymentStatus}</small><small className="booking-rain-inline">{b.roofStatus || 'Roofing not confirmed'} · {b.rainRefundPercent === null || b.rainRefundPercent === undefined ? 'Refund pending' : `${b.rainRefundPercent}% rain refund`}</small><button className="booking-pass-open" type="button" onClick={() => onOpenPass(b)}><QrCodeIcon/> View QR pass</button>{b.status !== 'Cancelled' && <button className="text-danger" onClick={() => onCancel(b.id)}>Cancel booking</button>}</div></article>) : <div className="empty-state"><CalendarDays size={30}/><strong>No bookings yet</strong><p>Your booking requests will appear here after checkout.</p></div>}</div><div className="availability-note"><ShieldCheck size={16}/><span>QR passes in this prototype are generated in your browser. Owners can scan and read the pass, but live booking verification requires a shared backend.</span></div></>
 }
 
 function createBookingPassToken() {
-  try { return crypto.randomUUID() } catch { return `FFPASS-${Date.now()}-${Math.random().toString(36).slice(2, 10).toUpperCase()}` }
+  try { return crypto.randomUUID() } catch { return `SPORTILAND-PASS-${Date.now()}-${Math.random().toString(36).slice(2, 10).toUpperCase()}` }
 }
 function QrCodeIcon() { return <Ticket size={15}/> }
 
 function BookingPassModal({ booking, onClose }) {
   const qrRef = useRef(null)
   const pass = {
-    type: 'FIELDFINDER_BOOKING_PASS', version: 1,
+    type: 'SPORTILAND_BOOKING_PASS', version: 1,
     bookingId: booking.id, token: booking.qrToken || createBookingPassToken(),
-    customer: booking.customerName || 'FieldFinder customer', venue: booking.venueName,
+    customer: booking.customerName || 'SportiLand customer', venue: booking.venueName,
     area: booking.area, sport: booking.sport, date: booking.date, time: booking.time,
     durationHours: booking.duration, amount: booking.total,
-    paymentStatus: booking.paymentStatus, bookingStatus: booking.status
+    paymentStatus: booking.paymentStatus, bookingStatus: booking.status,
+    roofStatus: booking.roofStatus || 'Not confirmed', rainRefundPercent: booking.rainRefundPercent ?? null, rainRefundLabel: booking.rainRefundLabel || 'Pending venue confirmation'
   }
   const qrValue = JSON.stringify(pass)
   const message = [
-    '*FieldFinder booking details*',
+    '*SportiLand booking details*',
     `Booking ID: ${booking.id}`,
     `Venue: ${booking.venueName}`,
     `Sport: ${booking.sport}`,
@@ -1331,8 +1390,10 @@ function BookingPassModal({ booking, onClose }) {
     `Amount: ${money(booking.total)}`,
     `Payment: ${booking.paymentStatus}`,
     `Booking status: ${booking.status}`,
+    `Roofing: ${booking.roofStatus || 'Not confirmed'}`,
+    `Rain refund: ${booking.rainRefundPercent === null || booking.rainRefundPercent === undefined ? 'Pending venue confirmation' : `${booking.rainRefundPercent}% if eligible`}`,
     `QR pass code: ${pass.token}`,
-    'Please show the FieldFinder QR pass at the venue for check-in.'
+    'Please show the SportiLand QR pass at the venue for check-in.'
   ].join('\n')
   const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
   function downloadQr() {
@@ -1340,7 +1401,7 @@ function BookingPassModal({ booking, onClose }) {
     if (!canvas) return
     const link = document.createElement('a')
     link.href = canvas.toDataURL('image/png')
-    link.download = `FieldFinder-${booking.id}-QR.png`
+    link.download = `SportiLand-${booking.id}-QR.png`
     link.click()
   }
   async function sharePass() {
@@ -1349,8 +1410,8 @@ function BookingPassModal({ booking, onClose }) {
       try {
         const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'))
         if (blob) {
-          const file = new File([blob], `FieldFinder-${booking.id}-QR.png`, { type: 'image/png' })
-          const data = { title: 'FieldFinder booking pass', text: message, files: [file] }
+          const file = new File([blob], `SportiLand-${booking.id}-QR.png`, { type: 'image/png' })
+          const data = { title: 'SportiLand booking pass', text: message, files: [file] }
           if (navigator.canShare(data)) {
             await navigator.share(data)
             return
@@ -1363,7 +1424,7 @@ function BookingPassModal({ booking, onClose }) {
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
   }
   return <div className="modal-backdrop ff-pass-backdrop" onMouseDown={event => event.target === event.currentTarget && onClose()}>
-    <section className="ff-pass-modal" role="dialog" aria-modal="true" aria-label="FieldFinder booking QR pass">
+    <section className="ff-pass-modal" role="dialog" aria-modal="true" aria-label="SportiLand booking QR pass">
       <button className="modal-close" type="button" onClick={onClose} aria-label="Close QR pass"><X/></button>
       <div className="ff-pass-heading"><span className="ff-pass-success"><Check size={14}/> BOOKING REQUEST CREATED</span><h2>Your digital booking pass</h2><p>Save this QR code and show it to the turf owner when you arrive.</p></div>
       <div className="ff-pass-ticket">
@@ -1371,7 +1432,7 @@ function BookingPassModal({ booking, onClose }) {
         <div className="ff-pass-id">{booking.id}</div>
         <div className="ff-pass-token">PASS TOKEN · {pass.token.slice(0, 8).toUpperCase()}</div>
       </div>
-      <div className="ff-pass-details"><div><small>VENUE</small><strong>{booking.venueName}</strong></div><div><small>DATE & TIME</small><strong>{prettyDate(booking.date)} · {prettyTime(booking.time)}</strong></div><div><small>SPORT & DURATION</small><strong>{booking.sport} · {booking.duration} hour(s)</strong></div><div><small>AMOUNT / PAYMENT</small><strong>{money(booking.total)} · {booking.paymentStatus}</strong></div></div>
+      <div className="ff-pass-details"><div><small>VENUE</small><strong>{booking.venueName}</strong></div><div><small>DATE & TIME</small><strong>{prettyDate(booking.date)} · {prettyTime(booking.time)}</strong></div><div><small>SPORT & DURATION</small><strong>{booking.sport} · {booking.duration} hour(s)</strong></div><div><small>AMOUNT / PAYMENT</small><strong>{money(booking.total)} · {booking.paymentStatus}</strong></div><div><small>ROOFING / RAIN REFUND</small><strong>{booking.roofStatus || 'Not confirmed'} · {booking.rainRefundPercent === null || booking.rainRefundPercent === undefined ? 'Pending confirmation' : `${booking.rainRefundPercent}% if eligible`}</strong></div></div>
       <div className="ff-pass-status"><ShieldCheck size={17}/><span><strong>{booking.status}</strong><small>This booking is awaiting owner confirmation. The QR pass is for identifying the request, not proof of payment.</small></span></div>
       <div className="ff-pass-actions"><button type="button" className="primary-btn" onClick={downloadQr}><DownloadIcon/> Download QR</button><button type="button" className="ff-whatsapp-button" onClick={sharePass}><WhatsAppIcon/> Share pass & details</button></div>
       <p className="ff-pass-note">On supported phones, the share sheet can include the QR image and booking message; choose WhatsApp. Otherwise WhatsApp opens with the prepared text, and you can attach the downloaded QR image. Automated delivery will be connected when the backend is available.</p>
@@ -1576,7 +1637,7 @@ function RosterSummary({ title, people }) {
 }
 
 function ProfilePage({ user, bookings, invites, onLogout }) {
-  return <><PageHeader kicker="ACCOUNT" title="My profile" description="Your FieldFinder customer account and activity overview."/><div className="profile-grid"><section className="profile-card"><span className="profile-big-avatar">{user.name.slice(0,1).toUpperCase()}</span><h2>{user.name}</h2><p>@{user.username}</p><div className="profile-info"><span><Mail size={16}/>{user.email}</span>{user.phone && <span><Phone size={16}/>{user.phone}</span>}</div><button className="secondary-btn" onClick={onLogout}><LogOut size={15}/> Sign out</button></section><section className="profile-stats"><div className="profile-stat"><CalendarDays/><strong>{bookings.length}</strong><span>Total bookings</span></div><div className="profile-stat"><UserRoundPlus/><strong>{invites.length}</strong><span>Player invites sent</span></div><div className="profile-stat"><Wallet/><strong>{money(bookings.reduce((s,b)=>s+b.total,0))}</strong><span>Demo booking value</span></div></section></div><div className="availability-note"><ShieldCheck size={16}/><span>Profile data is saved locally in your browser in this demo. Real account management will use the shared backend.</span></div></>
+  return <><PageHeader kicker="ACCOUNT" title="My profile" description="Your SportiLand customer account and activity overview."/><div className="profile-grid"><section className="profile-card"><span className="profile-big-avatar">{user.name.slice(0,1).toUpperCase()}</span><h2>{user.name}</h2><p>@{user.username}</p><div className="profile-info"><span><Mail size={16}/>{user.email}</span>{user.phone && <span><Phone size={16}/>{user.phone}</span>}</div><button className="secondary-btn" onClick={onLogout}><LogOut size={15}/> Sign out</button></section><section className="profile-stats"><div className="profile-stat"><CalendarDays/><strong>{bookings.length}</strong><span>Total bookings</span></div><div className="profile-stat"><UserRoundPlus/><strong>{invites.length}</strong><span>Player invites sent</span></div><div className="profile-stat"><Wallet/><strong>{money(bookings.reduce((s,b)=>s+b.total,0))}</strong><span>Demo booking value</span></div></section></div><div className="availability-note"><ShieldCheck size={16}/><span>Profile data is saved locally in your browser in this demo. Real account management will use the shared backend.</span></div></>
 }
 function PageHeader({ kicker, title, description }) { return <section className="page-heading"><div><span className="section-kicker">{kicker}</span><h1>{title}</h1><p>{description}</p></div></section> }
 

@@ -1,4 +1,4 @@
-# FieldFinder Customer Web — Madurai Region Event Sources
+# SportiLand Customer Web — Madurai Region Event Sources
 
 Event and trail information in the customer app was checked on **4 November 2026**. Dates, fees and availability can change; users are sent to the organiser or official portal to complete registration.
 

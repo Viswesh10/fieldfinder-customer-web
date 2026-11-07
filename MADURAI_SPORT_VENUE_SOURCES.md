@@ -1,6 +1,6 @@
 # Madurai sport venue additions – source notes
 
-Research checked 4 November 2026. These are online-listed venues, not FieldFinder partners. Phone numbers, prices, hours, active coaching batches and slot availability should be reconfirmed directly. Cards use activity illustrations rather than claiming to show venue photographs. External listings use contact / third-party booking actions and do not use FieldFinder's demo hourly checkout.
+Research checked 4 November 2026. These are online-listed venues, not SportiLand partners. Phone numbers, prices, hours, active coaching batches and slot availability should be reconfirmed directly. Cards use activity illustrations rather than claiming to show venue photographs. External listings use contact / third-party booking actions and do not use SportiLand's demo hourly checkout.
 
 ## Pickleball
 
@@ -26,4 +26,4 @@ Research checked 4 November 2026. These are online-listed venues, not FieldFinde
 
 ## Integration note
 
-For these venues, FieldFinder only displays directory information and links/call actions. It does not confirm or accept reservations, collect training fees, or guarantee current availability.
+For these venues, SportiLand only displays directory information and links/call actions. It does not confirm or accept reservations, collect training fees, or guarantee current availability.

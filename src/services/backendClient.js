@@ -17,7 +17,7 @@ async function ensureCsrfToken() {
     credentials: 'include',
     headers: { Accept: 'application/json' }
   })
-  if (!response.ok) throw new Error('Could not initialise secure sign-in. Check the FieldFinder backend.')
+  if (!response.ok) throw new Error('Could not initialise secure sign-in. Check the SportiLand backend.')
   const body = await response.json().catch(() => ({}))
   token = readCookie('XSRF-TOKEN') || body.token || ''
   if (!token) throw new Error('The backend did not provide a security token. Refresh and try again.')

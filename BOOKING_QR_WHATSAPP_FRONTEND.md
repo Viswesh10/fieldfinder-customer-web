@@ -1,4 +1,4 @@
-# FieldFinder booking QR + WhatsApp frontend
+# SportiLand booking QR + WhatsApp frontend
 
 This V8 frontend update adds:
 
@@ -9,9 +9,9 @@ This V8 frontend update adds:
 
 ## Important frontend-only limitation
 
-This is a frontend prototype. WhatsApp is not sent automatically by the website. The current `wa.me` action only opens WhatsApp with pre-filled text. Automated delivery from the FieldFinder business account needs a server-side integration with the WhatsApp Business Platform and an approved message template.
+This is a frontend prototype. WhatsApp is not sent automatically by the website. The current `wa.me` action only opens WhatsApp with pre-filled text. Automated delivery from the SportiLand business account needs a server-side integration with the WhatsApp Business Platform and an approved message template.
 
-The QR currently contains a `FIELDFINDER_BOOKING_PASS` JSON payload with booking facts and a random token. It is useful for demonstrating the customer and owner screens, but it is not cryptographically signed and is not proof of payment or a trustworthy booking record. A production system should put only an opaque, random booking-pass token in the QR and validate it with the server before check-in.
+The QR currently contains a `SPORTILAND_BOOKING_PASS` JSON payload with booking facts and a random token. It is useful for demonstrating the customer and owner screens, but it is not cryptographically signed and is not proof of payment or a trustworthy booking record. A production system should put only an opaque, random booking-pass token in the QR and validate it with the server before check-in.
 
 Install dependencies and run:
 

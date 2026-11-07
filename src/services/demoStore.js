@@ -13,7 +13,7 @@ export function writeDemo(key, value) {
   try {
     localStorage.setItem(prefix + key, JSON.stringify(value))
   } catch (error) {
-    console.warn('FieldFinder demo storage could not be saved:', error)
+    console.warn('SportiLand demo storage could not be saved:', error)
   }
 }
 
