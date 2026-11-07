@@ -1,4 +1,4 @@
-# FieldFinder Customer V7 — Vercel deployment
+# SportiLand Customer V7 — Vercel deployment
 
 This is a Vite + React single-page application. Deploy the contents of `customer-web/` at the GitHub repository root.
 
@@ -28,7 +28,7 @@ The Shop page currently uses a sample catalogue and browser-local cart/order sta
 
 ## Deploy or update from GitHub
 
-1. Create or open the `fieldfinder-customer-web` repository.
+1. Create or open the `SportiLand-customer-web` repository.
 2. Upload the *contents* of the `customer-web/` folder to the repository root (do not upload it as an extra nested directory).
 3. Commit changes to the production branch (usually `main`).
 4. In Vercel, import the repository if it is not already linked. Existing linked projects deploy automatically after a new commit.

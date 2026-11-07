@@ -1,4 +1,4 @@
-# FieldFinder Shop — backend handoff notes
+# SportiLand Shop — backend handoff notes
 
 ## Current frontend behaviour
 
