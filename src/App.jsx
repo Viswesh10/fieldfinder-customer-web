@@ -5,8 +5,9 @@ import {
   IndianRupee, LocateFixed, LogOut, MapPin, Menu, Minus, Plus, Search,
   ShieldCheck, SlidersHorizontal, Sparkles, Star, Ticket, Trophy, UserRound,
   UserRoundPlus, Users, Wallet, X, Zap, Mail, Phone, PhoneCall, Globe, LockKeyhole, Eye,
-  CircleHelp, MapPinned, Medal, BellRing, Percent, Dumbbell, ClipboardList, Gamepad2, Mountain, Route, Images, Video, PersonStanding
+  CircleHelp, MapPinned, Medal, BellRing, Percent, Dumbbell, ClipboardList, Gamepad2, Mountain, Route, Images, Video, PersonStanding, ShoppingBag, ShoppingCart, Package, Truck, Trash2, ArrowDown, Download,
 } from 'lucide-react'
+import { QRCodeCanvas } from 'qrcode.react'
 import { readDemo, writeDemo } from './services/demoStore'
 import { backendRequest } from './services/backendClient'
 import { demoPeople } from './data/demoPeople'
@@ -17,6 +18,21 @@ const RATE_PER_HOUR = 800
 const BOOKING_KEY = 'bookings'
 const INVITE_KEY = 'playerInvites'
 const SPORTS = ['All', 'Football', 'Cricket', 'Badminton', 'Running', 'Pickleball', 'Paintball', 'Boxing']
+const SHOP_CATEGORIES = ['All gear', 'Cricket', 'Football', 'Badminton', 'Pickleball', 'Boxing', 'Training']
+const SHOP_PRODUCTS = [
+  { id: 'cricket-bat-pro', name: 'Pro Cricket Bat', category: 'Cricket', price: 2899, compareAt: 3499, badge: 'Bestseller', icon: Trophy, tone: 'bat', description: 'Practice and match-ready bat for club play.' },
+  { id: 'cricket-tennis-ball', name: 'Tennis Cricket Ball · 3 Pack', category: 'Cricket', price: 299, compareAt: 399, badge: 'Popular', icon: CircleHelp, tone: 'ball', description: 'Bright, durable balls for turf and street cricket.' },
+  { id: 'cricket-leather-ball', name: 'Leather Cricket Ball', category: 'Cricket', price: 549, compareAt: 699, badge: '', icon: CircleHelp, tone: 'leather', description: 'Practice-grade leather ball for net sessions.' },
+  { id: 'cricket-stumps', name: 'Portable Cricket Stumps', category: 'Cricket', price: 649, compareAt: 799, badge: '', icon: Package, tone: 'stumps', description: 'Lightweight set for backyard and practice games.' },
+  { id: 'football-match-ball', name: 'Training Football', category: 'Football', price: 899, compareAt: 1199, badge: 'Popular', icon: Trophy, tone: 'football', description: 'All-round ball for turf and outdoor practice.' },
+  { id: 'badminton-racket', name: 'Carbon Badminton Racket', category: 'Badminton', price: 1599, compareAt: 1999, badge: '', icon: Activity, tone: 'racket', description: 'Lightweight frame for regular court sessions.' },
+  { id: 'shuttlecock-pack', name: 'Feather Shuttlecocks · 6 Pack', category: 'Badminton', price: 499, compareAt: 599, badge: '', icon: Activity, tone: 'shuttle', description: 'Practice pack for club and academy play.' },
+  { id: 'pickleball-paddle', name: 'Pickleball Paddle', category: 'Pickleball', price: 1299, compareAt: 1599, badge: 'New', icon: CircleHelp, tone: 'paddle', description: 'Comfort-grip paddle for beginner and regular play.' },
+  { id: 'pickleball-balls', name: 'Outdoor Pickleballs · 3 Pack', category: 'Pickleball', price: 349, compareAt: 449, badge: '', icon: CircleHelp, tone: 'pickleball', description: 'Perforated outdoor balls for court sessions.' },
+  { id: 'boxing-gloves', name: 'Training Boxing Gloves', category: 'Boxing', price: 1199, compareAt: 1499, badge: 'Popular', icon: Dumbbell, tone: 'gloves', description: 'Training gloves for bag work and fitness drills.' },
+  { id: 'skipping-rope', name: 'Speed Skipping Rope', category: 'Training', price: 299, compareAt: 399, badge: '', icon: Activity, tone: 'rope', description: 'Adjustable rope for warm-ups and conditioning.' },
+  { id: 'training-cones', name: 'Agility Cones · 10 Pack', category: 'Training', price: 399, compareAt: 499, badge: '', icon: Zap, tone: 'cones', description: 'Set up footwork, sprint and coordination drills.' }
+]
 const money = value => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(value || 0)
 
 const cleanMapLocation = value => {
@@ -270,7 +286,8 @@ const mergePublishedVenues = (directory, published) => {
 
 function App() {
   const [venues, setVenues] = useState([])
-  const [user, setUser] = useState(null)
+  // Keep the local demo customer signed in across refreshes for frontend-only testing.
+  const [user, setUser] = useState(() => readDemo('demoCustomerSession', null))
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [authChecking, setAuthChecking] = useState(true)
   const pendingAuthAction = useRef(null)
@@ -280,6 +297,7 @@ function App() {
   const [authNotice, setAuthNotice] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [page, setPage] = useState('discover')
+  const pageHistoryRef = useRef([])
   const [mobileNav, setMobileNav] = useState(false)
   const [sportsMenuOpen, setSportsMenuOpen] = useState(false)
   const [search, setSearch] = useState('')
@@ -295,6 +313,7 @@ function App() {
   const [checkout, setCheckout] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState('UPI demo')
   const [bookings, setBookings] = useState(() => readDemo(BOOKING_KEY, []))
+  const [bookingPass, setBookingPass] = useState(null)
   const [bookingFilter, setBookingFilter] = useState('All')
   const [toast, setToast] = useState('')
   const [playerVenueId, setPlayerVenueId] = useState('')
@@ -304,6 +323,9 @@ function App() {
   const [tournamentSport, setTournamentSport] = useState('All')
   const [tournamentRegistrations, setTournamentRegistrations] = useState(() => readDemo('tournamentRegistrations', []))
   const [adventureRegistrations, setAdventureRegistrations] = useState(() => readDemo('adventureRegistrations', []))
+  const [shopCart, setShopCart] = useState(() => readDemo('shopCart', []))
+  const [shopOrders, setShopOrders] = useState(() => readDemo('shopOrders', []))
+  const [shopCheckoutOpen, setShopCheckoutOpen] = useState(false)
   const [publishedTurfs, setPublishedTurfs] = useState([])
   const [announcementTarget, setAnnouncementTarget] = useState(null)
   const baseVenuesRef = useRef([])
@@ -353,6 +375,8 @@ function App() {
   useEffect(() => writeDemo(INVITE_KEY, invites), [invites])
   useEffect(() => writeDemo('tournamentRegistrations', tournamentRegistrations), [tournamentRegistrations])
   useEffect(() => writeDemo('adventureRegistrations', adventureRegistrations), [adventureRegistrations])
+  useEffect(() => writeDemo('shopCart', shopCart), [shopCart])
+  useEffect(() => writeDemo('shopOrders', shopOrders), [shopOrders])
   useEffect(() => { if (!toast) return; const timer = setTimeout(() => setToast(''), 3000); return () => clearTimeout(timer) }, [toast])
   useEffect(() => {
     const shell = document.querySelector('.experiment-shell')
@@ -395,9 +419,9 @@ function App() {
     }
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        // Toggle in both directions so the reveal replays whenever the section
-        // leaves and later re-enters the viewport (scrolling down or up).
-        entry.target.classList.toggle('exp-revealed', entry.isIntersecting)
+        if (!entry.isIntersecting) return
+        entry.target.classList.add('exp-revealed')
+        observer.unobserve(entry.target)
       })
     }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' })
     nodes.forEach(node => observer.observe(node))
@@ -419,6 +443,26 @@ function App() {
 
   function notify(message) { setToast(message) }
   function updateAuth(key, value) { setAuthForm(prev => ({ ...prev, [key]: value })) }
+  function continueAsDemoCustomer() {
+    const demoAccount = {
+      id: 'fieldfinder-demo-customer',
+      role: 'CUSTOMER',
+      username: 'demo_customer',
+      name: 'Demo Customer',
+      email: 'demo.customer@fieldfinder.local',
+      demo: true
+    }
+    writeDemo('demoCustomerSession', demoAccount)
+    setUser(demoAccount)
+    setAuthModalOpen(false)
+    setAuthForm({ username: '', email: '', password: '' })
+    setAuthError('')
+    const continueAction = pendingAuthAction.current
+    pendingAuthAction.current = null
+    if (continueAction) continueAction(demoAccount)
+    notify('Demo customer signed in. You can now complete a test booking and open its QR pass.')
+  }
+
   async function submitAuth(event) {
     event.preventDefault()
     setAuthError('')
@@ -477,6 +521,7 @@ function App() {
     try { await backendRequest('/api/auth/logout', { method: 'POST' }) }
     catch { /* Clear the local view even if the backend session has expired. */ }
     setUser(null)
+    writeDemo('demoCustomerSession', null)
     setPage('discover')
     setAuthModalOpen(false)
     pendingAuthAction.current = null
@@ -536,11 +581,18 @@ function App() {
       duration, ratePerHour: RATE_PER_HOUR, subtotal: price.subtotal, discountCode: appliedCoupon || '',
       discount: price.discount, total: price.total, paymentMethod,
       paymentStatus: paymentMethod === 'Pay at venue (demo)' ? 'Pending' : 'Demo payment complete',
-      status: 'Awaiting owner confirmation', createdAt: new Date().toISOString()
+      status: 'Awaiting owner confirmation', createdAt: new Date().toISOString(),
+      qrToken: createBookingPassToken()
     }
     setBookings(prev => [booking, ...prev])
+    setBookingPass(booking)
     setCheckout(false); setSelectedVenue(null); setSelectedTime(''); setPage('bookings')
-    notify('Demo booking request created. No real payment was collected.')
+    notify('Demo booking request created. Your QR booking pass is ready to view.')
+  }
+  function openBookingPass(booking) {
+    const next = booking.qrToken ? booking : { ...booking, qrToken: createBookingPassToken() }
+    if (!booking.qrToken) setBookings(previous => previous.map(item => item.id === booking.id ? next : item))
+    setBookingPass(next)
   }
   function cancelBooking(id) {
     setBookings(prev => prev.map(b => b.id === id ? { ...b, status: 'Cancelled', paymentStatus: b.paymentStatus === 'Demo payment complete' ? 'Demo refund not processed' : b.paymentStatus } : b))
@@ -579,14 +631,63 @@ function App() {
     notify(`${event.kind} ${event.kind === 'Marathon' ? 'registration' : 'booking'} saved for ${event.title} (demo).`)
   }
 
+  function addShopItem(product) {
+    setShopCart(previous => {
+      const found = previous.find(item => item.productId === product.id)
+      return found
+        ? previous.map(item => item.productId === product.id ? { ...item, quantity: Math.min(20, item.quantity + 1) } : item)
+        : [...previous, { productId: product.id, quantity: 1 }]
+    })
+    notify(`${product.name} added to your demo cart.`)
+  }
+  function updateShopQuantity(productId, delta) {
+    setShopCart(previous => previous
+      .map(item => item.productId === productId ? { ...item, quantity: Math.min(20, Math.max(0, item.quantity + delta)) } : item)
+      .filter(item => item.quantity > 0))
+  }
+  function removeShopItem(productId) {
+    setShopCart(previous => previous.filter(item => item.productId !== productId))
+  }
+  function beginShopCheckout() {
+    if (!shopCart.length) { notify('Add at least one item before checkout.'); return }
+    openCustomerAuth(() => setShopCheckoutOpen(true), 'Sign in or create a customer account to continue with your shop order.')
+  }
+  function completeShopOrder(details) {
+    if (!user || !shopCart.length) return
+    const items = shopCart.map(item => {
+      const product = SHOP_PRODUCTS.find(product => product.id === item.productId)
+      return { productId: item.productId, name: product?.name || 'FieldFinder item', quantity: item.quantity, unitPrice: product?.price || 0, lineTotal: (product?.price || 0) * item.quantity }
+    })
+    const order = {
+      id: `FF-SH-${String(Date.now()).slice(-8)}`, customerId: user.id, customerName: user.name || user.username,
+      items, subtotal: items.reduce((sum, item) => sum + item.lineTotal, 0),
+      shipping: 0, total: items.reduce((sum, item) => sum + item.lineTotal, 0),
+      ...details, status: 'Demo order saved · awaiting backend integration', createdAt: new Date().toISOString()
+    }
+    setShopOrders(previous => [order, ...previous])
+    setShopCart([])
+    setShopCheckoutOpen(false)
+    notify(`Demo order ${order.id} saved. No payment or delivery has been processed.`)
+  }
+
   function navigateFromAnnouncement(item) {
-    if (item.page === 'discover' && item.sport) setSport(item.sport)
+    // Change the destination first, then let the new page mount before scrolling.
+    // This avoids trying to scroll to an event card that is not in the DOM yet.
+    if (item.page === 'discover' && item.sport) {
+      setSport(item.sport)
+      setArea('All areas')
+    }
     if (item.page === 'tournaments') setTournamentSport('All')
     setAnnouncementTarget({ ...item, nonce: Date.now() })
+    if (item.page !== page) pageHistoryRef.current.push(page)
     setPage(item.page)
     setMobileNav(false)
+    setSportsMenuOpen(false)
+    window.scrollTo({ top: 0, behavior: 'auto' })
     if (item.page === 'discover' && item.sport) {
-      window.setTimeout(() => document.getElementById('venue-directory')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 90)
+      window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
+        document.getElementById('venue-directory')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }))
     }
   }
 
@@ -596,11 +697,22 @@ function App() {
     { id: 'players', label: 'Find players', icon: Users },
     { id: 'tournaments', label: 'Tournaments', icon: Trophy },
     { id: 'events', label: 'Events & adventures', icon: Route },
+    { id: 'shop', label: 'Shop', icon: ShoppingBag },
     { id: 'profile', label: 'My profile', icon: UserRound }
   ]
 
+  function navigateBack() {
+    const previousPage = pageHistoryRef.current.pop() || 'discover'
+    setPage(previousPage)
+    setMobileNav(false)
+    setSportsMenuOpen(false)
+    setAnnouncementTarget(null)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   function navigatePage(id) {
     const go = () => {
+      if (id !== page) pageHistoryRef.current.push(page)
       setPage(id)
       setMobileNav(false)
       setSportsMenuOpen(false)
@@ -614,6 +726,7 @@ function App() {
   function chooseExperimentSport(item) {
     setSport(item)
     setArea('All areas')
+    if (page !== 'discover') pageHistoryRef.current.push(page)
     setPage('discover')
     setSportsMenuOpen(false)
     setMobileNav(false)
@@ -627,6 +740,10 @@ function App() {
         <span className="brand-mark"><Trophy size={22}/></span>
         <span className="experiment-brand-copy">fieldfinder<span className="brand-dot">.</span><small>PLAY MORE. PLAN LESS.</small></span>
       </button>
+      <div className="experiment-page-controls" aria-label="Page navigation">
+        <button className="experiment-page-control" type="button" onClick={navigateBack} disabled={pageHistoryRef.current.length === 0} aria-label="Go back" title="Go back"><ChevronLeft size={16}/><span>Back</span></button>
+        <button className="experiment-page-control home-control" type="button" onClick={() => navigatePage('discover')} aria-label="Go to home" title="Home"><Home size={15}/><span>Home</span></button>
+      </div>
       <nav className="experiment-nav" aria-label="Main navigation">
         <button className={`experiment-nav-link ${page === 'discover' ? 'active' : ''}`} onClick={() => navigatePage('discover')}>Discover</button>
         <div className={`experiment-sports-nav ${sportsMenuOpen ? 'open' : ''}`}>
@@ -639,6 +756,7 @@ function App() {
         <button className={`experiment-nav-link ${page === 'events' ? 'active' : ''}`} onClick={() => navigatePage('events')}>Events & adventures</button>
         <button className={`experiment-nav-link ${page === 'tournaments' ? 'active' : ''}`} onClick={() => navigatePage('tournaments')}>Tournaments</button>
         <button className={`experiment-nav-link ${page === 'players' ? 'active' : ''}`} onClick={() => navigatePage('players')}>Find players</button>
+        <button className={`experiment-nav-link ${page === 'shop' ? 'active' : ''}`} onClick={() => navigatePage('shop')}>Shop <ShoppingBag size={14}/>{shopCart.reduce((sum, item) => sum + item.quantity, 0) > 0 && <b className="shop-nav-count">{shopCart.reduce((sum, item) => sum + item.quantity, 0)}</b>}</button>
       </nav>
       <div className="experiment-top-actions">
         <button className="experiment-search-shortcut" type="button" onClick={() => { if (page !== 'discover') navigatePage('discover'); window.setTimeout(() => document.getElementById('venue-search')?.focus(), 80) }}><Search size={16}/><span>Search venues</span><kbd>/</kbd></button>
@@ -648,69 +766,249 @@ function App() {
     </header>
     {mobileNav && <div className="experiment-mobile-panel">
       <div className="experiment-mobile-caption">EXPLORE FIELDFINDER</div>
-      {[{id:'discover',label:'Discover'},{id:'events',label:'Events & adventures'},{id:'tournaments',label:'Tournaments'},{id:'players',label:'Find players'},{id:'bookings',label:'My bookings'},{id:'profile',label:'My profile'}].map(item => <button key={item.id} type="button" onClick={() => navigatePage(item.id)}>{item.label}<ArrowUpRight size={16}/></button>)}
+      {[{id:'discover',label:'Discover'},{id:'events',label:'Events & adventures'},{id:'tournaments',label:'Tournaments'},{id:'players',label:'Find players'},{id:'shop',label:'Shop'},{id:'bookings',label:'My bookings'},{id:'profile',label:'My profile'}].map(item => <button key={item.id} type="button" onClick={() => navigatePage(item.id)}>{item.label}<ArrowUpRight size={16}/></button>)}
       <div className="experiment-mobile-caption">SPORTS</div>
       <div className="experiment-mobile-sports">{SPORTS.slice(1).map(item => <button key={item} type="button" onClick={() => chooseExperimentSport(item)}>{item}</button>)}</div>
     </div>}
     <main className="experiment-main">
       {page !== 'discover' && <div className="experiment-breadcrumb"><button onClick={() => navigatePage('discover')}>FieldFinder</button><span>/</span><strong>{nav.find(n => n.id === page)?.label}</strong></div>}
       {page === 'discover' && <DiscoverPage venues={filteredVenues} total={venues.length} search={search} setSearch={setSearch} sport={sport} setSport={setSport} areas={areas} area={area} setArea={setArea} onOpen={openVenue} onGoPlayers={() => navigatePage('players')} adventureEvents={adventureEvents} onNavigateAnnouncement={navigateFromAnnouncement} onGoPage={navigatePage} />}
-      {page === 'bookings' && user && <BookingsPage bookings={filteredBookings} filter={bookingFilter} setFilter={setBookingFilter} onCancel={cancelBooking} />}
+      {page === 'bookings' && user && <BookingsPage bookings={filteredBookings} filter={bookingFilter} setFilter={setBookingFilter} onCancel={cancelBooking} onOpenPass={openBookingPass} />}
       {page === 'players' && <PlayersPage venues={venues} selectedVenueId={playerVenueId} setSelectedVenueId={setPlayerVenueId} sport={playerSport} setSport={setPlayerSport} search={playerSearch} setSearch={setPlayerSearch} invited={myInviteIds} onInvite={sendInvite} />}
       {page === 'tournaments' && <TournamentsPage events={tournaments} sport={tournamentSport} setSport={setTournamentSport} registrations={tournamentRegistrations.filter(r => r.customerId === user?.id)} onRegister={registerTournament} onRequireAuth={openCustomerAuth} focusAnnouncement={announcementTarget?.page === 'tournaments' ? announcementTarget : null} />}
       {page === 'events' && <AdventureEventsPage events={adventureEvents} focusAnnouncement={announcementTarget?.page === 'events' ? announcementTarget : null} />}
+      {page === 'shop' && <ShopPage products={SHOP_PRODUCTS} cart={shopCart} onAdd={addShopItem} onQuantity={updateShopQuantity} onRemove={removeShopItem} onCheckout={beginShopCheckout} onContinueShopping={() => navigatePage('discover')} orders={shopOrders.filter(order => order.customerId === user?.id)} />}
       {page === 'profile' && user && <ProfilePage user={user} bookings={customerBookings} invites={invites.filter(i => i.customerId === user.id)} onLogout={logout} />}
     </main>
-    <footer className="experiment-footer"><div className="experiment-footer-brand"><span className="brand-mark"><Trophy size={20}/></span><strong>fieldfinder<span>.</span></strong></div><p>Find your place to play. Meet your team. Make time for the game.</p><div className="experiment-footer-links"><button onClick={() => navigatePage('discover')}>Discover</button><button onClick={() => navigatePage('events')}>Events</button><button onClick={() => navigatePage('tournaments')}>Tournaments</button><button onClick={() => navigatePage('players')}>Find players</button></div><small>© 2026 FieldFinder · Madurai region</small></footer>
+    <footer className="experiment-footer"><div className="experiment-footer-brand"><span className="brand-mark"><Trophy size={20}/></span><strong>fieldfinder<span>.</span></strong></div><p>Find your place to play. Meet your team. Make time for the game.</p><div className="experiment-footer-links"><button onClick={() => navigatePage('discover')}>Discover</button><button onClick={() => navigatePage('events')}>Events</button><button onClick={() => navigatePage('tournaments')}>Tournaments</button><button onClick={() => navigatePage('players')}>Find players</button><button onClick={() => navigatePage('shop')}>Shop</button></div><small>© 2026 FieldFinder · Madurai region</small></footer>
     {selectedVenue && <BookingModal venue={selectedVenue} onFindPlayers={() => { setPlayerVenueId(selectedVenue.id); setPlayerSport((selectedVenue.sports || ['All'])[0]); setSelectedVenue(null); navigatePage('players') }} date={bookingDate} setDate={value => { setBookingDate(value); setSelectedTime(''); setAppliedCoupon(null); setCouponError('') }} duration={duration} setDuration={value => { setDuration(value); setAppliedCoupon(null); setCouponError('') }} selectedTime={selectedTime} setSelectedTime={setSelectedTime} slots={slotOptions(selectedVenue, bookingDate, duration)} coupon={coupon} setCoupon={setCoupon} appliedCoupon={appliedCoupon} couponError={couponError} applyCoupon={applyCoupon} price={getPrice()} onClose={() => { setSelectedVenue(null); setCheckout(false) }} onContinue={startBooking} />}
+    {bookingPass && <BookingPassModal booking={bookingPass} onClose={() => setBookingPass(null)} />}
     {checkout && selectedVenue && <CheckoutModal venue={selectedVenue} date={bookingDate} time={selectedTime} duration={duration} price={getPrice()} paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} onBack={() => setCheckout(false)} onConfirm={completeBooking} />}
-    {authModalOpen && <CustomerAuthModal mode={authMode} setMode={mode => { setAuthMode(mode); setAuthError(''); setAuthNotice('') }} form={authForm} update={updateAuth} onSubmit={submitAuth} error={authError} notice={authNotice} onClose={() => { setAuthModalOpen(false); pendingAuthAction.current = null }} />}
+    {shopCheckoutOpen && <ShopCheckoutModal cart={shopCart} products={SHOP_PRODUCTS} user={user} onClose={() => setShopCheckoutOpen(false)} onConfirm={completeShopOrder} />}
+    {authModalOpen && <CustomerAuthModal mode={authMode} setMode={mode => { setAuthMode(mode); setAuthError(''); setAuthNotice('') }} form={authForm} update={updateAuth} onSubmit={submitAuth} onDemo={continueAsDemoCustomer} error={authError} notice={authNotice} onClose={() => { setAuthModalOpen(false); pendingAuthAction.current = null }} />}
     {toast && <div className="toast"><Check size={17}/>{toast}</div>}
     <div className="demo-ribbon"><ShieldCheck size={13}/> EXPERIMENTAL CUSTOMER EXPERIENCE · DEMO BOOKINGS & PAYMENTS · Owner-published media sync when the backend is running</div>
   </div>
 }
 
 function HomeAnnouncementMarquee({ adventureEvents, onNavigate }) {
-  const events = adventureEvents.slice(0, 4)
-  const games = [
-    { id: 'new-pickleball', page: 'discover', sport: 'Pickleball', kind: 'NEW GAME', title: 'Pickleball', meta: 'Explore local courts', icon: Activity },
-    { id: 'new-paintball', page: 'discover', sport: 'Paintball', kind: 'NEW GAME', title: 'Paintball arenas', meta: 'Find an action session', icon: Zap },
-    { id: 'new-boxing', page: 'discover', sport: 'Boxing', kind: 'TRAIN & MOVE', title: 'Boxing & fitness', meta: 'Discover local academies', icon: Dumbbell }
-  ]
-  const cards = [
-    ...events.map(item => ({ id: item.id, page: 'events', kind: item.kind.toUpperCase(), title: item.title, meta: `${item.dateLabel || 'Choose a date on the official portal'} · ${item.location}`, icon: item.kind === 'Cycling' ? Bike : item.kind === 'Trekking' ? Mountain : PersonStanding })),
-    ...games
-  ]
-  const renderCards = (duplicate = false) => cards.map(item => {
-    const Icon = item.icon
-    return <button className={`experiment-news-card ${item.kind === 'NEW GAME' || item.kind === 'TRAIN & MOVE' ? 'game-news' : ''}`} type="button" key={`${duplicate ? 'copy-' : ''}${item.id}`} onClick={() => !duplicate && onNavigate(item)} tabIndex={duplicate ? -1 : 0}>
-      <span className="experiment-news-icon"><Icon size={20}/></span>
-      <span className="experiment-news-copy"><small>{item.kind}</small><strong>{item.title}</strong><em>{item.meta}</em></span>
-      <ArrowUpRight className="experiment-news-arrow" size={18}/>
-    </button>
-  })
-  return <section className="experiment-whats-on" data-exp-reveal aria-label="What's on in the Madurai region">
-    <div className="experiment-section-heading"><div><span className="section-kicker">LOCAL PLAY · LOCAL ADVENTURES</span><h2>What’s happening around Madurai.</h2><p>Upcoming rides, outdoor experiences and new ways to play.</p></div><button className="experiment-text-link" type="button" onClick={() => onNavigate({ page: 'events' })}>View all events <ArrowUpRight size={16}/></button></div>
-    <div className="experiment-news-marquee" aria-label="Moving event and activity cards">
-      <div className="experiment-news-marquee-track">
-        <div className="experiment-news-marquee-group">{renderCards(false)}</div>
-        <div className="experiment-news-marquee-group" aria-hidden="true">{renderCards(true)}</div>
+  const trackRef = useRef(null)
+  const stageRef = useRef(null)
+
+  useEffect(() => {
+    const track = trackRef.current
+    const stage = stageRef.current
+    if (!track || !stage) return undefined
+
+    const cards = Array.from(track.querySelectorAll('[data-stack-card]'))
+    if (!cards.length) return undefined
+
+    const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false
+    let frame = 0
+    let trackTop = 0
+    let trackHeight = 1
+    let stageHeight = 1
+    let stickyTop = 112
+    let travel = 1
+    let lastActiveStep = -1
+
+    const setStyle = (node, property, value) => {
+      if (node.style[property] !== value) node.style[property] = value
+    }
+    const setCssVar = (node, property, value) => {
+      if (node.style.getPropertyValue(property) !== value) node.style.setProperty(property, value)
+    }
+    const setAccess = (card, enabled) => {
+      const next = enabled ? '1' : '0'
+      if (card.dataset.stackAccess !== next) {
+        card.dataset.stackAccess = next
+        card.style.pointerEvents = enabled ? 'auto' : 'none'
+        card.tabIndex = enabled ? 0 : -1
+        card.setAttribute('aria-hidden', enabled ? 'false' : 'true')
+      }
+    }
+    const measure = () => {
+      const rect = track.getBoundingClientRect()
+      trackTop = rect.top + window.scrollY
+      trackHeight = track.offsetHeight || 1
+      stageHeight = stage.offsetHeight || 1
+      stickyTop = Number.parseFloat(window.getComputedStyle(stage).top) || 112
+      travel = Math.max(1, trackHeight - stageHeight)
+    }
+    const setImageWindow = activeStep => {
+      // Only keep the current card, the outgoing card and the next four images
+      // attached. The stack uses overlapping cards, so native lazy-loading alone
+      // treats every image as near-viewport and can decode the entire gallery.
+      const loadFrom = Math.max(0, activeStep - 1)
+      const loadTo = Math.min(cards.length - 1, activeStep + 4)
+      cards.forEach((card, index) => {
+        const img = card.querySelector('[data-stack-src]')
+        if (!img) return
+        const shouldLoad = index >= loadFrom && index <= loadTo
+        const currentSrc = img.getAttribute('src')
+        if (shouldLoad && !currentSrc) img.setAttribute('src', img.dataset.stackSrc)
+        else if (!shouldLoad && currentSrc) img.removeAttribute('src')
+      })
+    }
+
+    const updateStack = () => {
+      frame = 0
+      if (reduceMotion) {
+        cards.forEach((card, index) => {
+          const img = card.querySelector('[data-stack-src]')
+          if (img && !img.getAttribute('src')) img.setAttribute('src', img.dataset.stackSrc)
+          setStyle(card, 'opacity', '1')
+          setStyle(card, 'transform', 'none')
+          setStyle(card, 'zIndex', String(cards.length - index))
+          card.classList.remove('is-stack-moving')
+          setAccess(card, true)
+        })
+        setCssVar(track, '--stack-progress', '0')
+        return
+      }
+
+      // Read cached geometry and the scroll position only; no layout reads inside
+      // the per-card loop. Scroll updates are already coalesced to one RAF.
+      const progress = Math.min(1, Math.max(0, (window.scrollY + stickyTop - trackTop) / travel))
+      const position = progress * Math.max(0, cards.length - 1)
+      const activeStep = Math.floor(position)
+      if (activeStep !== lastActiveStep) {
+        lastActiveStep = activeStep
+        setImageWindow(activeStep)
+      }
+
+      cards.forEach((card, index) => {
+        const relative = index - position
+        let y = 0
+        let scale = 1
+        let rotation = 0
+        let opacity = 1
+        let zIndex
+
+        if (relative < -0.42) {
+          const distance = Math.min(1.5, Math.abs(relative) - 0.42)
+          y = -74 - distance * 118
+          scale = 0.96 - distance * 0.1
+          rotation = -1.2 - distance * 1.3
+          opacity = Math.max(0, 1 - distance * 1.7)
+          zIndex = 1 + index
+        } else {
+          const depth = Math.max(0, relative)
+          y = Math.min(76, depth * 19)
+          scale = 1 - Math.min(0.13, depth * 0.034)
+          rotation = Math.min(2.2, depth * 0.62)
+          opacity = depth > 3 ? Math.max(0, 1 - (depth - 3) * 1.45) : 1
+          zIndex = 100 - index
+        }
+
+        // Round values to avoid tiny sub-pixel style mutations on every frame.
+        const transform = `translate3d(0,${y.toFixed(1)}px,0) scale(${scale.toFixed(3)}) rotate(${rotation.toFixed(2)}deg)`
+        setStyle(card, 'transform', transform)
+        setStyle(card, 'opacity', opacity.toFixed(3))
+
+        // Accessibility, hit-testing and stacking order only change when a card
+        // crosses a threshold, not on every scroll frame.
+        const layer = relative < -0.42 ? 'outgoing' : 'front'
+        if (card.dataset.stackLayer !== layer) {
+          card.dataset.stackLayer = layer
+          setStyle(card, 'zIndex', String(zIndex))
+        }
+        setAccess(card, opacity > 0.35)
+
+        const shouldPromote = Math.abs(relative) < 3.5 && opacity > 0.01
+        if (card.classList.contains('is-stack-moving') !== shouldPromote) {
+          card.classList.toggle('is-stack-moving', shouldPromote)
+        }
+      })
+
+      setCssVar(track, '--stack-progress', progress.toFixed(4))
+      setCssVar(track, '--stack-active-index', String(Math.min(cards.length, activeStep + 1)))
+    }
+
+    const requestUpdate = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateStack)
+    }
+    const onResize = () => {
+      measure()
+      requestUpdate()
+    }
+
+    measure()
+    updateStack()
+    window.addEventListener('scroll', requestUpdate, { passive: true })
+    window.addEventListener('resize', onResize, { passive: true })
+    window.addEventListener('orientationchange', onResize, { passive: true })
+    const resizeObserver = 'ResizeObserver' in window ? new ResizeObserver(onResize) : null
+    resizeObserver?.observe(track)
+    resizeObserver?.observe(stage)
+
+    return () => {
+      window.removeEventListener('scroll', requestUpdate)
+      window.removeEventListener('resize', onResize)
+      window.removeEventListener('orientationchange', onResize)
+      resizeObserver?.disconnect()
+      if (frame) window.cancelAnimationFrame(frame)
+    }
+  }, [adventureEvents.length])
+
+  return <section className="experiment-event-stack" aria-label="Events and adventures around Madurai">
+    <div className="experiment-event-stack-intro">
+      <span className="section-kicker">LOCAL PLAY · LOCAL ADVENTURES</span>
+      <h2>Make your next day<br/><em>one to remember.</em></h2>
+      <p>Scroll through upcoming rides and outdoor experiences. Each card opens its full event listing, details and official registration link.</p>
+      <button className="primary-btn" type="button" onClick={() => onNavigate({ page: 'events' })}>Explore all events <ArrowUpRight size={16}/></button>
+      <div className="experiment-stack-instruction"><span className="experiment-stack-mouse"><i/></span><span><strong>Scroll to explore</strong><small>{String(adventureEvents.length).padStart(2, '0')} experiences in the stack</small></span></div>
+    </div>
+
+    <div className="experiment-stack-track" ref={trackRef} style={{ '--stack-count': adventureEvents.length, '--stack-height': `${adventureEvents.length * 42 + 42}vh`, '--stack-height-tablet': `${adventureEvents.length * 37 + 38}vh`, '--stack-height-mobile': `${adventureEvents.length * 34 + 35}vh` }}>
+      <div className="experiment-stack-stage" ref={stageRef}>
+        {adventureEvents.map((event, index) => {
+          const EventIcon = event.kind === 'Cycling' ? Bike : event.kind === 'Marathon' ? PersonStanding : event.kind === 'Tournament' ? Trophy : Mountain
+          return <button
+            className="experiment-stack-card"
+            data-stack-card
+            type="button"
+            key={event.id}
+            style={{ '--stack-index': index }}
+            onClick={() => onNavigate({ page: 'events', id: event.id, title: event.title })}
+            aria-label={`Open ${event.title} in Events and adventures`}
+          >
+            <img className="experiment-stack-photo" src={index < 4 ? event.image : undefined} data-stack-src={event.image} alt={`${event.title} event`} loading={index < 4 ? 'eager' : 'lazy'} decoding="async" />
+            <span className="experiment-stack-shade" aria-hidden="true"/>
+            <span className="experiment-stack-card-top"><span><EventIcon size={14}/>{event.kind}</span><b>{String(index + 1).padStart(2, '0')} <i>/ {String(adventureEvents.length).padStart(2, '0')}</i></b></span>
+            <span className="experiment-stack-card-copy">
+              <small>{event.organiser || 'FIELDfinder · LOCAL EXPERIENCE'}</small>
+              <strong>{event.title}</strong>
+              <span className="experiment-stack-card-meta"><span><CalendarDays size={14}/>{event.dateLabel || (event.date ? prettyDate(event.date) : 'Date to be selected')}</span><span><MapPin size={14}/>{event.location}</span></span>
+              <span className="experiment-stack-card-action">View event details <ArrowUpRight size={16}/></span>
+            </span>
+          </button>
+        })}
       </div>
+      <div className="experiment-stack-progress" aria-hidden="true"><span/></div>
     </div>
   </section>
 }
 
 function AdventureEventsPage({ events, focusAnnouncement }) {
   useEffect(() => {
-    if (!focusAnnouncement?.id) return
-    const timer = window.setTimeout(() => {
-      const target = document.querySelector(`[data-event-id="${focusAnnouncement.id}"]`)
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    if (!focusAnnouncement?.id) return undefined
+    let firstFrame = 0
+    let secondFrame = 0
+    firstFrame = window.requestAnimationFrame(() => {
+      secondFrame = window.requestAnimationFrame(() => {
+        const target = document.querySelector(`[data-event-id="${focusAnnouncement.id}"]`)
+        if (!target) return
+        const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false
+        target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' })
         target.classList.add('announcement-focus')
-      }
-    }, 80)
-    return () => window.clearTimeout(timer)
+        window.setTimeout(() => target.classList.remove('announcement-focus'), 1800)
+      })
+    })
+    return () => {
+      window.cancelAnimationFrame(firstFrame)
+      window.cancelAnimationFrame(secondFrame)
+    }
   }, [focusAnnouncement])
 
   return <>
@@ -782,7 +1080,66 @@ function AdventureRegistrationModal({ event, registration, onClose, onSubmit }) 
   return <div className="modal-backdrop tournament-modal-backdrop" onMouseDown={e => e.target === e.currentTarget && onClose()}><section className="tournament-registration-modal adventure-registration-modal" role="dialog" aria-modal="true" aria-label={`${event.kind} registration`}><div className="tournament-modal-heading"><div><span className="section-kicker">{isTrek ? 'TREKKING BOOKING' : 'MARATHON REGISTRATION'}</span><h2>{registration ? 'Your saved details' : isTrek ? 'Reserve your trek place' : 'Register for the run'}</h2><p>{event.title}</p></div><button className="modal-close" type="button" onClick={onClose}><X size={19}/></button></div><div className="registration-event-strip"><span><MapPin size={15}/>{event.location}</span><span><CalendarDays size={15}/>{prettyDate(event.date)}</span><strong>{money(registration?.packageFee || packageFee)} / person</strong></div>{registration ? <div className="registration-detail-view"><div className="registration-success"><Check size={20}/><div><strong>{isTrek ? 'Trek booking request saved' : 'Marathon registration saved'}</strong><small>{registration.status} · {registration.id}</small></div></div><div className="registration-detail-grid"><div><small>Participant</small><strong>{registration.participantName}</strong></div><div><small>Mobile</small><strong>{registration.phone}</strong></div><div><small>Category / trail</small><strong>{registration.option}</strong></div><div><small>Emergency contact</small><strong>{registration.emergencyContact}</strong></div><div><small>Group size</small><strong>{registration.groupSize}</strong></div>{registration.packageName && <div><small>Package</small><strong>{registration.packageName}</strong></div>}{registration.totalAmount != null && <div><small>Estimated total</small><strong>{money(registration.totalAmount)}</strong></div>}</div><button type="button" className="primary-btn full" onClick={onClose}>Done</button></div> : <form className="tournament-registration-form" onSubmit={submit}><div className="registration-form-grid"><label className="registration-field"><span>Participant name *</span><input required value={form.participantName} onChange={e => update('participantName', e.target.value)} maxLength={80}/></label><label className="registration-field"><span>Mobile number *</span><input required type="tel" value={form.phone} onChange={e => update('phone', e.target.value)} maxLength={16}/></label><label className="registration-field"><span>Email address</span><input type="email" value={form.email} onChange={e => update('email', e.target.value)} maxLength={100}/></label><BootstrapDropdown label={isTrek ? 'Trail difficulty' : 'Race category'} value={form.option} options={event.options.map(option => ({ value: option, label: option }))} onChange={value => update('option', value)} inlineMenu className="registration-dropdown-field"/><label className="registration-field"><span>Emergency contact *</span><input required type="tel" value={form.emergencyContact} onChange={e => update('emergencyContact', e.target.value)} maxLength={16}/></label>{isTrek && <label className="registration-field"><span>Group size</span><input type="number" min="1" max="20" value={form.groupSize} onChange={e => update('groupSize', e.target.value)}/></label>}</div>{isTrek && event.packages?.length > 0 && <div className="registration-field trek-package-select"><BootstrapDropdown label="Select package" value={form.packageId} options={event.packages.map(pkg => ({ value: pkg.id, label: `${pkg.name} · ${money(pkg.fee)} per person` }))} onChange={value => update('packageId', value)} inlineMenu className="registration-dropdown-field"/><small>Estimated group total: {money(packageFee * Math.max(1, Number(form.groupSize) || 1))}</small></div>}{isTrek && <BootstrapDropdown label="Trekking experience" value={form.experience} options={['Beginner','Intermediate','Experienced'].map(item => ({ value: item, label: item }))} onChange={value => update('experience', value)} inlineMenu className="registration-dropdown-field"/>}<label className="registration-field"><span>Notes / medical or dietary information (optional)</span><textarea rows="2" value={form.notes} onChange={e => update('notes', e.target.value)} maxLength={500}/></label>{error && <div className="form-error">{error}</div>}<div className="registration-form-note"><ShieldCheck size={15}/> Demo only. This does not confirm a real event seat or a guided trek booking.</div><div className="registration-form-actions"><button type="button" className="secondary-btn" onClick={onClose}>Cancel</button><button type="submit" className="primary-btn">{isTrek ? 'Save trek request' : 'Submit registration'} <ArrowRight size={16}/></button></div></form>}</section></div>
 }
 
-function CustomerAuthModal({ mode, setMode, form, update, onSubmit, error, notice, onClose }) {
+
+function ShopPage({ products, cart, onAdd, onQuantity, onRemove, onCheckout, onContinueShopping, orders }) {
+  const [category, setCategory] = useState('All gear')
+  const [query, setQuery] = useState('')
+  const filtered = products.filter(product => {
+    const categoryMatch = category === 'All gear' || product.category === category
+    const queryMatch = `${product.name} ${product.category} ${product.description}`.toLowerCase().includes(query.toLowerCase())
+    return categoryMatch && queryMatch
+  })
+  const cartItems = cart.map(item => ({ ...item, product: products.find(product => product.id === item.productId) })).filter(item => item.product)
+  const subtotal = cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
+  const count = cartItems.reduce((sum, item) => sum + item.quantity, 0)
+  return <div className="shop-page">
+    <div className="shop-hero" data-exp-reveal>
+      <div><span className="section-kicker">FIELDfinder SHOP · GAME DAY ESSENTIALS</span><h1>Gear up for<br/><em>your next game.</em></h1><p>Shop the everyday essentials for turf, court, training and outdoor play.</p><div className="shop-benefits"><span><Truck size={15}/> Demo delivery preview</span><span><ShieldCheck size={15}/> Secure checkout planned</span><span><Package size={15}/> Curated sports essentials</span></div></div>
+      <div className="shop-hero-art"><span className="shop-hero-orbit"/><div className="shop-hero-product"><ShoppingBag size={68}/><small>PLAY MORE · SHOP SMART</small></div><b className="shop-hero-sticker">READY<br/>SET<br/>PLAY</b></div>
+    </div>
+    <div className="shop-heading-row"><div><span className="section-kicker">THE EQUIPMENT SHELF</span><h2>Find your game-day gear.</h2><p>Demo catalogue · sample products and prices for the frontend prototype.</p></div><span className="shop-cart-count"><ShoppingCart size={16}/>{count} items in cart</span></div>
+    <div className="shop-layout">
+      <div className="shop-catalog">
+        <div className="shop-tools"><div className="search-field"><Search size={17}/><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Search bats, balls, rackets and more"/><button type="button" aria-label="Clear product search" onClick={() => setQuery('')}><X size={15}/></button></div><div className="shop-category-filters">{SHOP_CATEGORIES.map(item => <button type="button" className={category === item ? 'selected' : ''} key={item} onClick={() => setCategory(item)}>{item}</button>)}</div></div>
+        <div className="shop-product-grid">{filtered.map(product => {
+          const Icon = product.icon
+          const inCart = cart.find(item => item.productId === product.id)?.quantity || 0
+          return <article className="shop-product-card" key={product.id}>
+            <div className={`shop-product-art tone-${product.tone}`}><span className="shop-product-badge">{product.badge || product.category}</span><Icon size={56} strokeWidth={1.55}/><small>FIELDFINDER</small></div>
+            <div className="shop-product-info"><span className="shop-product-category">{product.category}</span><h3>{product.name}</h3><p>{product.description}</p><div className="shop-product-price"><strong>{money(product.price)}</strong><del>{money(product.compareAt)}</del><small>Demo price</small></div><button type="button" className={`primary-btn shop-add-btn ${inCart ? 'added' : ''}`} onClick={() => onAdd(product)}>{inCart ? <><Check size={15}/> Add one more · {inCart}</> : <><Plus size={16}/> Add to cart</>}</button></div>
+          </article>
+        })}{!filtered.length && <div className="shop-empty"><Package size={28}/><strong>No matching gear</strong><p>Try a different search or category.</p><button className="secondary-btn" onClick={() => { setCategory('All gear'); setQuery('') }}>Clear filters</button></div>}</div>
+      </div>
+      <aside className="shop-cart-panel">
+        <div className="shop-cart-heading"><div><span className="section-kicker">YOUR SELECTION</span><h3>Shopping cart</h3></div><span>{count}</span></div>
+        {cartItems.length ? <div className="shop-cart-items">{cartItems.map(item => <div className="shop-cart-item" key={item.productId}><div className={`shop-cart-thumb tone-${item.product.tone}`}><item.product.icon size={21}/></div><div className="shop-cart-item-copy"><strong>{item.product.name}</strong><small>{money(item.product.price)} each</small><div className="shop-quantity-control"><button type="button" onClick={() => onQuantity(item.productId, -1)} aria-label={`Decrease ${item.product.name}`}><Minus size={13}/></button><b>{item.quantity}</b><button type="button" onClick={() => onQuantity(item.productId, 1)} aria-label={`Increase ${item.product.name}`}><Plus size={13}/></button></div></div><div className="shop-cart-item-total"><strong>{money(item.product.price * item.quantity)}</strong><button type="button" onClick={() => onRemove(item.productId)} aria-label={`Remove ${item.product.name}`}><Trash2 size={14}/></button></div></div>)}</div> : <div className="shop-cart-empty"><ShoppingCart size={30}/><strong>Your cart is waiting.</strong><p>Add a few game-day essentials to see them here.</p></div>}
+        <div className="shop-cart-summary"><div><span>Subtotal</span><strong>{money(subtotal)}</strong></div><div><span>Delivery</span><strong>Calculated later</strong></div><div className="shop-cart-total"><span>Estimated total</span><strong>{money(subtotal)}</strong></div><button type="button" className="primary-btn full" disabled={!cartItems.length} onClick={onCheckout}>Continue to checkout <ArrowRight size={16}/></button><small><ShieldCheck size={13}/> Demo checkout only. No payment or shipment is processed.</small></div>
+      </aside>
+    </div>
+    {orders.length > 0 && <section className="shop-recent-orders"><div><span className="section-kicker">YOUR DEMO ACTIVITY</span><h3>Recent shop orders</h3></div>{orders.slice(0,3).map(order => <div className="shop-order-row" key={order.id}><span><strong>{order.id}</strong><small>{order.items.length} product types · {new Date(order.createdAt).toLocaleDateString('en-IN')}</small></span><b>{money(order.total)}</b><em>{order.status}</em></div>)}</section>}
+    <div className="shop-demo-note"><ShieldCheck size={16}/><span><strong>Prototype storefront.</strong> Product catalogue, prices, cart and order confirmation are demo data saved in this browser. Inventory, shipping, tax calculation, payment gateway and order fulfilment must be connected to the backend before real sales.</span></div>
+  </div>
+}
+
+function ShopCheckoutModal({ cart, products, user, onClose, onConfirm }) {
+  const [form, setForm] = useState({ name: user?.name || user?.username || '', phone: '', address: '', city: 'Madurai', pincode: '' })
+  const [payment, setPayment] = useState('Cash on delivery (demo)')
+  const [error, setError] = useState('')
+  const items = cart.map(item => ({ ...item, product: products.find(product => product.id === item.productId) })).filter(item => item.product)
+  const total = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
+  const update = (key, value) => setForm(previous => ({ ...previous, [key]: value }))
+  const submit = event => {
+    event.preventDefault()
+    if (!form.name.trim() || !/^\+?[0-9\s-]{10,15}$/.test(form.phone.trim()) || form.address.trim().length < 8 || !/^\d{6}$/.test(form.pincode.trim())) {
+      setError('Enter your name, valid mobile number, full address and 6-digit PIN code.')
+      return
+    }
+    onConfirm({ ...form, name: form.name.trim(), phone: form.phone.trim(), address: form.address.trim(), city: form.city.trim(), pincode: form.pincode.trim(), paymentMethod: payment })
+  }
+  return <div className="modal-backdrop shop-checkout-backdrop" onMouseDown={event => event.target === event.currentTarget && onClose()}><section className="shop-checkout-modal" role="dialog" aria-modal="true" aria-label="Shop checkout"><div className="shop-checkout-head"><div><span className="section-kicker">FIELDFINDER SHOP</span><h2>Delivery details</h2><p>Signed in as {user?.name || user?.username}</p></div><button type="button" className="modal-close" onClick={onClose}><X size={18}/></button></div><form onSubmit={submit}><div className="shop-checkout-grid"><label><span>Full name *</span><input value={form.name} onChange={event => update('name', event.target.value)} required maxLength={80}/></label><label><span>Mobile number *</span><input type="tel" value={form.phone} onChange={event => update('phone', event.target.value)} required maxLength={16}/></label><label className="wide"><span>Delivery address *</span><textarea rows="3" value={form.address} onChange={event => update('address', event.target.value)} required maxLength={300}/></label><label><span>City</span><input value={form.city} onChange={event => update('city', event.target.value)} maxLength={50}/></label><label><span>PIN code *</span><input value={form.pincode} onChange={event => update('pincode', event.target.value.replace(/\D/g, '').slice(0,6))} inputMode="numeric" required maxLength={6}/></label></div><label className="shop-payment-choice"><span>Payment preference</span><select value={payment} onChange={event => setPayment(event.target.value)}><option>Cash on delivery (demo)</option><option>UPI payment (demo only)</option></select></label>{error && <div className="form-error" role="alert">{error}</div>}<div className="shop-checkout-summary"><span>{items.reduce((sum,item)=>sum+item.quantity,0)} items · Demo total</span><strong>{money(total)}</strong></div><div className="shop-checkout-actions"><button type="button" className="secondary-btn" onClick={onClose}>Back to cart</button><button type="submit" className="primary-btn">Place demo order <ArrowRight size={16}/></button></div><small className="shop-checkout-disclaimer">This prototype stores a local order record only. No money is charged and no shipment is created.</small></form></section></div>
+}
+
+function CustomerAuthModal({ mode, setMode, form, update, onSubmit, onDemo, error, notice, onClose }) {
   return <div className="auth-gate-backdrop" role="presentation" onMouseDown={event => { if (event.target === event.currentTarget) onClose() }}>
     <section className="auth-gate-card" role="dialog" aria-modal="true" aria-labelledby="customer-auth-title">
       <button className="auth-gate-close" type="button" onClick={onClose} aria-label="Continue browsing as guest"><X size={19}/></button>
@@ -798,6 +1155,8 @@ function CustomerAuthModal({ mode, setMode, form, update, onSubmit, error, notic
         {error && <div className="form-error" role="alert">{error}</div>}
         <button className="primary-btn full auth-gate-submit" type="submit">{mode === 'login' ? 'Sign in and continue' : 'Create account and continue'} <ArrowRight size={17}/></button>
       </form>
+      <div className="auth-demo-divider"><span>OR</span></div>
+      <button type="button" className="auth-demo-continue" onClick={onDemo}><Sparkles size={16}/><span><strong>Continue as demo customer</strong><small>No account or backend required</small></span><ArrowRight size={17}/></button>
       <div className="auth-gate-footnote"><ShieldCheck size={15}/><span>Accounts are checked and stored by the FieldFinder backend. Email / SMS OTP verification is not enabled yet, so use an email address you control.</span></div>
       <button type="button" className="auth-guest-continue" onClick={onClose}>Continue browsing as guest</button>
     </section>
@@ -806,20 +1165,26 @@ function CustomerAuthModal({ mode, setMode, form, update, onSubmit, error, notic
 
 function DiscoverPage({ venues, total, search, setSearch, sport, setSport, areas, area, setArea, onOpen, onGoPlayers, adventureEvents, onNavigateAnnouncement, onGoPage }) {
   const directoryRef = useRef(null)
+  const [visibleCount, setVisibleCount] = useState(9)
+  useEffect(() => {
+    // Reset the page count only when the customer's filters change. Background
+    // refreshes of owner-published venue data should not collapse the list.
+    setVisibleCount(9)
+  }, [search, sport, area])
   useEffect(() => {
     if (!('IntersectionObserver' in window) || !directoryRef.current) return undefined
     const cards = directoryRef.current.querySelectorAll('[data-reveal-card]')
     if (!cards.length) return undefined
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        // Venue cards fade in again on every viewport entry, including when
-        // the visitor scrolls back upward through the directory.
-        entry.target.classList.toggle('is-revealed', entry.isIntersecting)
+        if (!entry.isIntersecting) return
+        entry.target.classList.add('is-revealed')
+        observer.unobserve(entry.target)
       })
     }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' })
     cards.forEach(card => { card.classList.add('reveal-pending'); observer.observe(card) })
     return () => observer.disconnect()
-  }, [venues])
+  }, [venues, visibleCount])
   const areaOptions = areas.map(item => ({ value: item, label: item, description: item === 'All areas' ? 'Show every listed venue' : 'Madurai venue area' }))
   const sportTiles = [
     { name: 'Football', sub: 'Turf & five-a-side', icon: '⚽', image: '/assets/sport-cards/football.webp', position: 'center 54%' },
@@ -830,8 +1195,10 @@ function DiscoverPage({ venues, total, search, setSearch, sport, setSport, areas
     { name: 'Paintball', sub: 'Action arenas', icon: '🎯', image: '/assets/sport-cards/paintball.webp', position: 'center 50%' },
     { name: 'Boxing', sub: 'Training & fitness', icon: '🥊', image: '/assets/sport-cards/boxing.webp', position: 'center 48%' }
   ]
-  const featuredVenues = venues.slice(0, 3)
+  const visibleVenues = venues.slice(0, visibleCount)
+  const remainingVenues = Math.max(0, venues.length - visibleVenues.length)
   const scrollToDirectory = () => document.getElementById('venue-directory')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  const clearFilters = () => { setSearch(''); setSport('All'); setArea('All areas'); setVisibleCount(9) }
   return <div className="experiment-home">
     <section className="experiment-hero">
       <div className="experiment-hero-text">
@@ -839,8 +1206,6 @@ function DiscoverPage({ venues, total, search, setSearch, sport, setSport, areas
         <h1 className="experiment-hero-title"><span>Find your</span><span><em>next game.</em></span></h1>
         <p>From quick turf matches to discovering a new sport. Find a place, bring your people and get out there.</p>
         <div className="experiment-hero-actions"><button className="primary-btn" onClick={scrollToDirectory}>Explore venues <ArrowRight size={17}/></button><button className="experiment-outline-btn" onClick={() => onGoPage('events')}>See local events <ArrowUpRight size={16}/></button></div>
-        <div className="experiment-hero-search"><Search size={18}/><input id="venue-search" value={search} onChange={e => { setSearch(e.target.value); if (sport !== 'All') setSport('All') }} placeholder="Search a sport, venue or area"/><button type="button" onClick={scrollToDirectory}>Find a place</button></div>
-        <div className="experiment-hero-footnote"><span><b>{total}</b> venue listings</span><i/><span>7 sports to explore</span><i/><span>Madurai region</span></div>
       </div>
       <div className="experiment-hero-visual" aria-label="Sports venues in the Madurai region">
         <div className="experiment-hero-photo main-photo"><img data-scroll-parallax src="/assets/venues/jaypal-sports-center.webp" alt="Sports turf at Jaypal Sports Center"/><span className="experiment-photo-label"><small>START WITH A PLACE</small><strong>Make the first move.</strong></span></div>
@@ -853,9 +1218,23 @@ function DiscoverPage({ venues, total, search, setSearch, sport, setSport, areas
 
     <HomeAnnouncementMarquee adventureEvents={adventureEvents} onNavigate={onNavigateAnnouncement}/>
 
+    <section className="directory-section experiment-directory" id="venue-directory" ref={directoryRef}>
+      <div className="experiment-section-heading directory-heading" data-exp-reveal><div><span className="section-kicker">THE LOCAL DIRECTORY</span><h2>Find a place to play.</h2><p>Explore all {total} listed venues, with photos, owner-published videos and contact options around Madurai.</p></div><span className="listing-count"><i/>{total} listings</span></div>
+      <div className="experiment-directory-tools"><div className="search-field"><Search size={18}/><input id="venue-search" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search venue, sport or area"/><button onClick={() => setSearch('')} aria-label="Clear search"><X size={15}/></button></div><div className="area-filter-dropdown"><BootstrapDropdown label="Filter by area" value={area} options={areaOptions} onChange={setArea} searchable placeholder="All Madurai areas"/></div></div>
+      <div className="filter-toolbar"><div className="sport-filters">{SPORTS.map(item => <button key={item} className={sport === item ? 'selected' : ''} onClick={() => setSport(item)}>{item === 'All' ? <SlidersHorizontal size={14}/> : null}{item}</button>)}</div></div>
+      <div className="venue-result-line"><span><b>{venues.length}</b> places to explore <small>· Showing {venues.length ? 1 : 0}–{visibleVenues.length} of {venues.length}</small></span><span>Owner-published media appears when available.</span></div>
+      <div className="venue-grid">{visibleVenues.map((venue, index) => <VenueCard key={venue.id} venue={venue} onClick={() => onOpen(venue)} revealIndex={index}/>)}{venues.length === 0 && <div className="empty-state"><Search size={28}/><strong>No venues found</strong><p>Try another search term, sport or area.</p><button className="secondary-btn" onClick={clearFilters}>Clear filters</button></div>}</div>
+      {venues.length > 9 && <div className="venue-pagination"><span>Showing {visibleVenues.length} of {venues.length} venues</span><div>{visibleCount > 9 && <button className="secondary-btn" type="button" onClick={() => { setVisibleCount(9); scrollToDirectory() }}>Show first 9</button>}{remainingVenues > 0 && <button className="primary-btn" type="button" onClick={() => setVisibleCount(current => Math.min(venues.length, current + 9))}>Show more venues <ArrowDown size={16}/></button>}</div></div>}
+    </section>
+
     <section className="experiment-sports-section" data-exp-reveal>
       <div className="experiment-section-heading"><div><span className="section-kicker">CHOOSE YOUR GAME</span><h2>One city. So many ways to play.</h2><p>Explore the sports and spaces that get you moving.</p></div><button className="experiment-text-link" onClick={scrollToDirectory}>Browse all venues <ArrowUpRight size={16}/></button></div>
       <div className="experiment-sport-grid">{sportTiles.map((item, index) => <button className="experiment-sport-card" key={item.name} onClick={() => { setSport(item.name); scrollToDirectory() }} data-exp-reveal style={{'--reveal-index': index}} aria-label={`Explore ${item.name} venues`}><span className="experiment-sport-art"><img src={item.image} alt={`${item.name} activity`} loading="lazy" decoding="async" style={{objectPosition:item.position}}/></span><span className="experiment-sport-symbol" aria-hidden="true">{item.icon}</span><span className="experiment-sport-copy"><strong>{item.name}</strong><small>{item.sub}</small></span><span className="experiment-sport-arrow"><ArrowUpRight size={18}/></span></button>)}</div>
+    </section>
+
+    <section className="experiment-shop-promo" data-exp-reveal>
+      <div className="shop-promo-copy"><span className="section-kicker">FIELDFINDER SHOP · GAME DAY ESSENTIALS</span><h2>Got the game.<br/><em>Get the gear.</em></h2><p>Pick up bats, balls, rackets, paddles, gloves and training essentials for your next session.</p><button className="primary-btn" type="button" onClick={() => onGoPage('shop')}>Shop essentials <ShoppingBag size={16}/><ArrowRight size={16}/></button></div>
+      <div className="shop-promo-items" aria-label="Popular sports essentials"><span><Trophy size={19}/> Cricket bat</span><span><CircleHelp size={19}/> Match balls</span><span><Activity size={19}/> Rackets & paddles</span><span><Dumbbell size={19}/> Training gear</span></div>
     </section>
 
     <div className="experiment-manifesto-marquee" aria-label="Play more. Explore more."><div className="experiment-manifesto-track">{Array.from({length: 2}, (_, index) => <span key={index}>PLAY MORE <i>✳</i> EXPLORE MORE <i>✳</i> FIND YOUR GAME <i>✳</i> MAKE IT HAPPEN <i>✳</i></span>)}</div></div>
@@ -863,14 +1242,6 @@ function DiscoverPage({ venues, total, search, setSearch, sport, setSport, areas
     <section className="experiment-story-section" data-exp-reveal>
       <div className="experiment-story-image" data-reveal-direction="left"><img data-scroll-parallax src="/assets/venues/bats-and-boots-turf.webp" alt="Football turf in Madurai" loading="lazy"/><span className="experiment-image-stamp">YOUR NEXT<br/>MOVE STARTS HERE</span></div>
       <div className="experiment-story-copy" data-reveal-direction="right"><span className="section-kicker">MORE THAN A PLACE TO PLAY</span><h2>Make room<br/>for <em>more play.</em></h2><p>Find the court for your usual game. Try something you’ve never played. Or pull your friends together for a weekend match.</p><div className="experiment-story-points"><span><b>01</b> Discover a venue near you</span><span><b>02</b> Check the facilities and media</span><span><b>03</b> Bring your team together</span></div><button className="primary-btn" onClick={scrollToDirectory}>Find your venue <ArrowRight size={16}/></button></div>
-    </section>
-
-    <section className="directory-section experiment-directory" id="venue-directory" ref={directoryRef}>
-      <div className="experiment-section-heading directory-heading" data-exp-reveal><div><span className="section-kicker">THE LOCAL DIRECTORY</span><h2>Find a place to play.</h2><p>Explore all {total} listed venues, with photos, owner-published videos and contact options around Madurai.</p></div><span className="listing-count"><i/>{total} listings</span></div>
-      <div className="experiment-directory-tools"><div className="search-field"><Search size={18}/><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search venue, sport or area"/><button onClick={() => setSearch('')} aria-label="Clear search"><X size={15}/></button></div><div className="area-filter-dropdown"><BootstrapDropdown label="Filter by area" value={area} options={areaOptions} onChange={setArea} searchable placeholder="All Madurai areas"/></div></div>
-      <div className="filter-toolbar"><div className="sport-filters">{SPORTS.map(item => <button key={item} className={sport === item ? 'selected' : ''} onClick={() => setSport(item)}>{item === 'All' ? <SlidersHorizontal size={14}/> : null}{item}</button>)}</div></div>
-      <div className="venue-result-line"><span><b>{venues.length}</b> places to explore</span><span>Owner-published media appears when available.</span></div>
-      <div className="venue-grid">{venues.map((venue, index) => <VenueCard key={venue.id} venue={venue} onClick={() => onOpen(venue)} revealIndex={index}/>)}{venues.length === 0 && <div className="empty-state"><Search size={28}/><strong>No venues found</strong><p>Try another search term, sport or area.</p><button className="secondary-btn" onClick={() => { setSearch(''); setSport('All'); setArea('All areas') }}>Clear filters</button></div>}</div>
     </section>
 
     <section className="experiment-community-section" data-exp-reveal>
@@ -930,9 +1301,85 @@ function CheckoutModal({ venue, date, time, duration, price, paymentMethod, setP
   return <div className="modal-backdrop checkout-layer"><div className="checkout-modal"><button className="modal-close" onClick={onBack}><X/></button><span className="section-kicker">DEMO CHECKOUT</span><h2>Review your booking</h2><p className="checkout-sub">Check the details before completing this demo booking.</p><div className="checkout-venue"><div><strong>{venue.name}</strong><span>{prettyDate(date)} · {prettyTime(time)} · {duration} hour{duration > 1 ? 's' : ''}</span></div><b>{money(price.total)}</b></div><div className="checkout-breakdown"><div><span>Slot subtotal</span><b>{money(price.subtotal)}</b></div><div><span>Discount</span><b className="discount-text">−{money(price.discount)}</b></div><div className="total-row"><span>Total to pay</span><strong>{money(price.total)}</strong></div></div><h3>Choose payment method</h3><div className="payment-options"><button className={paymentMethod === 'UPI demo' ? 'active' : ''} onClick={() => setPaymentMethod('UPI demo')}><Wallet/><span><b>UPI</b><small>Simulated demo payment</small></span><i/></button><button className={paymentMethod === 'Card demo' ? 'active' : ''} onClick={() => setPaymentMethod('Card demo')}><CreditCard/><span><b>Card</b><small>No card details collected</small></span><i/></button><button className={paymentMethod === 'Pay at venue (demo)' ? 'active' : ''} onClick={() => setPaymentMethod('Pay at venue (demo)')}><Banknote/><span><b>Pay at venue</b><small>Mark as pending in demo</small></span><i/></button></div><div className="payment-disclaimer"><ShieldCheck size={17}/><span>This is a payment-interface prototype. No bank, UPI or card transaction will occur.</span></div><button className="primary-btn full" onClick={onConfirm}>{paymentMethod === 'Pay at venue (demo)' ? 'Confirm demo booking' : 'Simulate successful payment'} <ArrowRight size={17}/></button></div></div>
 }
 
-function BookingsPage({ bookings, filter, setFilter, onCancel }) {
-  return <><PageHeader kicker="YOUR ACTIVITY" title="My bookings" description="Review your reservations and manage demo booking requests."/><div className="booking-filters">{['All','Awaiting owner confirmation','Confirmed','Cancelled'].map(item => <button key={item} className={filter === item ? 'selected' : ''} onClick={() => setFilter(item)}>{item}</button>)}</div><div className="customer-booking-list">{bookings.length ? bookings.map(b => <article className="customer-booking-card" key={b.id}><div className="booking-card-main"><span className="booking-ref">{b.id}</span><h3>{b.venueName}</h3><p><MapPin size={14}/>{b.area}</p><div className="booking-facts"><span><CalendarDays size={14}/>{prettyDate(b.date)}</span><span><Clock3 size={14}/>{prettyTime(b.time)}</span><span><Activity size={14}/>{b.duration} hour{b.duration > 1 ? 's' : ''}</span></div></div><div className="booking-card-side"><strong>{money(b.total)}</strong><span className={`status-pill ${b.status === 'Cancelled' ? 'cancelled' : b.status === 'Confirmed' ? 'confirmed' : 'pending'}`}>{b.status}</span><small>Payment: {b.paymentStatus}</small>{b.status !== 'Cancelled' && <button className="text-danger" onClick={() => onCancel(b.id)}>Cancel booking</button>}</div></article>) : <div className="empty-state"><CalendarDays size={30}/><strong>No bookings yet</strong><p>Your booking requests will appear here after checkout.</p></div>}</div><div className="availability-note"><ShieldCheck size={16}/><span>Bookings are stored in this browser for demo purposes. The shared backend will provide real owner confirmation and cancellation later.</span></div></>
+function BookingsPage({ bookings, filter, setFilter, onCancel, onOpenPass }) {
+  return <><PageHeader kicker="YOUR ACTIVITY" title="My bookings" description="Review your reservations, open your QR pass and share your booking details."/><div className="booking-filters">{['All','Awaiting owner confirmation','Confirmed','Cancelled'].map(item => <button key={item} className={filter === item ? 'selected' : ''} onClick={() => setFilter(item)}>{item}</button>)}</div><div className="customer-booking-list">{bookings.length ? bookings.map(b => <article className="customer-booking-card" key={b.id}><div className="booking-card-main"><span className="booking-ref">{b.id}</span><h3>{b.venueName}</h3><p><MapPin size={14}/>{b.area}</p><div className="booking-facts"><span><CalendarDays size={14}/>{prettyDate(b.date)}</span><span><Clock3 size={14}/>{prettyTime(b.time)}</span><span><Activity size={14}/>{b.duration} hour{b.duration > 1 ? 's' : ''}</span></div></div><div className="booking-card-side"><strong>{money(b.total)}</strong><span className={`status-pill ${b.status === 'Cancelled' ? 'cancelled' : b.status === 'Confirmed' ? 'confirmed' : 'pending'}`}>{b.status}</span><small>Payment: {b.paymentStatus}</small><button className="booking-pass-open" type="button" onClick={() => onOpenPass(b)}><QrCodeIcon/> View QR pass</button>{b.status !== 'Cancelled' && <button className="text-danger" onClick={() => onCancel(b.id)}>Cancel booking</button>}</div></article>) : <div className="empty-state"><CalendarDays size={30}/><strong>No bookings yet</strong><p>Your booking requests will appear here after checkout.</p></div>}</div><div className="availability-note"><ShieldCheck size={16}/><span>QR passes in this prototype are generated in your browser. Owners can scan and read the pass, but live booking verification requires a shared backend.</span></div></>
 }
+
+function createBookingPassToken() {
+  try { return crypto.randomUUID() } catch { return `FFPASS-${Date.now()}-${Math.random().toString(36).slice(2, 10).toUpperCase()}` }
+}
+function QrCodeIcon() { return <Ticket size={15}/> }
+
+function BookingPassModal({ booking, onClose }) {
+  const qrRef = useRef(null)
+  const pass = {
+    type: 'FIELDFINDER_BOOKING_PASS', version: 1,
+    bookingId: booking.id, token: booking.qrToken || createBookingPassToken(),
+    customer: booking.customerName || 'FieldFinder customer', venue: booking.venueName,
+    area: booking.area, sport: booking.sport, date: booking.date, time: booking.time,
+    durationHours: booking.duration, amount: booking.total,
+    paymentStatus: booking.paymentStatus, bookingStatus: booking.status
+  }
+  const qrValue = JSON.stringify(pass)
+  const message = [
+    '*FieldFinder booking details*',
+    `Booking ID: ${booking.id}`,
+    `Venue: ${booking.venueName}`,
+    `Sport: ${booking.sport}`,
+    `Date: ${prettyDate(booking.date)}`,
+    `Time: ${prettyTime(booking.time)} · ${booking.duration} hour(s)`,
+    `Amount: ${money(booking.total)}`,
+    `Payment: ${booking.paymentStatus}`,
+    `Booking status: ${booking.status}`,
+    `QR pass code: ${pass.token}`,
+    'Please show the FieldFinder QR pass at the venue for check-in.'
+  ].join('\n')
+  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
+  function downloadQr() {
+    const canvas = qrRef.current?.querySelector('canvas')
+    if (!canvas) return
+    const link = document.createElement('a')
+    link.href = canvas.toDataURL('image/png')
+    link.download = `FieldFinder-${booking.id}-QR.png`
+    link.click()
+  }
+  async function sharePass() {
+    const canvas = qrRef.current?.querySelector('canvas')
+    if (canvas && navigator.share && navigator.canShare) {
+      try {
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'))
+        if (blob) {
+          const file = new File([blob], `FieldFinder-${booking.id}-QR.png`, { type: 'image/png' })
+          const data = { title: 'FieldFinder booking pass', text: message, files: [file] }
+          if (navigator.canShare(data)) {
+            await navigator.share(data)
+            return
+          }
+        }
+      } catch (error) {
+        if (error?.name === 'AbortError') return
+      }
+    }
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
+  }
+  return <div className="modal-backdrop ff-pass-backdrop" onMouseDown={event => event.target === event.currentTarget && onClose()}>
+    <section className="ff-pass-modal" role="dialog" aria-modal="true" aria-label="FieldFinder booking QR pass">
+      <button className="modal-close" type="button" onClick={onClose} aria-label="Close QR pass"><X/></button>
+      <div className="ff-pass-heading"><span className="ff-pass-success"><Check size={14}/> BOOKING REQUEST CREATED</span><h2>Your digital booking pass</h2><p>Save this QR code and show it to the turf owner when you arrive.</p></div>
+      <div className="ff-pass-ticket">
+        <div className="ff-pass-qr" ref={qrRef}><QRCodeCanvas value={qrValue} size={224} level="H" includeMargin /></div>
+        <div className="ff-pass-id">{booking.id}</div>
+        <div className="ff-pass-token">PASS TOKEN · {pass.token.slice(0, 8).toUpperCase()}</div>
+      </div>
+      <div className="ff-pass-details"><div><small>VENUE</small><strong>{booking.venueName}</strong></div><div><small>DATE & TIME</small><strong>{prettyDate(booking.date)} · {prettyTime(booking.time)}</strong></div><div><small>SPORT & DURATION</small><strong>{booking.sport} · {booking.duration} hour(s)</strong></div><div><small>AMOUNT / PAYMENT</small><strong>{money(booking.total)} · {booking.paymentStatus}</strong></div></div>
+      <div className="ff-pass-status"><ShieldCheck size={17}/><span><strong>{booking.status}</strong><small>This booking is awaiting owner confirmation. The QR pass is for identifying the request, not proof of payment.</small></span></div>
+      <div className="ff-pass-actions"><button type="button" className="primary-btn" onClick={downloadQr}><DownloadIcon/> Download QR</button><button type="button" className="ff-whatsapp-button" onClick={sharePass}><WhatsAppIcon/> Share pass & details</button></div>
+      <p className="ff-pass-note">On supported phones, the share sheet can include the QR image and booking message; choose WhatsApp. Otherwise WhatsApp opens with the prepared text, and you can attach the downloaded QR image. Automated delivery will be connected when the backend is available.</p>
+    </section>
+  </div>
+}
+function DownloadIcon() { return <Download size={16}/> }
+function WhatsAppIcon() { return <Phone size={16}/> }
 function BootstrapDropdown({ label, value, options, onChange, searchable = false, placeholder = 'Select an option', inlineMenu = false, className = '' }) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
