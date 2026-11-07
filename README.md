@@ -1,20 +1,50 @@
-# FieldFinder Customer Web – Experimental V5
+# FieldFinder Customer Web — V7
 
-A Vite + React customer-facing prototype for Madurai sports venues, tournaments and regional events.
+A separate Vite + React Customer experience for the Madurai region. It retains the FieldFinder green, lime, white and charcoal colour system and is packaged independently from the Turf Owner frontend.
 
-## Install and run
+## Run locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Default Vite port: 5176. For another port use `npm run dev -- --port 5177`.
+Default Vite port: `5176`. To use another port:
 
-## V5 changes
-- Daily tournament schedule with a calendar date input, day navigation and Today button.
-- Guest Sign in button remains on one line.
-- Consistent “Events & adventures” naming across navigation and content.
-- Local optimized event images for all cycling and trekking cards.
+```bash
+npm run dev -- --port 5177
+```
 
-This is an experimental demo. Tournament registrations, customer accounts and bookings are not yet a production-connected service.
+## V7 changes
+
+- **Endless What's On cards:** event, trek and new-sport announcement cards loop continuously across the homepage. The rail pauses on hover/focus so cards can be selected; selecting a card opens the matching event or sport with a smooth scroll to the target.
+- **Nine venues at a time:** the directory initially shows 9 venues. `Show more venues` appends the next 9, then the next 9, until the filtered result set is complete. Changing search/sport/area resets the page to the first 9; background owner-content refreshes no longer collapse the list.
+- **One directory search area:** the duplicated hero search treatment is not used. The homepage uses the single, full `Find a place to play` directory section with search, area and sport filters.
+- **Shop storefront:** dedicated Shop navigation and page; 12 demo sports products; category filters; product search; quantity controls; cart totals; checkout details; and local demo order history. The homepage also has a Shop Essentials callout.
+- Existing 49 Madurai-region venue records, venue photos/videos, sports discovery, daily tournament calendar, event/trek cards, player discovery, guest-first browsing and booking flows are retained.
+
+## Shop and booking limitations
+
+The Shop catalogue, prices, cart and demo orders are frontend sample data stored in this browser. No inventory is reserved, no real payment is taken, and no product is shipped. Connect the Store APIs and payment/shipping services before accepting real orders. See `SHOP_BACKEND_HANDOFF.md`.
+
+Venue slot availability, booking confirmations, tournament registrations and several event request flows also remain demo/local unless connected to their backend or official provider. Do not treat a demo status as a confirmed real booking or payment.
+
+## Backend integration
+
+- Public venue browsing works without signing in.
+- Customer registration/login uses the shared FieldFinder Spring Boot API when available.
+- Owner-published games, photos and videos require the shared backend; the Customer app reads the public turf feed and refreshes periodically.
+- The API base defaults to the same host as the browser on port `8080`. To use a hosted backend, create `.env` from `.env.example` and set `VITE_API_BASE_URL`.
+
+## Deployment
+
+The project is a Vite static frontend. Use `npm install`, `npm run build` and `dist` as the output directory. `vercel.json` includes the SPA fallback rewrite. Shop orders and browser demo state do not become shared server data after deployment.
+
+
+## Test a booking without a backend
+
+Use the new **Continue as demo customer** option in the sign-in dialog. It creates a local demo customer session in this browser, then resumes the booking flow you started. Demo bookings and QR passes are saved in browser local storage. Sign out to clear the demo customer session. No real payment or WhatsApp notification is sent.
+
+## V8 animation performance update
+
+The event stack now uses cached scroll geometry, requestAnimationFrame-coalesced updates, a small nearby-image loading window, and limited compositor promotion. Reveal animations are one-shot to avoid replaying and janking on reverse scroll. See `../ANIMATION_PERFORMANCE_NOTES.md`.

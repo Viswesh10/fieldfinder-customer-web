@@ -1018,3 +1018,14 @@
 @keyframes ff-auth-card-in{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(max-width:760px){.guest-status{display:none}.guest-signin-btn{min-height:34px;padding:7px 10px;font-size:11px}.auth-gate-card{padding:24px 19px;border-radius:16px}.auth-gate-card h2{font-size:23px}}
 @media(prefers-reduced-motion:reduce){.auth-gate-backdrop,.auth-gate-card{animation:none}.guest-signin-btn{transition:none}}
+
+/* Local demo access for testing booking + QR flows before backend integration. */
+.auth-demo-divider{display:flex;align-items:center;gap:12px;margin:14px 0 10px;color:#87917f;font-size:10px;font-weight:900;letter-spacing:.14em}
+.auth-demo-divider:before,.auth-demo-divider:after{content:"";height:1px;flex:1;background:#e3eadf}
+.auth-demo-continue{width:100%;display:flex;align-items:center;gap:11px;padding:12px 14px;border:1px solid #b9d99b;border-radius:11px;background:#f3faec;color:#274d20;text-align:left;cursor:pointer;transition:background .18s ease,border-color .18s ease,transform .18s ease}
+.auth-demo-continue:hover{background:#eaf6df;border-color:#8fc765;transform:translateY(-1px)}
+.auth-demo-continue>svg:first-child{flex:0 0 auto;color:#669b36}
+.auth-demo-continue>svg:last-child{margin-left:auto;flex:0 0 auto}
+.auth-demo-continue span{display:grid;gap:2px}
+.auth-demo-continue strong{font-size:12px;font-weight:900}
+.auth-demo-continue small{font-size:10px;color:#64765b;font-weight:600}
