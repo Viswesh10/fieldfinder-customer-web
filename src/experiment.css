@@ -270,7 +270,7 @@
 .experiment-footer-links button { padding: 4px; border: 0; background: transparent; color: #435b3d; font-size: 10px; font-weight: 850; }
 .experiment-footer-links button:hover { color: #1f411f; text-decoration: underline; }
 .experiment-footer > small { color: #8a9486; font-size: 9px; font-weight: 700; }
-.experiment-shell [data-exp-reveal] { opacity: 0; transform: translate3d(0,20px,0); transition: opacity .52s cubic-bezier(.2,.72,.25,1),transform .52s cubic-bezier(.2,.72,.25,1); }
+.experiment-shell [data-exp-reveal] { opacity: 1; transform: none; transition: opacity .52s cubic-bezier(.2,.72,.25,1),transform .52s cubic-bezier(.2,.72,.25,1); }
 .experiment-shell [data-exp-reveal].exp-revealed { opacity: 1; transform: translate3d(0,0,0); }
 .experiment-shell [data-exp-reveal] .experiment-news-card { transition-delay: calc(var(--reveal-index,0) * 25ms); }
 .experiment-shell .page-heading { margin: 6px 0 27px; }
@@ -497,19 +497,19 @@
 .experiment-story-points span { transition: padding-left .24s ease, color .24s ease; }
 .experiment-story-points span:hover { padding-left: 8px; color: #244a24; }
 .experiment-shell [data-exp-reveal] {
-  opacity: 0;
-  transform: translate3d(0,34px,0);
+  opacity: 1;
+  transform: none;
   transition: opacity .72s cubic-bezier(.18,.68,.2,1), transform .82s cubic-bezier(.18,.68,.2,1);
   transition-delay: var(--reveal-delay,0ms);
 }
 .experiment-shell [data-exp-reveal].exp-revealed { opacity: 1; transform: translate3d(0,0,0); }
 .experiment-shell [data-exp-reveal] [data-reveal-direction="left"],
 .experiment-shell [data-exp-reveal] [data-reveal-direction="right"] {
-  opacity: 0;
+  opacity: 1;
   transition: opacity .8s cubic-bezier(.18,.68,.2,1), transform .85s cubic-bezier(.18,.68,.2,1);
 }
-.experiment-shell [data-exp-reveal] [data-reveal-direction="left"] { transform: translate3d(-36px,0,0); }
-.experiment-shell [data-exp-reveal] [data-reveal-direction="right"] { transform: translate3d(36px,0,0); transition-delay: .09s; }
+.experiment-shell [data-exp-reveal] [data-reveal-direction="left"] { transform: none; }
+.experiment-shell [data-exp-reveal] [data-reveal-direction="right"] { transform: none; transition-delay: .09s; }
 .experiment-shell [data-exp-reveal].exp-revealed [data-reveal-direction="left"],
 .experiment-shell [data-exp-reveal].exp-revealed [data-reveal-direction="right"] { opacity: 1; transform: translate3d(0,0,0); }
 .experiment-sport-card { transition: transform .55s cubic-bezier(.18,.68,.2,1), border-color .3s ease, box-shadow .35s ease; }
@@ -1585,4 +1585,2882 @@
   .shop-product-art .shop-product-photo { padding:10px 14px 20px; }
   .rain-policy-summary { grid-template-columns:1fr; }
   .terms-policy-card { border-radius:14px; }
+}
+
+/* Expanded Madurai game directory: cards without venue photography use a
+   quiet illustrated treatment instead of borrowing an unrelated sport photo. */
+.experiment-sport-art.sport-art-no-photo {
+  background:
+    radial-gradient(circle at 72% 25%, rgba(185,243,107,.25), transparent 34%),
+    linear-gradient(145deg, #496b42 0%, #1e4028 58%, #172d20 100%);
+}
+.experiment-sport-art-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(255,255,255,.62);
+  font-size: clamp(54px, 6vw, 84px);
+  filter: saturate(.9);
+  transform: rotate(-9deg);
+  text-shadow: 0 8px 25px rgba(0,0,0,.18);
+}
+.experiment-sport-card:not(:has(.has-photo)) .experiment-sport-art::after {
+  background: linear-gradient(180deg, rgba(8,19,10,.04) 10%, rgba(8,19,10,.2) 42%, rgba(8,19,10,.76) 100%);
+}
+.experiment-directory .venue-card-address {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  margin: 3px 0 5px;
+  color: #586b51;
+  font-size: 9px;
+  font-weight: 650;
+  line-height: 1.42;
+}
+.experiment-directory .venue-card-address > svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: #719b4e;
+}
+.experiment-directory .venue-card-address > span {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow-wrap: anywhere;
+}
+.experiment-directory .verification-hint {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 480px) {
+  .experiment-directory .venue-card-address { font-size: 9px; }
+}
+
+/* SportiLand visual system refresh: warm off-white, ink black and lime green. */
+:root {
+  --ink: #11120f;
+  --muted: #64665f;
+  --line: #dedfd7;
+  --green: #c7ff3e;
+  --green-dark: #243d0b;
+  --pale: #f5f5ee;
+  --panel: #fffefa;
+}
+body { background: #f6f6f0; color: #11120f; }
+.experiment-main { background: #f6f6f0; }
+.experiment-home { gap: clamp(38px, 4.8vw, 66px); }
+.experiment-hero {
+  min-height: 580px;
+  border-color: #e0e2d7;
+  background: linear-gradient(122deg, #fafaf5 0%, #f1f5e8 54%, #e7f0d9 100%);
+  box-shadow: 0 18px 44px rgba(20, 25, 12, .045);
+}
+.experiment-overline { color: #4e6f16; }
+.experiment-overline i { background: #a6e91f; box-shadow: 0 0 0 5px rgba(166,233,31,.18); }
+.experiment-hero h1 em { color: #416c0b; }
+.experiment-hero-actions .primary-btn,
+.experiment-shell .primary-btn {
+  border-color: #a6dd20;
+  background: #c7ff3e;
+  color: #11120f;
+}
+.experiment-hero-actions .primary-btn:hover,
+.experiment-shell .primary-btn:hover { background: #b5ef28; }
+.experiment-outline-btn { border-color: #b8c2a8; background: rgba(255,255,250,.86); color: #171914; }
+.experiment-outline-btn:hover { border-color: #9bc91e; background: #fff; }
+.experiment-section-heading h2 { color: #11120f; }
+.experiment-section-heading p { color: #62645c; }
+.experiment-text-link { color: #3e6410; }
+
+/* Compact game tiles: all 19 categories remain visible together on desktop. */
+.experiment-sport-grid {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+}
+.experiment-sport-card {
+  aspect-ratio: 1.68 / 1;
+  border-color: #25271f;
+  border-radius: 12px;
+  background: #171915;
+  box-shadow: 0 5px 14px rgba(10, 13, 6, .10);
+}
+.experiment-sport-card:hover,
+.experiment-sport-card:focus-visible {
+  border-color: #c7ff3e;
+  box-shadow: 0 12px 24px rgba(28, 44, 7, .17);
+}
+.experiment-sport-symbol {
+  top: 9px;
+  left: 9px;
+  width: 29px;
+  height: 29px;
+  border-radius: 8px;
+  background: #f7f8ee;
+  color: #2d4b08;
+  font-size: 15px;
+}
+.experiment-sport-copy { left: 12px; right: 36px; bottom: 11px; gap: 2px; }
+.experiment-sport-copy strong { font-size: clamp(12px, 1.05vw, 15px); }
+.experiment-sport-copy small { font-size: 8px; line-height: 1.25; }
+.experiment-sport-arrow { right: 9px; bottom: 9px; width: 24px; height: 24px; background: #f7f8ee; color: #263f0a; }
+.experiment-sport-card:hover .experiment-sport-arrow,
+.experiment-sport-card:focus-visible .experiment-sport-arrow { background: #c7ff3e; }
+.experiment-sport-art-fallback { opacity: 0; font-size: 40px; }
+.experiment-sport-art.sport-art-no-photo .experiment-sport-art-fallback,
+.experiment-sport-art.sport-art-image-failed .experiment-sport-art-fallback { opacity: 1; }
+.experiment-sport-art.sport-art-no-photo,
+.experiment-sport-art.sport-art-image-failed {
+  background: radial-gradient(circle at 72% 25%, rgba(199,255,62,.22), transparent 36%), linear-gradient(145deg,#454b36 0%,#171915 100%);
+}
+@media (max-width: 1199px) {
+  .experiment-sport-grid { grid-template-columns: repeat(6, minmax(0,1fr)); gap: 9px; }
+}
+@media (max-width: 980px) {
+  .experiment-sport-grid { grid-template-columns: repeat(5, minmax(0,1fr)); }
+  .experiment-sport-copy strong { font-size: 14px; }
+  .experiment-sport-copy small { font-size: 9px; }
+}
+@media (max-width: 760px) {
+  .experiment-sport-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
+}
+@media (max-width: 640px) {
+  .experiment-sport-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; }
+  .experiment-sport-card { aspect-ratio: 1.55 / 1; }
+  .experiment-sport-copy { left: 11px; bottom: 10px; right: 36px; }
+  .experiment-sport-copy strong { font-size: 14px; }
+  .experiment-sport-copy small { font-size: 9px; }
+}
+
+/* Event deck in the hero: the front card grows while the following cards stay smaller.
+   Scroll, swipe or use the arrows to loop through all events. */
+.experiment-hero-visual { min-height: 485px; }
+.hero-event-deck { position: absolute; inset: 0; min-width: 0; touch-action: pan-y; user-select: none; }
+.hero-event-deck-label {
+  position: absolute;
+  z-index: 8;
+  top: 0;
+  left: 3%;
+  right: 2%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+.hero-event-deck-label > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #526c27;
+  font-size: 8px;
+  font-weight: 950;
+  letter-spacing: 1.4px;
+}
+.hero-event-deck-label > span i { width: 7px; height: 7px; border-radius: 50%; background: #b5f02b; }
+.hero-event-deck-label > b {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 5px 9px;
+  border-radius: 30px;
+  background: #171915;
+  color: #f9faef;
+  font-size: 8px;
+  font-weight: 950;
+  letter-spacing: .8px;
+}
+.hero-event-deck-label > b em { margin-left: 4px; color: #c7ff3e; font-style: normal; }
+.hero-event-card {
+  position: absolute;
+  display: block;
+  overflow: hidden;
+  padding: 0;
+  border: 7px solid #fffefa;
+  border-radius: 20px;
+  background: #171915;
+  color: #fffefa;
+  text-align: left;
+  box-shadow: 0 20px 44px rgba(16, 24, 7, .21);
+  transform-origin: 50% 72%;
+  transition: transform .62s cubic-bezier(.18,.72,.2,1), opacity .48s ease, width .62s cubic-bezier(.18,.72,.2,1), height .62s cubic-bezier(.18,.72,.2,1), top .62s cubic-bezier(.18,.72,.2,1), left .62s cubic-bezier(.18,.72,.2,1), right .62s cubic-bezier(.18,.72,.2,1), bottom .62s cubic-bezier(.18,.72,.2,1), box-shadow .35s ease;
+}
+.hero-event-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-event-card-shade { position: absolute; inset: 0; background: linear-gradient(180deg,rgba(8,10,5,.24),rgba(8,10,5,.02) 37%,rgba(8,10,5,.86)); }
+.hero-event-card-kind,
+.hero-event-card-count {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 27px;
+  padding: 6px 9px;
+  border: 1px solid rgba(255,255,255,.44);
+  border-radius: 30px;
+  background: rgba(16,18,13,.82);
+  color: #fff;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .5px;
+  backdrop-filter: blur(7px);
+}
+.hero-event-card-kind { left: 12px; }
+.hero-event-card-kind svg { color: #c7ff3e; }
+.hero-event-card-count { right: 12px; color: #d9ffa0; }
+.hero-event-card-copy {
+  position: absolute;
+  z-index: 2;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  display: grid;
+  gap: 6px;
+}
+.hero-event-card-copy > small { color: #dbf5a5; font-size: 7px; font-weight: 950; letter-spacing: 1.1px; text-transform: uppercase; }
+.hero-event-card-copy > strong { max-width: 94%; color: #fff; font: 850 clamp(18px,2vw,27px)/1.06 Manrope,sans-serif; letter-spacing: -.045em; text-wrap: balance; }
+.hero-event-card-copy > span { display: flex; align-items: center; gap: 6px; overflow: hidden; color: rgba(255,255,255,.92); font-size: 8px; font-weight: 750; text-overflow: ellipsis; white-space: nowrap; }
+.hero-event-card-copy > span svg { flex: 0 0 auto; color: #c7ff3e; }
+.hero-event-card-copy > i { display: inline-flex; align-items: center; gap: 7px; width: fit-content; margin-top: 4px; padding: 7px 9px; border-radius: 7px; background: #f8f9f1; color: #17200e; font-size: 8px; font-style: normal; font-weight: 950; }
+.hero-event-card.is-active { z-index: 5; top: 5%; left: 4%; right: auto; bottom: auto; width: 84%; height: 82%; opacity: 1; transform: rotate(-2deg) scale(1); }
+.hero-event-card.is-next { z-index: 4; top: auto; left: auto; right: 0; bottom: 7%; width: 58%; height: 54%; opacity: .98; transform: rotate(4deg) scale(.94); }
+.hero-event-card.is-third { z-index: 2; top: 17%; left: 8%; right: auto; bottom: auto; width: 56%; height: 53%; opacity: .54; transform: rotate(-5deg) scale(.88); }
+.hero-event-card.is-hidden { z-index: 0; top: 30%; left: 24%; width: 50%; height: 45%; opacity: 0; transform: translate3d(0,20px,0) scale(.76) rotate(0deg); pointer-events: none; }
+.hero-event-card.is-active:hover { box-shadow: 0 25px 55px rgba(16,24,7,.28), 0 0 0 2px rgba(199,255,62,.35); }
+.hero-event-card.is-next .hero-event-card-copy,
+.hero-event-card.is-third .hero-event-card-copy { left: 10px; right: 10px; bottom: 10px; gap: 3px; }
+.hero-event-card.is-next .hero-event-card-copy > small,
+.hero-event-card.is-next .hero-event-card-copy > span,
+.hero-event-card.is-next .hero-event-card-copy > i,
+.hero-event-card.is-third .hero-event-card-copy > small,
+.hero-event-card.is-third .hero-event-card-copy > span,
+.hero-event-card.is-third .hero-event-card-copy > i { display: none; }
+.hero-event-card.is-next .hero-event-card-copy > strong,
+.hero-event-card.is-third .hero-event-card-copy > strong { font-size: clamp(11px,1.2vw,15px); }
+.hero-event-card.is-next .hero-event-card-kind,
+.hero-event-card.is-third .hero-event-card-kind { top: 7px; left: 7px; min-height: 22px; padding: 4px 7px; font-size: 7px; }
+.hero-event-card.is-next .hero-event-card-count,
+.hero-event-card.is-third .hero-event-card-count { top: 7px; right: 7px; min-height: 22px; padding: 4px 7px; font-size: 7px; }
+.hero-event-deck-controls { position: absolute; z-index: 9; right: 7%; bottom: -2px; display: flex; gap: 7px; }
+.hero-event-deck-controls button { width: 33px; height: 33px; display: grid; place-items: center; border: 1px solid #191b16; border-radius: 50%; background: #c7ff3e; color: #11120f; box-shadow: 0 5px 12px rgba(15,22,8,.13); transition: transform .2s ease, background .2s ease; }
+.hero-event-deck-controls button:hover { transform: translateY(-2px); background: #b5ef28; }
+.hero-event-deck-hint { position: absolute; z-index: 8; left: 3%; bottom: 2px; color: #566d2e; font-size: 7px; font-weight: 950; letter-spacing: 1.2px; }
+.hero-event-deck-empty { display: flex; flex-direction: column; justify-content: center; padding: 35px; border: 7px solid #fff; border-radius: 20px; background: #171915; color: #fff; }
+.hero-event-deck-empty strong { margin-top: 12px; font: 850 34px Manrope,sans-serif; }
+.hero-event-deck-empty p { color: #d9dfca; font-size: 12px; }
+.experiment-hero-sticker { top: 3%; right: 1%; padding: 9px 12px; background: #fbfcf5; color: #18200f; }
+.experiment-hero-sticker svg { color: #567d13; }
+.experiment-hero-sticker b { color: #11120f; }
+.experiment-hero-sticker small { color: #59604f; }
+.experiment-hero-orbit { border-color: rgba(123,160,51,.22); }
+.experiment-hero-index { color: #506b24; }
+@media (max-width: 820px) {
+  .experiment-hero-visual { min-height: 430px; }
+  .hero-event-card.is-active { width: 85%; height: 79%; }
+  .hero-event-card.is-next { width: 58%; height: 51%; }
+  .experiment-hero-sticker { top: 1%; right: 0; }
+}
+@media (max-width: 560px) {
+  .experiment-hero-visual { min-height: 340px; }
+  .hero-event-card { border-width: 5px; border-radius: 15px; }
+  .hero-event-card.is-active { top: 7%; left: 3%; width: 88%; height: 78%; }
+  .hero-event-card.is-next { right: 0; bottom: 7%; width: 59%; height: 49%; }
+  .hero-event-card.is-third { top: 22%; left: 3%; width: 56%; height: 47%; }
+  .hero-event-card-kind,.hero-event-card-count { top: 7px; min-height: 22px; padding: 4px 6px; font-size: 7px; }
+  .hero-event-card-kind { left: 7px; }
+  .hero-event-card-count { right: 7px; }
+  .hero-event-card-copy { left: 10px; right: 10px; bottom: 10px; gap: 4px; }
+  .hero-event-card-copy > small { font-size: 6px; }
+  .hero-event-card-copy > strong { font-size: clamp(15px,4.8vw,21px); }
+  .hero-event-card-copy > span { font-size: 7px; }
+  .hero-event-card-copy > i { padding: 6px 7px; font-size: 7px; }
+  .hero-event-deck-controls { right: 8%; bottom: -1px; }
+  .hero-event-deck-controls button { width: 28px; height: 28px; }
+  .hero-event-deck-hint { font-size: 6px; }
+  .hero-event-deck-label { top: 1%; }
+  .experiment-hero-sticker { right: -1%; top: -3%; padding: 7px 9px; }
+  .experiment-hero-sticker svg { width: 16px; }
+  .experiment-hero-sticker b { font-size: 9px; }
+  .experiment-hero-sticker small { font-size: 7px; }
+  .experiment-hero-index { bottom: -2px; font-size: 6px; }
+}
+
+/* Venue cards follow the supplied dark product-card reference without fabricated ratings or discounts. */
+.experiment-directory .venue-card {
+  overflow: hidden;
+  border: 1px solid #282a23;
+  border-radius: 18px;
+  background: #11120f;
+  color: #f7f8ef;
+  box-shadow: 0 9px 24px rgba(10,12,6,.13);
+}
+.experiment-directory .venue-card:hover {
+  border-color: #c7ff3e;
+  box-shadow: 0 16px 33px rgba(10,12,6,.2), 0 0 0 1px rgba(199,255,62,.15);
+}
+.experiment-directory .venue-photo {
+  position: relative;
+  height: clamp(185px, 18vw, 245px);
+  background: #25281d;
+}
+.experiment-directory .venue-photo img { object-fit: cover; }
+.experiment-directory .photo-badge {
+  top: 13px;
+  left: 13px;
+  padding: 6px 9px;
+  border-radius: 6px;
+  background: rgba(250,251,243,.94);
+  color: #151710;
+  font-size: 8px;
+  font-weight: 950;
+  letter-spacing: .8px;
+}
+.experiment-directory .photo-arrow {
+  right: 12px;
+  bottom: 12px;
+  width: 36px;
+  height: 36px;
+  background: #f5f7ec;
+  color: #18200d;
+}
+.experiment-directory .venue-card-ribbon {
+  min-height: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 9px;
+  padding: 8px 15px;
+  background: #c7ff3e;
+  color: #11120f;
+}
+.experiment-directory .venue-card-ribbon > span { display: inline-flex; align-items: center; gap: 6px; font-size: 9px; font-weight: 950; letter-spacing: .6px; }
+.experiment-directory .venue-card-ribbon > small { overflow: hidden; color: #273a0c; font-size: 8px; font-weight: 900; text-overflow: ellipsis; white-space: nowrap; }
+.experiment-directory .venue-info { min-height: 230px; padding: 15px 16px 16px; background: #11120f; }
+.experiment-directory .venue-area { color: #d2f890; font-size: 10px; font-weight: 800; }
+.experiment-directory .venue-area svg { color: #c7ff3e; }
+.experiment-directory .venue-info h3 { margin: 8px 0 7px; color: #fbfcf5; font: 850 18px/1.15 Manrope,sans-serif; letter-spacing: -.035em; }
+.experiment-directory .venue-card-address { color: #d0d2c8; font-size: 9px; line-height: 1.45; }
+.experiment-directory .venue-card-address > svg { color: #c7ff3e; }
+.experiment-directory .verification-hint { margin-top: 7px; padding: 3px 6px; border-color: #4a532d; border-radius: 5px; background: #24291b; color: #d4ef9b; font-size: 7px; }
+.experiment-directory .venue-summary { min-height: 31px; margin: 7px 0 9px; color: #c2c5b9; font-size: 10px; line-height: 1.45; }
+.experiment-directory .venue-card .sport-tags { gap: 5px; flex-wrap: wrap; }
+.experiment-directory .venue-card .sport-tags span { padding: 4px 7px; border: 1px solid #3e4a23; border-radius: 5px; background: #202719; color: #ddf6a9; font-size: 8px; font-weight: 800; }
+.experiment-directory .venue-card-foot { margin-top: 12px; padding-top: 10px; border-top: 1px solid #34372d; color: #c7ff3e; font-size: 9px; font-weight: 950; }
+.experiment-directory .venue-card-foot svg { color: #c7ff3e; }
+.experiment-directory .venue-directions-link {
+  align-self: stretch;
+  min-height: 36px;
+  margin: 0;
+  border-color: #25271f;
+  border-radius: 8px;
+  background: #f7f8ee;
+  color: #11120f !important;
+  font-size: 9px;
+  font-weight: 900;
+}
+.experiment-directory .venue-directions-link:hover { border-color: #b3e52e; background: #c7ff3e; }
+@media (max-width: 640px) {
+  .experiment-directory .venue-photo { height: 190px; }
+  .experiment-directory .venue-info { min-height: 0; }
+}
+
+/* Keep the same palette across the remaining customer pages and navigation. */
+.experiment-shell { background: #f6f6f0; color: #11120f; }
+.experiment-topbar { background: rgba(250,250,245,.96); border-bottom-color: #dedfd7; box-shadow: 0 5px 18px rgba(10,12,6,.045); }
+.experiment-brand .brand-mark,
+.experiment-footer-brand .brand-mark { background: #c7ff3e; color: #11120f; }
+.experiment-brand-copy { color: #11120f; }
+.experiment-brand-copy small { color: #62645c; }
+.experiment-brand-copy .brand-dot { color: #81b800; }
+.experiment-nav-link { color: #24251f; }
+.experiment-nav-link:hover,
+.experiment-nav-link.active,
+.experiment-sports-nav.open > .experiment-nav-link { color: #11120f; border-bottom-color: #a9de19; }
+.experiment-page-control,
+.experiment-search-shortcut { border-color: #d8d9ce; background: #fffefa; color: #171812; }
+.experiment-page-control:hover:not(:disabled),
+.experiment-search-shortcut:hover { border-color: #b4e537; background: #f8fbe9; color: #11120f; }
+.experiment-mobile-toggle { border-color: #d7d9cf; background: #fffefa; color: #11120f; }
+.experiment-mobile-panel { border-bottom-color: #dedfd7; background: #fafaf4; }
+.experiment-mobile-panel > button { border-bottom-color: #e5e6dc; background: #fafaf4; color: #171812; }
+.experiment-mobile-panel > button svg { color: #7cab10; }
+.experiment-mobile-caption { color: #5a790f; }
+.experiment-mobile-sports button { border-color: #dddfd2; background: #fffefa; color: #11120f; }
+.experiment-mobile-sports button:hover { border-color: #b6e53c; background: #f5f9e7; }
+.experiment-mega-menu { border-color: #d8ddcd; border-top-color: #c7ff3e; background: #fffefa; }
+.experiment-mega-options button { border-color: #dedfd7; background: #f8f8f1; color: #11120f; }
+.experiment-mega-options button:hover { border-color: #b6e53c; background: #f1f6df; }
+.experiment-mega-options button svg { color: #7da900; }
+.experiment-mega-intro p { color: #62645c; }
+.experiment-sports-section .section-kicker,
+.experiment-directory .section-kicker { color: #5c850b; }
+.experiment-directory-tools .search-field { border-color: #d7d9cf; background: #fffefa; color: #5d6252; }
+.experiment-directory-tools .search-field input { color: #11120f; }
+.experiment-directory-tools .search-field input::placeholder { color: #85877e; }
+.experiment-directory-tools .search-field button { color: #5b690d; }
+.experiment-directory .sport-filters button { border-color: #d5d7cc; background: #fffefa; color: #1b1c16; }
+.experiment-directory .sport-filters button.selected { border-color: #11120f; background: #11120f; color: #c7ff3e; }
+.experiment-directory .venue-result-line { color: #66685e; }
+.experiment-directory .venue-result-line b { color: #11120f; }
+.experiment-manifesto-marquee { background: #11120f; color: #f7f8ef; }
+.experiment-manifesto-track span { color: #f7f8ef; }
+.experiment-manifesto-track i { color: #c7ff3e; }
+.experiment-last-callout { border-color: #d9dfc8; background: linear-gradient(120deg,#fafaf4,#eef3df); }
+.experiment-last-callout h2 { color: #11120f; }
+.experiment-last-callout p { color: #606358; }
+.experiment-footer { border-top-color: #24261f; background: #11120f; color: #f7f8ef; }
+.experiment-footer-brand { color: #f7f8ef; }
+.experiment-footer > p { color: #c4c7b9; }
+.experiment-footer-links button { color: #c7ff3e; }
+.experiment-shell .availability-note { border-color: #dedfd7; background: #f1f2e9; color: #515449; }
+.experiment-shell .availability-note svg { color: #779d13; }
+.experiment-sport-art { width: 100%; height: 100%; }
+.experiment-sport-art img { padding: 0; }
+.experiment-hero-sticker { top: 12%; right: -3%; }
+@media (max-width: 560px) {
+  .experiment-sport-art { width: 100%; height: 100%; }
+  .experiment-sport-art img { padding: 0; }
+  .experiment-hero-sticker { top: 10%; right: -2%; }
+}
+
+/* V10: compact game discovery and reference-inspired venue marketplace cards */
+.games-show-more{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:18px 0 4px;color:#67695f;font-size:11px;font-weight:750}
+.games-show-more .primary-btn{min-height:38px;padding:0 17px;background:#c7ff3e;color:#11120f;border:0}
+.experiment-directory .venue-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.experiment-directory .venue-card{display:flex;flex-direction:column;text-align:left;width:100%;border:1px solid #34352f;border-radius:22px;background:#11120f;overflow:hidden;color:#f8f8f2;box-shadow:0 8px 26px #10120b18}
+.experiment-directory .venue-photo{height:clamp(210px,22vw,310px);position:relative;overflow:hidden;background:#262920}
+.experiment-directory .venue-photo img{width:100%;height:100%;object-fit:cover}
+.experiment-directory .photo-badge{position:absolute;top:12px;left:12px;padding:5px 8px;border-radius:20px;background:#11120fca;color:#fff;font-size:8px;letter-spacing:.45px}
+.experiment-directory .photo-arrow{position:absolute;right:13px;top:13px;bottom:auto;width:35px;height:35px;border-radius:50%;background:#c7ff3e;color:#11120f;display:grid;place-items:center}
+.experiment-directory .venue-card-offer{display:flex;align-items:center;gap:9px;padding:10px 17px;background:#c7ff3e;color:#11120f;font-size:13px;font-weight:950}
+.experiment-directory .venue-info{min-height:0;padding:19px 19px 21px;background:#11120f}
+.experiment-directory .venue-info h3{margin:0 0 10px;color:#fff;font-size:clamp(17px,1.4vw,22px);line-height:1.2;font-weight:850}
+.experiment-directory .venue-card-address{display:flex;align-items:flex-start;gap:7px;color:#b9bbb2;font-size:12px;line-height:1.5}
+.experiment-directory .venue-card-address svg{flex:0 0 auto;color:#c7ff3e;margin-top:1px}
+.experiment-directory .venue-card-sports{margin-top:20px;padding-top:16px;border-top:1px solid #30312b}
+.experiment-directory .venue-card-sports>strong{display:block;color:#a9aaa1;font-size:10px;letter-spacing:2px;font-weight:900}
+.experiment-directory .venue-card-sports>div{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.experiment-directory .venue-card-sports span{padding:9px 13px;border-radius:22px;background:#292a28;color:#f5f5ee;font-size:11px;font-weight:750}
+.experiment-directory .venue-card:hover{border-color:#c7ff3e;transform:translateY(-4px)}
+.experiment-directory .venue-directions-link{display:none}
+
+/* Dedicated venue page follows the supplied mobile venue-detail reference. */
+.venue-detail-page{max-width:1060px;margin:0 auto;padding:8px 0 120px;color:#f7f7f3}
+.venue-detail-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0 18px}
+.venue-detail-topbar button{display:flex;align-items:center;gap:5px;border:0;background:none;color:#c7ff3e;font-size:12px;font-weight:850}
+.venue-detail-topbar h1{margin:0;color:#11120f;font-size:18px;font-weight:850}
+.venue-detail-gallery{height:clamp(280px,43vw,540px);position:relative;overflow:hidden;border-radius:24px;background:#171815}
+.venue-detail-gallery>img{width:100%;height:100%;object-fit:cover}
+.venue-gallery-count{position:absolute;right:17px;top:17px;padding:8px 12px;border-radius:30px;background:#11120fca;color:#fff;font-size:10px;font-weight:850}
+.venue-gallery-dots{position:absolute;left:0;right:0;bottom:16px;display:flex;justify-content:center;gap:8px}
+.venue-gallery-dots button{width:7px;height:7px;padding:0;border:0;border-radius:50%;background:#ffffff80}
+.venue-gallery-dots button.active{width:22px;border-radius:8px;background:#c7ff3e}
+.venue-detail-content{padding:0 4px}
+.venue-detail-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:26px 0 18px;border-bottom:1px solid #34352f}
+.venue-detail-heading h2{margin:0 0 9px;color:#11120f;font-size:clamp(22px,2.5vw,30px);font-weight:900;letter-spacing:-.7px}
+.venue-detail-heading p{display:flex;align-items:flex-start;gap:7px;max-width:750px;margin:0;color:#666960;font-size:13px;line-height:1.55}
+.venue-detail-heading p svg{flex:0 0 auto;color:#638c1b}
+.venue-detail-heading small{display:block;margin-top:8px;color:#888b80;font-size:10px}
+.venue-detail-heading>a,.venue-detail-actions>a,.venue-detail-actions>button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 15px;border:1px solid #44463d;border-radius:10px;background:#242521;color:#f7f7f2;text-decoration:none;font-size:12px;font-weight:800;white-space:nowrap}
+.venue-detail-actions{display:flex;gap:10px;padding:18px 0 6px}
+.venue-detail-section{padding:26px 0;border-bottom:1px solid #34352f}
+.venue-detail-section h3{margin:0 0 18px;color:#777a70;font-size:12px;letter-spacing:2px;font-weight:900}
+.venue-detail-sports{display:flex;flex-wrap:wrap;gap:10px}
+.venue-detail-sports span{padding:13px 19px;border-radius:25px;background:#292a28;color:#f7f7f3;font-size:13px;font-weight:750}
+.venue-detail-section-title{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.venue-detail-section-title h3{margin:0 0 16px}
+.venue-detail-section-title button{display:flex;align-items:center;gap:4px;border:0;background:none;color:#c7ff3e;font-size:12px;font-weight:850}
+.venue-amenities-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px}
+.venue-amenities-grid span{display:flex;align-items:center;gap:11px;color:#f1f1eb;font-size:13px;font-weight:650}
+.venue-amenities-grid svg,.venue-offer-detail>svg{color:#c7ff3e}
+.venue-detail-muted{color:#92948b;font-size:12px}
+.venue-offer-detail{display:flex;align-items:center;gap:14px;padding:17px;border:1px solid #33352e;border-radius:17px;background:#20211f}
+.venue-offer-detail strong,.venue-offer-detail small{display:block}.venue-offer-detail small{margin-top:5px;color:#9b9d93;font-size:11px}
+.venue-detail-gallery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.venue-detail-gallery-grid button{padding:0;border:0;border-radius:17px;overflow:hidden;background:#222}
+.venue-detail-gallery-grid img,.venue-detail-gallery-grid video{width:100%;height:190px;object-fit:cover;display:block}
+.venue-more-section>div{padding:0 16px;border:1px solid #33352e;border-radius:18px}
+.venue-more-section details{padding:18px 0;border-bottom:1px solid #33352e;color:#f4f4ef}
+.venue-more-section details:last-child{border-bottom:0}
+.venue-more-section summary{display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;font-size:14px;font-weight:800;cursor:pointer}
+.venue-more-section summary::-webkit-details-marker{display:none}
+.venue-more-section details p{margin:12px 0 0;color:#a8aaa1;font-size:12px;line-height:1.6}
+.venue-detail-bookbar{position:sticky;bottom:12px;z-index:20;margin:22px 0 0;padding:14px 17px;border:1px solid #3a3b35;border-radius:24px;background:#252624f5;box-shadow:0 12px 40px #0003;backdrop-filter:blur(14px)}
+.venue-detail-bookbar>small{display:block;margin-bottom:10px;color:#b7d6f0;text-align:center;font-size:11px}
+.venue-detail-bookbar>div{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.venue-detail-bookbar strong{color:#fff;font-size:15px}
+.venue-detail-bookbar button{display:flex;align-items:center;justify-content:center;gap:8px;min-width:220px;min-height:58px;padding:0 24px;border:0;border-radius:40px;background:#f7f7f3;color:#11120f;font-size:18px;font-weight:900}
+.amenities-sheet-backdrop{position:fixed;inset:0;z-index:110;display:flex;align-items:flex-end;justify-content:center;background:#000a;backdrop-filter:blur(4px)}
+.amenities-sheet{width:min(760px,100%);max-height:min(78vh,760px);overflow:auto;border-radius:26px 26px 0 0;background:#20211f;color:#f7f7f2;box-shadow:0 -20px 60px #0005}
+.amenities-sheet header{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid #393a36;background:#20211f}
+.amenities-sheet header h3{margin:0;font-size:20px;font-weight:850}
+.amenities-sheet header button{border:0;background:none;color:#d8d8d0}
+.amenities-sheet>div{padding:0 24px 18px}
+.amenities-sheet p{display:flex;align-items:center;gap:14px;margin:0;padding:19px 4px;border-bottom:1px solid #393a36;color:#f4f4ef;font-size:14px;font-weight:650}
+.amenities-sheet p svg{color:#c7ff3e}
+@media(max-width:900px){.experiment-directory .venue-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.venue-detail-page{padding-left:0;padding-right:0}}
+@media(max-width:640px){.games-show-more{align-items:flex-start;flex-direction:column}.games-show-more .primary-btn{width:100%;justify-content:center}.experiment-directory .venue-grid{grid-template-columns:1fr;gap:15px}.experiment-directory .venue-photo{height:245px}.experiment-directory .venue-info{padding:17px}.venue-detail-page{padding-bottom:112px}.venue-detail-topbar{padding:7px 0 14px}.venue-detail-topbar h1{max-width:48%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px}.venue-detail-gallery{height:clamp(250px,92vw,430px);border-radius:18px}.venue-detail-heading{display:block;padding:22px 0 15px}.venue-detail-heading h2{font-size:23px}.venue-detail-heading>a{margin-top:13px}.venue-detail-actions>a,.venue-detail-actions>button{flex:1;padding:0 8px;font-size:11px}.venue-detail-section{padding:23px 0}.venue-amenities-grid{gap:16px 10px}.venue-amenities-grid span{font-size:11px}.venue-detail-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.venue-detail-gallery-grid img,.venue-detail-gallery-grid video{height:155px}.venue-detail-bookbar{bottom:8px;margin:16px -5px 0;padding:13px;border-radius:28px}.venue-detail-bookbar button{min-width:0;min-height:55px;padding:0 22px;font-size:16px}.amenities-sheet{max-height:75vh}.amenities-sheet header{padding:18px 20px}.amenities-sheet>div{padding:0 20px 18px}.amenities-sheet p{padding:17px 3px}}
+.amenities-sheet .amenities-empty{display:block;padding:22px 0;color:#aeb0a6;font-size:13px;line-height:1.6}
+
+/* V11 refinements from the latest SportiLand reference screenshots. */
+/* Newly inserted game cards are not gated by the one-time section reveal observer. */
+.experiment-sport-grid .experiment-sport-card { opacity: 1 !important; transform: none; visibility: visible; }
+.experiment-sport-grid { grid-auto-rows: auto; align-items: stretch; }
+.experiment-sport-card { min-height: 112px; }
+
+/* Venue listing card: photo, venue name, locality, distance and rating only. */
+.experiment-directory .venue-card { border-radius: 22px; background: #11120f; }
+.experiment-directory .venue-card-offer,
+.experiment-directory .venue-card-sports,
+.experiment-directory .venue-card-address { display: none !important; }
+.experiment-directory .venue-info.venue-info-minimal { padding: 17px 19px 19px; }
+.experiment-directory .venue-info.venue-info-minimal h3 { margin: 0 0 5px; color: #f8f8f2; }
+.experiment-directory .venue-card-area { margin: 0 0 13px; color: #b9bbb2; font-size: 12px; font-weight: 650; }
+.experiment-directory .venue-card-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 11px; border-top: 1px solid #30312b; }
+.experiment-directory .venue-card-distance,
+.experiment-directory .venue-card-rating { display: inline-flex; align-items: center; gap: 5px; min-width: 0; color: #b9bbb2; font-size: 10px; font-weight: 750; }
+.experiment-directory .venue-card-distance svg { color: #c7ff3e; flex: 0 0 auto; }
+.experiment-directory .venue-card-rating { color: #d7e8bc; }
+.experiment-directory .venue-card-rating svg { color: #c7ff3e; flex: 0 0 auto; }
+
+/* Venue detail page: remove the old MORE accordion and keep a single lime booking CTA. */
+.venue-detail-page { color: #f7f7f3; }
+.venue-detail-bookbar { position: fixed; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); z-index: 85; display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: min(420px, calc(100vw - 36px)); min-height: 62px; margin: 0; padding: 0 24px; transform: translateX(-50%); border: 0; border-radius: 999px; background: #c7ff3e; color: #11120f; box-shadow: 0 12px 34px #0005; font-size: 18px; font-weight: 950; }
+.venue-detail-bookbar:hover { background: #b8f02d; }
+.venue-detail-bookbar svg { color: #11120f; }
+.venue-detail-page { padding-bottom: 110px; }
+
+/* Booking picker inspired by the supplied date / duration / time-slot screen. */
+.slot-picker-backdrop { position: fixed; inset: 0; z-index: 120; display: grid; place-items: center; padding: 18px; background: #000b; backdrop-filter: blur(5px); }
+.slot-picker-modal { width: min(720px, 100%); max-height: min(88vh, 820px); overflow: auto; padding: 24px; border: 1px solid #373934; border-radius: 26px; background: #11120f; color: #f7f7f3; box-shadow: 0 24px 80px #0008; }
+.slot-picker-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.slot-picker-header>div { display: grid; gap: 4px; }
+.slot-picker-header span { color: #c7ff3e; font-size: 12px; font-weight: 800; }
+.slot-picker-header h2 { margin: 0; color: #f7f7f3; font-size: clamp(20px, 3vw, 27px); font-weight: 900; }
+.slot-picker-header>button { display: grid; width: 40px; height: 40px; flex: 0 0 auto; place-items: center; border: 1px solid #393b34; border-radius: 50%; background: #242521; color: #f7f7f3; }
+.slot-picker-dates { display: flex; align-items: center; gap: 10px; margin: 25px 0 22px; }
+.slot-picker-month { display: grid; width: 40px; min-width: 40px; height: 66px; place-items: center; border-radius: 16px; background: #292a28; color: #f7f7f3; font-size: 10px; font-weight: 900; writing-mode: vertical-rl; transform: rotate(180deg); }
+.slot-picker-date-list { display: grid; flex: 1; grid-template-columns: repeat(7, minmax(0,1fr)); gap: 6px; min-width: 0; }
+.slot-picker-date-list button { display: grid; min-width: 0; min-height: 66px; place-items: center; gap: 3px; padding: 7px 3px; border: 1px solid transparent; border-radius: 14px; background: transparent; color: #c8c9c2; }
+.slot-picker-date-list button strong { color: inherit; font-size: 19px; font-weight: 800; }
+.slot-picker-date-list button span { font-size: 11px; }
+.slot-picker-date-list button.active { border-color: #f7f7f3; background: #f7f7f3; color: #11120f; }
+.slot-picker-calendar { position: relative; display: grid; width: 42px; height: 42px; flex: 0 0 auto; place-items: center; border: 1px solid #42443b; border-radius: 12px; color: #c7ff3e; cursor: pointer; }
+.slot-picker-calendar input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.slot-picker-duration { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 86px; margin: 0 0 29px; padding: 16px 18px; border: 1px solid #343630; border-radius: 22px; }
+.slot-picker-duration>strong { color: #f1f1eb; font-size: 16px; }
+.slot-picker-duration>div { display: inline-flex; align-items: center; gap: 18px; min-height: 50px; padding: 5px 10px; border-radius: 14px; background: #f7f7f3; color: #11120f; }
+.slot-picker-duration button { display: grid; width: 34px; height: 34px; place-items: center; border: 0; border-radius: 9px; background: transparent; color: #11120f; }
+.slot-picker-duration button:disabled { opacity: .3; cursor: not-allowed; }
+.slot-picker-duration b { min-width: 54px; color: #11120f; font-size: 18px; text-align: center; white-space: nowrap; }
+.slot-picker-time-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 15px; }
+.slot-picker-time-heading h3 { margin: 0; color: #f7f7f3; font-size: 19px; font-weight: 850; }
+.slot-picker-time-heading span { color: #aeb0a6; font-size: 11px; }
+.slot-picker-times { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 11px; }
+.slot-picker-times button { display: grid; min-height: 76px; place-items: center; gap: 5px; padding: 12px; border: 1px solid #454740; border-radius: 17px; background: transparent; color: #f7f7f3; }
+.slot-picker-times button strong { font-size: 15px; font-weight: 750; text-align: center; }
+.slot-picker-times button small { color: #aeb0a6; font-size: 11px; }
+.slot-picker-times button.selected { border-color: #c7ff3e; background: #c7ff3e14; box-shadow: inset 0 0 0 1px #c7ff3e; }
+.slot-picker-times button.selected strong,
+.slot-picker-times button.selected small { color: #eaffc0; }
+.slot-picker-empty { padding: 22px; border: 1px dashed #454740; border-radius: 16px; color: #b9bbb2; font-size: 13px; line-height: 1.6; text-align: center; }
+.slot-picker-footer { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-top: 22px; padding-top: 18px; border-top: 1px solid #343630; }
+.slot-picker-footer>span { color: #c8c9c2; font-size: 12px; }
+.slot-picker-footer>button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 50px; padding: 0 21px; border: 0; border-radius: 999px; background: #c7ff3e; color: #11120f; font-size: 14px; font-weight: 900; white-space: nowrap; }
+.slot-picker-footer>button:disabled { opacity: .35; cursor: not-allowed; }
+.slot-picker-note { margin: 13px 0 0; color: #888b80; font-size: 10px; line-height: 1.5; }
+@media(max-width:640px) {
+  .experiment-directory .venue-info.venue-info-minimal { padding: 15px 16px 17px; }
+  .experiment-directory .venue-card-meta { align-items: flex-start; flex-direction: column; }
+  .venue-detail-bookbar { bottom: max(12px, env(safe-area-inset-bottom)); min-height: 60px; width: min(420px, calc(100vw - 28px)); font-size: 17px; }
+  .slot-picker-backdrop { align-items: end; padding: 0; }
+  .slot-picker-modal { width: 100%; max-height: 92vh; padding: 19px 16px max(18px, env(safe-area-inset-bottom)); border-radius: 25px 25px 0 0; }
+  .slot-picker-dates { gap: 7px; }
+  .slot-picker-month { width: 32px; min-width: 32px; height: 60px; }
+  .slot-picker-date-list { gap: 3px; }
+  .slot-picker-date-list button { min-height: 60px; padding: 5px 1px; }
+  .slot-picker-date-list button strong { font-size: 17px; }
+  .slot-picker-date-list button span { font-size: 9px; }
+  .slot-picker-calendar { width: 36px; height: 38px; }
+  .slot-picker-duration { min-height: 78px; margin-bottom: 24px; padding: 13px; }
+  .slot-picker-duration>div { gap: 8px; min-height: 46px; }
+  .slot-picker-duration b { font-size: 16px; }
+  .slot-picker-time-heading { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .slot-picker-time-heading h3 { font-size: 18px; }
+  .slot-picker-times { gap: 9px; }
+  .slot-picker-times button { min-height: 72px; padding: 9px 6px; }
+  .slot-picker-times button strong { font-size: 13px; }
+  .slot-picker-footer { align-items: stretch; flex-direction: column; }
+  .slot-picker-footer>button { width: 100%; }
+}
+.experiment-directory .photo-badge { display: none !important; }
+.amenities-demo-note { display: block; margin-top: 16px; color: #85877e; font-size: 10px; line-height: 1.4; }
+
+
+/* V12: strong black/lime navigation, shared location control, whitespace and accessible amenities. */
+.experiment-topbar {
+  background: #10110f !important;
+  border-bottom: 1px solid #2c3025 !important;
+  box-shadow: 0 8px 26px rgba(0,0,0,.18) !important;
+}
+.experiment-brand-copy, .experiment-brand-copy small { color: #f7f8ef !important; }
+.experiment-brand-copy .brand-dot { color: #c7ff3e !important; }
+.experiment-brand .brand-mark { background: #c7ff3e !important; color: #11120f !important; }
+.experiment-nav-link { color: #f1f2eb !important; }
+.experiment-nav-link:hover, .experiment-nav-link.active, .experiment-sports-nav.open > .experiment-nav-link {
+  color: #c7ff3e !important;
+  border-bottom-color: #c7ff3e !important;
+}
+.experiment-page-control, .experiment-search-shortcut, .experiment-mobile-toggle {
+  border-color: #414438 !important;
+  background: #20221d !important;
+  color: #f6f7ef !important;
+}
+.experiment-page-control:hover:not(:disabled), .experiment-search-shortcut:hover, .experiment-mobile-toggle:hover {
+  border-color: #c7ff3e !important;
+  background: #292d20 !important;
+  color: #c7ff3e !important;
+}
+.experiment-top-actions .guest-status { color: #bec2b2 !important; }
+.experiment-top-actions .guest-signin-btn { border-color: #c7ff3e !important; background: #c7ff3e !important; color: #11120f !important; }
+.experiment-location-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  min-height: 38px;
+  padding: 0 10px;
+  border: 1px solid #414438;
+  border-radius: 10px;
+  background: #20221d;
+  color: #c7ff3e;
+}
+.experiment-location-picker select {
+  width: clamp(76px, 8vw, 112px);
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #f6f7ef;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.experiment-location-picker select option { background: #20221d; color: #f6f7ef; }
+.experiment-location-picker > svg:last-child { flex: 0 0 auto; color: #c7ff3e; pointer-events: none; }
+.experiment-mobile-panel {
+  border-bottom: 1px solid #383d2d !important;
+  background: #11120f !important;
+  color: #f7f8ef;
+}
+.experiment-mobile-panel > button { border-bottom-color: #34382d !important; background: #11120f !important; color: #f7f8ef !important; }
+.experiment-mobile-panel > button svg { color: #c7ff3e !important; }
+.experiment-mobile-caption { color: #c7ff3e !important; }
+.experiment-mobile-sports button { border-color: #414438 !important; background: #20221d !important; color: #f7f8ef !important; }
+.experiment-mobile-location-row { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:0 0 12px; border-bottom:1px solid #34382d; }
+.experiment-mobile-location-row > span { display:flex; align-items:center; gap:7px; color:#c7ff3e; font-size:10px; font-weight:900; letter-spacing:1.1px; }
+.experiment-mobile-location-row .experiment-location-picker { min-height:36px; }
+.experiment-manifesto-marquee { margin: 0 0 clamp(28px, 4vw, 50px) !important; }
+.experiment-sports-section { margin-top: 0 !important; }
+.experiment-sport-grid { gap: 17px 18px !important; padding: 4px 2px 8px; }
+.experiment-sport-card { border-radius: 15px !important; }
+.experiment-directory .venue-grid { gap: 28px 26px !important; }
+.experiment-directory .venue-card-wrap { min-width: 0; }
+.venue-card-meta { gap: 14px !important; }
+.venue-card-meta > span { min-width: 0; font-size: 10px !important; }
+.venue-amenities-section {
+  margin: 22px 0;
+  padding: 26px 28px !important;
+  border: 1px solid #d8ddcb !important;
+  border-radius: 20px;
+  background: #f0f2e8;
+  color: #151711;
+}
+.venue-detail-section.venue-amenities-section h3 {
+  margin-bottom: 20px !important;
+  color: #33382a !important;
+  font-size: 13px !important;
+  letter-spacing: 1.8px;
+}
+.venue-amenities-section .venue-detail-section-title button { color: #547d08 !important; }
+.venue-amenities-section .venue-amenities-grid { gap: 22px 42px !important; }
+.venue-amenities-section .venue-amenities-grid span {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-height:24px;
+  color:#25291f !important;
+  font-size:14px !important;
+  font-weight:750;
+  line-height:1.45;
+}
+.venue-amenities-section .venue-amenities-grid svg { flex:0 0 auto; color:#6e9e0d !important; }
+.slot-picker-duration .slot-duration-options {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:flex-end;
+  gap:7px;
+  min-height:0;
+  padding:0;
+  border-radius:0;
+  background:transparent;
+  color:inherit;
+}
+.slot-picker-duration .slot-duration-options button {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:auto;
+  min-width:66px;
+  height:39px;
+  padding:0 12px;
+  border:1px solid #cbd0be;
+  border-radius:10px;
+  background:#f5f6ef;
+  color:#1a1c15;
+  font-size:12px;
+  font-weight:850;
+  white-space:nowrap;
+}
+.slot-picker-duration .slot-duration-options button.active {
+  border-color:#c7ff3e;
+  background:#c7ff3e;
+  color:#11120f;
+  box-shadow:0 0 0 1px #c7ff3e;
+}
+.slot-picker-duration .slot-duration-options button:hover { border-color:#c7ff3e; }
+@media (max-width:1120px) {
+  .experiment-top-actions { gap:7px !important; }
+  .experiment-location-picker { min-height:36px; padding-inline:8px; }
+  .experiment-location-picker select { width:82px; }
+}
+@media (max-width:820px) {
+  .experiment-top-actions { display:flex !important; }
+  .experiment-location-picker { gap:5px; min-height:35px; padding-inline:7px; }
+  .experiment-location-picker select { width:76px; font-size:10px; }
+  .experiment-mobile-location-row .experiment-location-picker select { width:160px; }
+  .experiment-sport-grid { gap:14px 14px !important; }
+  .experiment-directory .venue-grid { gap:22px !important; }
+}
+@media (max-width:640px) {
+  .experiment-sport-grid { gap:13px 11px !important; }
+  .experiment-directory .venue-grid { gap:20px !important; }
+  .venue-amenities-section { margin:18px 0; padding:21px 18px !important; }
+  .venue-amenities-section .venue-amenities-grid { grid-template-columns:1fr 1fr; gap:20px 12px !important; }
+  .venue-amenities-section .venue-amenities-grid span { align-items:flex-start; font-size:12px !important; }
+  .slot-picker-duration { align-items:flex-start; flex-direction:column; gap:12px; }
+  .slot-picker-duration .slot-duration-options { justify-content:flex-start; width:100%; gap:7px; }
+  .slot-picker-duration .slot-duration-options button { flex:1 1 calc(33.33% - 7px); min-width:0; padding-inline:6px; }
+}
+
+@media (max-width:560px) { .experiment-page-controls { display:none !important; } .experiment-top-actions > .experiment-location-picker { display:inline-flex; } .experiment-location-picker select { width:66px; } .experiment-brand-copy small { display:none; } }
+
+.experiment-location-picker select { text-overflow: ellipsis; }
+.experiment-account .profile-mini { color:#f7f8ef !important; }
+.experiment-account .profile-mini .avatar { background:#c7ff3e !important; color:#11120f !important; }
+@media (max-width:820px) { .experiment-top-actions .guest-signin-btn { display:none; } }
+
+/* V15: spacing, searchable location selection, compact booking action and match tickets. */
+.experiment-sports-section { margin-bottom: clamp(52px, 6vw, 84px) !important; padding-bottom: clamp(30px, 4vw, 52px) !important; }
+.experiment-section-heading { margin-bottom: 27px !important; }
+.experiment-sport-grid { column-gap: clamp(16px, 1.45vw, 24px) !important; row-gap: clamp(18px, 1.8vw, 27px) !important; padding: 8px 4px 14px !important; }
+.experiment-sport-card { min-width: 0; overflow: hidden; border: 1px solid rgba(20,24,13,.14) !important; border-radius: 18px !important; box-shadow: 0 9px 22px rgba(18,24,13,.10); }
+.experiment-directory .venue-grid { column-gap: clamp(24px, 2.4vw, 38px) !important; row-gap: clamp(28px, 3vw, 44px) !important; padding: 5px 2px 20px; }
+.experiment-directory .venue-card-wrap { padding: 0 !important; }
+.experiment-directory .venue-card { overflow: hidden; box-shadow: 0 12px 26px rgba(18,24,13,.12); }
+.experiment-directory .venue-card:hover { transform: translateY(-4px); }
+.experiment-home > section { scroll-margin-top: 96px; }
+
+/* Searchable area picker shared by desktop and mobile headers. */
+.experiment-header-location { display:inline-flex; align-items:center; gap:7px; min-width:0; padding:4px 9px; border:1px solid #3d4232; border-radius:12px; background:#1d2019; color:#c7ff3e; }
+.experiment-header-area-dropdown { min-width:0; margin:0; }
+.experiment-header-area-dropdown .ff-dropdown-label { display:none !important; }
+.experiment-header-area-dropdown .ff-bootstrap-dropdown { position:relative; min-width:132px; }
+.experiment-header-area-dropdown .ff-dropdown-toggle { display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; min-height:31px; padding:0 2px; border:0 !important; outline:0; background:transparent !important; color:#f6f7ef !important; box-shadow:none !important; font-size:12px; font-weight:850; }
+.experiment-header-area-dropdown .ff-dropdown-toggle::after { display:none; }
+.experiment-header-area-dropdown .ff-dropdown-current { overflow:hidden; max-width:160px; text-overflow:ellipsis; white-space:nowrap; }
+.experiment-header-area-dropdown .ff-dropdown-toggle svg { color:#c7ff3e; }
+.experiment-header-area-dropdown .ff-dropdown-menu { position:absolute; top:calc(100% + 13px); right:0; left:auto; z-index:160; width:min(310px, calc(100vw - 30px)); max-height:min(68vh, 480px); overflow:hidden; padding:0; border:1px solid #3b4130; border-radius:16px; background:#171a14; color:#f7f8ef; box-shadow:0 24px 54px rgba(0,0,0,.38); }
+.experiment-header-area-dropdown .ff-dropdown-search { display:flex; align-items:center; gap:9px; padding:12px; border-bottom:1px solid #343a2a; background:#20241a; color:#c7ff3e; }
+.experiment-header-area-dropdown .ff-dropdown-search input { width:100%; min-width:0; border:0; outline:0; background:transparent; color:#f8faef; font-size:13px; }
+.experiment-header-area-dropdown .ff-dropdown-search input::placeholder { color:#9da38e; }
+.experiment-header-area-dropdown .ff-dropdown-options { max-height:350px; overflow:auto; padding:6px; }
+.experiment-header-area-dropdown .ff-dropdown-item { display:flex; align-items:center; justify-content:space-between; width:100%; min-height:42px; padding:9px 11px; border:0; border-radius:9px; background:transparent; color:#f5f6ef; text-align:left; font-size:13px; }
+.experiment-header-area-dropdown .ff-dropdown-item:hover,
+.experiment-header-area-dropdown .ff-dropdown-item.selected { background:#2a3020; color:#c7ff3e; }
+.experiment-header-area-dropdown .ff-dropdown-item small { display:block; margin-top:2px; color:#a7ad9a; font-size:10px; }
+.experiment-header-area-dropdown .ff-dropdown-footer { padding:8px 12px; border-top:1px solid #343a2a; color:#aab19a; font-size:10px; }
+.experiment-mobile-location-row .experiment-header-location { flex:1; justify-content:flex-end; }
+.experiment-mobile-location-row .experiment-header-area-dropdown .ff-bootstrap-dropdown { min-width:170px; }
+.experiment-mobile-location-row .experiment-header-area-dropdown .ff-dropdown-menu { right:0; }
+
+/* Keep the primary booking call-to-action compact and right aligned. */
+.venue-detail-bookbar { position:fixed !important; right:clamp(18px, 4vw, 54px) !important; left:auto !important; bottom:max(18px, env(safe-area-inset-bottom)) !important; width:auto !important; min-width:164px !important; min-height:49px !important; padding:0 22px !important; transform:none !important; border-radius:999px !important; font-size:14px !important; box-shadow:0 10px 26px rgba(0,0,0,.28) !important; }
+.venue-detail-bookbar svg { width:15px; height:15px; }
+.venue-detail-gallery { margin-bottom:24px; }
+.venue-detail-content { width:min(1120px, calc(100% - 40px)); margin:0 auto; }
+.venue-detail-heading { padding:28px 0 24px !important; margin-bottom:12px; border-bottom:1px solid #d8ddcb; }
+.venue-detail-section { padding:30px 0 !important; }
+.venue-detail-gallery-grid { gap:20px !important; margin-top:18px; }
+.venue-detail-gallery-grid button { min-height:190px; }
+@media(max-width:640px) {
+  .venue-detail-bookbar { right:14px !important; bottom:max(14px, env(safe-area-inset-bottom)) !important; min-width:144px !important; min-height:46px !important; padding:0 17px !important; }
+  .venue-detail-content { width:calc(100% - 30px); }
+  .venue-detail-gallery-grid { gap:12px !important; }
+}
+
+/* Date strip navigation and +/- half-hour duration stepper. */
+.slot-picker-dates { gap:8px !important; }
+.slot-date-nav { display:grid; width:35px; height:42px; flex:0 0 auto; place-items:center; border:1px solid #42463a; border-radius:11px; background:#20231c; color:#c7ff3e; }
+.slot-date-nav:disabled { opacity:.28; cursor:not-allowed; }
+.slot-picker-duration .slot-duration-stepper { display:inline-flex; align-items:center; justify-content:space-between; gap:15px; min-width:180px; min-height:48px; padding:5px 8px; border:1px solid #45483e; border-radius:13px; background:#f6f7ef; color:#11120f; }
+.slot-picker-duration .slot-duration-stepper button { display:grid; width:35px; height:35px; place-items:center; border:0; border-radius:9px; background:#e8ebdf; color:#11120f; }
+.slot-picker-duration .slot-duration-stepper button:hover:not(:disabled) { background:#c7ff3e; }
+.slot-picker-duration .slot-duration-stepper button:disabled { opacity:.28; cursor:not-allowed; }
+.slot-picker-duration .slot-duration-stepper b { min-width:65px; color:#11120f; font-size:17px; font-weight:950; text-align:center; }
+@media(max-width:640px) {
+  .slot-picker-dates { display:grid !important; grid-template-columns:30px 30px minmax(0,1fr) 30px 36px; gap:4px !important; }
+  .slot-picker-month { width:29px; min-width:29px; }
+  .slot-picker-date-list { gap:2px; }
+  .slot-picker-date-list button { min-height:58px; }
+  .slot-date-nav { width:28px; height:36px; }
+  .slot-picker-calendar { width:32px; }
+  .slot-picker-duration .slot-duration-stepper { width:100%; }
+}
+
+/* Book match tickets module. */
+.match-tickets-page { padding-bottom:56px; }
+.match-ticket-notice { display:flex; align-items:flex-start; gap:12px; margin:22px 0 26px; padding:15px 17px; border:1px solid #d8dfc8; border-radius:16px; background:#eef3e4; color:#353a2c; font-size:12px; line-height:1.6; }
+.match-ticket-notice>svg { flex:0 0 auto; margin-top:2px; color:#668f0e; }
+.match-ticket-notice strong { display:block; color:#161912; font-weight:900; }
+.match-ticket-notice.compact { margin:16px 0; padding:11px 12px; font-size:11px; }
+.match-ticket-filters { display:flex; flex-wrap:wrap; gap:10px; margin:0 0 27px; }
+.match-ticket-filters button { min-height:38px; padding:0 16px; border:1px solid #d7ddc9; border-radius:99px; background:#fff; color:#33372b; font-size:12px; font-weight:800; }
+.match-ticket-filters button.active { border-color:#c7ff3e; background:#c7ff3e; color:#11120f; }
+.match-ticket-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:26px; }
+.match-ticket-card { min-width:0; overflow:hidden; border:1px solid #d8ddcb; border-radius:22px; background:#11120f; box-shadow:0 12px 26px rgba(18,24,13,.09); }
+.match-ticket-photo { position:relative; height:190px; overflow:hidden; background:#252820; }
+.match-ticket-photo img { width:100%; height:100%; object-fit:cover; }
+.match-ticket-photo>span,.match-ticket-photo>b { position:absolute; top:13px; display:inline-flex; align-items:center; min-height:28px; padding:0 11px; border-radius:99px; background:#11120fdf; color:#f7f8ef; font-size:10px; font-weight:900; }
+.match-ticket-photo>span { left:13px; }
+.match-ticket-photo>b { right:13px; background:#c7ff3e; color:#11120f; font-size:9px; letter-spacing:.7px; }
+.match-ticket-body { padding:20px; color:#f5f6ef; }
+.match-ticket-date { display:flex; align-items:center; gap:7px; color:#c7ff3e; font-size:11px; font-weight:800; }
+.match-ticket-body h2 { margin:13px 0 6px; color:#fff; font-size:19px; line-height:1.25; font-weight:950; }
+.match-ticket-teams { min-height:34px; margin:0 0 12px; color:#c7c9bf; font-size:12px; }
+.match-ticket-venue { display:flex; align-items:flex-start; gap:7px; margin:0; color:#b8bdac; font-size:11px; line-height:1.5; }
+.match-ticket-venue svg { flex:0 0 auto; color:#c7ff3e; }
+.match-ticket-card-footer { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:19px; padding-top:16px; border-top:1px solid #33372c; }
+.match-ticket-card-footer>strong { color:#f7f8ef; font-size:18px; white-space:nowrap; }
+.match-ticket-card-footer>strong small { color:#a9ad9f; font-size:10px; font-weight:600; }
+.match-ticket-card-footer .primary-btn { min-height:40px; padding:0 13px; font-size:11px; white-space:nowrap; }
+.match-ticket-disclaimer { display:flex; align-items:flex-start; gap:9px; margin:23px 0; padding:13px 15px; border:1px solid #d8ddcb; border-radius:13px; color:#656b59; background:#fbfcf7; font-size:11px; line-height:1.6; }
+.match-ticket-disclaimer svg { flex:0 0 auto; color:#749e14; }
+.match-ticket-saved { margin-top:40px; padding:25px; border:1px solid #d7ddca; border-radius:20px; background:#fff; }
+.match-ticket-section-title { display:flex; justify-content:space-between; align-items:center; gap:15px; margin-bottom:17px; }
+.match-ticket-section-title h2 { margin:5px 0 0; color:#11120f; font-size:23px; }
+.match-ticket-section-title>span { color:#69705d; font-size:11px; font-weight:800; }
+.match-ticket-saved>button { display:flex; align-items:center; gap:13px; width:100%; padding:14px 0; border:0; border-top:1px solid #e3e6dc; background:transparent; color:#20241a; text-align:left; }
+.match-ticket-saved>button>svg:first-child { color:#69950c; }
+.match-ticket-saved>button>span { display:grid; flex:1; gap:4px; }
+.match-ticket-saved>button small { color:#74796d; font-size:10px; }
+.match-booking-backdrop,.match-pass-backdrop { position:fixed; inset:0; z-index:145; display:grid; place-items:center; padding:18px; background:rgba(0,0,0,.72); backdrop-filter:blur(5px); }
+.match-booking-modal,.match-pass-modal { width:min(610px,100%); max-height:90vh; overflow:auto; padding:25px; border:1px solid #3b4031; border-radius:24px; background:#11120f; color:#f6f7ef; box-shadow:0 25px 80px #0008; }
+.match-booking-modal>header { display:flex; justify-content:space-between; gap:15px; }
+.match-booking-modal>header span { color:#c7ff3e; font-size:10px; font-weight:950; letter-spacing:1.3px; }
+.match-booking-modal>header h2 { margin:8px 0 5px; color:#f7f8ef; font-size:24px; line-height:1.2; }
+.match-booking-modal>header p { margin:0; color:#b7bdab; font-size:12px; }
+.match-booking-modal>header button,.match-pass-close { display:grid; width:39px; height:39px; flex:0 0 auto; place-items:center; border:1px solid #404537; border-radius:50%; background:#24271f; color:#f6f7ef; }
+.match-booking-summary { display:grid; gap:9px; margin:20px 0; padding:15px; border:1px solid #343a2c; border-radius:15px; background:#1a1d16; }
+.match-booking-summary span { display:flex; align-items:center; gap:8px; color:#d0d4c8; font-size:11px; }
+.match-booking-summary svg { color:#c7ff3e; }
+.match-booking-summary strong { color:#c7ff3e; font-size:13px; }
+.match-ticket-field { display:grid; gap:7px; margin-bottom:14px; }
+.match-ticket-field>span { color:#e4e8dc; font-size:11px; font-weight:800; }
+.match-ticket-field input { width:100%; min-height:45px; padding:0 13px; border:1px solid #44483b; border-radius:11px; outline:0; background:#1b1e17; color:#f8faef; font-size:13px; }
+.match-ticket-field input:focus { border-color:#c7ff3e; box-shadow:0 0 0 3px #c7ff3e20; }
+.match-ticket-form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.match-ticket-quantity { display:flex; align-items:center; justify-content:space-between; gap:14px; margin:16px 0; padding:14px; border:1px solid #383d30; border-radius:14px; }
+.match-ticket-quantity>div:first-child { display:grid; gap:4px; }
+.match-ticket-quantity strong { color:#f6f7ef; font-size:13px; }
+.match-ticket-quantity small { color:#a7ad9a; font-size:10px; }
+.match-ticket-quantity>div:last-child { display:flex; align-items:center; gap:12px; }
+.match-ticket-quantity button { display:grid; width:34px; height:34px; place-items:center; border:0; border-radius:9px; background:#c7ff3e; color:#11120f; }
+.match-ticket-quantity button:disabled { opacity:.35; cursor:not-allowed; }
+.match-ticket-quantity b { min-width:18px; color:#f8faef; text-align:center; }
+.match-ticket-total { display:flex; align-items:center; justify-content:space-between; margin:17px 0; padding-top:15px; border-top:1px solid #373c30; color:#c5cabc; font-size:12px; }
+.match-ticket-total strong { color:#c7ff3e; font-size:20px; }
+.match-ticket-form-note { display:block; margin-top:12px; color:#a5aa9b; font-size:10px; line-height:1.5; text-align:center; }
+.match-pass-modal { position:relative; width:min(480px,100%); padding:30px 28px; text-align:center; }
+.match-pass-close { position:absolute; top:17px; right:17px; }
+.match-pass-modal h2 { margin:18px 0 5px; color:#f8faef; font-size:24px; }
+.match-pass-modal>p { margin:0; color:#bfc5b4; font-size:12px; }
+.match-pass-qr { display:grid; width:max-content; margin:21px auto 13px; padding:14px; border-radius:17px; background:#fff; }
+.match-pass-code { display:block; color:#c7ff3e; font-size:12px; letter-spacing:1px; }
+.match-pass-facts { display:grid; gap:6px; margin-top:17px; color:#e2e5dc; font-size:11px; }
+@media(max-width:1000px) { .match-ticket-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; } .experiment-nav { gap:7px !important; } .experiment-nav-link { font-size:11px !important; } }
+@media(max-width:640px) { .match-ticket-grid { grid-template-columns:1fr; gap:17px; } .match-ticket-photo { height:185px; } .match-ticket-form-row { grid-template-columns:1fr; gap:0; } .match-booking-modal,.match-pass-modal { padding:21px 17px; border-radius:20px; } .match-ticket-card-footer { flex-wrap:wrap; } .match-ticket-card-footer .primary-btn { flex:1; justify-content:center; } .match-ticket-saved { padding:17px; } }
+
+/* Specificity overrides for the customer-theme Bootstrap dropdown rules. */
+.customer-shell .experiment-topbar { position:sticky; top:0; z-index:130; overflow:visible; }
+.customer-shell .experiment-top-actions { overflow:visible; }
+.customer-shell .experiment-header-area-dropdown .ff-dropdown-menu.dropdown-menu { display:none; position:absolute; inset:calc(100% + 13px) 0 auto auto; z-index:220; width:min(310px,calc(100vw - 30px)); max-height:min(68vh,480px); overflow:hidden; padding:0; border:1px solid #3b4130; border-radius:16px; background:#171a14; color:#f7f8ef; box-shadow:0 24px 54px rgba(0,0,0,.38); }
+.customer-shell .experiment-header-area-dropdown .ff-dropdown-menu.dropdown-menu.show { display:block; }
+.customer-shell .experiment-header-area-dropdown .ff-dropdown-item.dropdown-item { display:flex; min-height:42px; margin:0; padding:9px 11px; border:1px solid transparent; border-radius:9px; background:transparent; color:#f5f6ef; }
+.customer-shell .experiment-header-area-dropdown .ff-dropdown-item.dropdown-item:hover,
+.customer-shell .experiment-header-area-dropdown .ff-dropdown-item.dropdown-item:focus-visible,
+.customer-shell .experiment-header-area-dropdown .ff-dropdown-item.dropdown-item.selected { border-color:#3a432c; background:#2a3020; color:#c7ff3e; }
+.customer-shell .experiment-header-area-dropdown .ff-dropdown-item .ff-option-copy strong { color:inherit; font-size:12px; }
+.customer-shell .experiment-header-area-dropdown .ff-dropdown-item .ff-option-copy small { color:#a7ad9a; }
+.customer-shell .experiment-header-area-dropdown .ff-dropdown-search { margin:0; border:0; border-bottom:1px solid #343a2a; border-radius:0; background:#20241a; color:#c7ff3e; }
+.customer-shell .experiment-header-area-dropdown .ff-dropdown-search input { color:#f8faef; }
+.customer-shell .experiment-header-area-dropdown .ff-dropdown-footer { padding:8px 12px; border-top:1px solid #343a2a; color:#aab19a; }
+@media(max-width:560px) {
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-menu.dropdown-menu { right:0; width:min(300px,calc(100vw - 28px)); }
+  .experiment-header-location { padding-inline:6px; }
+  .experiment-header-area-dropdown .ff-bootstrap-dropdown { min-width:112px; }
+}
+
+/* V16 responsive refinement: compact cards, compact sports menu, safe checkout and mobile shortcuts. */
+.experiment-mega-menu.compact-sports-menu {
+  left: 50%;
+  width: min(470px, calc(100vw - 28px));
+  max-height: min(66vh, 480px);
+  display: block;
+  overflow-y: auto;
+  padding: 14px;
+  border-radius: 0 0 15px 15px;
+  transform: translateX(-50%);
+  animation: sport-menu-pop .16s ease both;
+}
+.compact-sports-menu-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0 0 11px; padding:0 2px 10px; border-bottom:1px solid #e5e7dc; }
+.compact-sports-menu-heading strong { color:#11120f; font:850 14px/1.2 Manrope,sans-serif; }
+.compact-sports-menu-heading span { color:#73776a; font-size:10px; font-weight:750; }
+.experiment-mega-options { grid-template-columns:repeat(3,minmax(0,1fr)) !important; gap:6px !important; }
+.experiment-mega-options button { min-height:47px !important; padding:7px 8px !important; border-radius:8px !important; gap:2px 4px !important; }
+.experiment-mega-options button span { font-size:10px !important; }
+.experiment-mega-options button small { font-size:8px !important; }
+.experiment-mega-options button svg { width:12px; height:12px; }
+@keyframes sport-menu-pop { from { opacity:0; transform:translate(-50%,7px); } to { opacity:1; transform:translate(-50%,0); } }
+
+.experiment-profile-menu-wrap { position:relative; display:inline-flex; align-items:center; min-width:0; }
+.experiment-profile-trigger { display:inline-flex; align-items:center; justify-content:center; gap:7px; min-height:40px; padding:3px 8px 3px 3px; border:1px solid #414438; border-radius:24px; background:#20221d; color:#f7f8ef; font-size:11px; font-weight:850; white-space:nowrap; }
+.experiment-profile-trigger .avatar { width:31px; height:31px; background:#c7ff3e !important; color:#11120f !important; }
+.experiment-profile-trigger svg { color:#c7ff3e; }
+.experiment-profile-menu { position:absolute; top:calc(100% + 10px); right:0; z-index:260; width:min(265px,calc(100vw - 26px)); display:grid; gap:3px; padding:8px; border:1px solid #39402d; border-radius:14px; background:#141611; box-shadow:0 20px 46px rgba(0,0,0,.32); }
+.experiment-profile-menu button { min-height:43px; display:flex; align-items:center; gap:10px; padding:0 10px; border:0; border-radius:9px; background:transparent; color:#f5f7ed; text-align:left; font-size:11px; font-weight:800; }
+.experiment-profile-menu button:hover { background:#282e1e; color:#c7ff3e; }
+.experiment-profile-menu button svg:first-child { flex:0 0 auto; color:#c7ff3e; }
+.experiment-profile-menu button span { flex:1; min-width:0; }
+.experiment-profile-menu button svg:last-child { color:#8b9b63; }
+
+.experiment-directory .venue-grid { grid-template-columns:repeat(4,minmax(0,1fr)) !important; column-gap:18px !important; row-gap:24px !important; padding:4px 2px 18px !important; }
+.experiment-directory .venue-photo { height:clamp(138px,14vw,182px) !important; }
+.experiment-directory .venue-info.venue-info-minimal { padding:12px 14px 14px !important; }
+.experiment-directory .venue-info.venue-info-minimal h3 { margin-bottom:4px !important; font-size:clamp(14px,1.1vw,17px) !important; line-height:1.22; }
+.experiment-directory .venue-card-area { margin-bottom:9px !important; font-size:11px !important; }
+.experiment-directory .venue-card-meta { gap:8px !important; padding-top:8px !important; }
+.experiment-directory .venue-card-meta > span { font-size:9px !important; }
+.experiment-directory .venue-card { border-radius:16px !important; }
+.experiment-directory .photo-arrow { width:31px !important; height:31px !important; top:10px !important; right:10px !important; }
+
+.checkout-layer {
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:center !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  overscroll-behavior:contain;
+  padding:clamp(8px,2.5vh,22px) 12px !important;
+  -webkit-overflow-scrolling:touch;
+}
+.checkout-modal {
+  position:relative !important;
+  width:min(560px,100%) !important;
+  max-height:calc(100dvh - 24px) !important;
+  margin:auto !important;
+  padding:21px clamp(17px,3vw,28px) 24px !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  overscroll-behavior:contain;
+  border-radius:18px !important;
+  background:#fff !important;
+  -webkit-overflow-scrolling:touch;
+}
+.checkout-modal-header { position:sticky; top:-21px; z-index:5; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin:-21px -2px 14px; padding:21px 2px 10px; background:#fff; border-bottom:1px solid #edf0e8; }
+.checkout-modal-header > div { min-width:0; }
+.checkout-modal-header .section-kicker { margin:0 0 3px; }
+.checkout-modal-header h2 { margin:0 0 4px; font-size:clamp(22px,4vw,27px); line-height:1.15; }
+.checkout-modal-header .checkout-sub { margin:0; font-size:12px; }
+.checkout-modal-header .modal-close { position:static !important; flex:0 0 auto; width:36px; height:36px; display:grid; place-items:center; border:1px solid #e1e5dc; border-radius:50%; background:#f7f8f2; color:#11120f; }
+.checkout-confirm-btn { position:sticky; bottom:0; z-index:3; box-shadow:0 -8px 18px rgba(255,255,255,.92); }
+.checkout-modal .payment-options { gap:8px; }
+.checkout-modal .payment-options button { min-height:58px; }
+
+.coupons-offers-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:17px; }
+.coupon-offer-card { min-width:0; display:flex; flex-direction:column; align-items:flex-start; padding:22px; border:1px solid #d9dfce; border-radius:16px; background:#fffefa; box-shadow:0 10px 26px rgba(20,25,12,.05); }
+.coupon-offer-icon { width:42px; height:42px; display:grid; place-items:center; margin-bottom:15px; border-radius:12px; background:#c7ff3e; color:#11120f; }
+.coupon-offer-card .section-kicker { margin-bottom:5px; font-size:9px; }
+.coupon-offer-card h2 { margin:0 0 8px; color:#11120f; font:850 18px/1.2 Manrope,sans-serif; }
+.coupon-offer-card p { min-height:42px; margin:0 0 9px; color:#5d6254; font-size:12px; line-height:1.5; }
+.coupon-offer-card > small { color:#6a7b48; font-size:10px; font-weight:800; }
+.coupon-offer-card > div:last-child { width:100%; display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:17px; padding-top:13px; border-top:1px dashed #d7ddca; }
+.coupon-offer-card code { padding:7px 10px; border:1px dashed #a7c95f; border-radius:8px; background:#f2f8e6; color:#263817; font-size:12px; font-weight:900; letter-spacing:1px; }
+.coupon-offer-card .secondary-btn { min-height:34px; padding:7px 10px; font-size:10px; }
+
+.mobile-bottom-nav { display:none; }
+@media (min-width:1200px) {
+  .experiment-directory .venue-grid { grid-template-columns:repeat(4,minmax(0,1fr)) !important; }
+}
+@media (max-width:1199px) and (min-width:821px) {
+  .experiment-directory .venue-grid { grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
+  .experiment-mega-menu.compact-sports-menu { width:min(450px,calc(100vw - 24px)); }
+}
+@media (max-width:820px) {
+  .experiment-directory .venue-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:17px 14px !important; }
+  .experiment-directory .venue-photo { height:clamp(125px,26vw,180px) !important; }
+  .experiment-directory .venue-info.venue-info-minimal { padding:11px 12px 13px !important; }
+  .experiment-directory .venue-card-meta { align-items:flex-start !important; flex-direction:column !important; gap:5px !important; }
+  .experiment-topbar { grid-template-columns:minmax(0,1fr) auto !important; gap:8px !important; }
+  .experiment-page-controls { display:none !important; }
+  .experiment-top-actions { gap:7px !important; }
+  .experiment-top-actions .experiment-header-location { max-width:138px; }
+  .experiment-profile-trigger { min-height:36px; padding-right:6px; }
+  .experiment-profile-trigger strong { display:none; }
+  .experiment-profile-trigger > svg { display:none; }
+  .experiment-profile-trigger .avatar { width:31px; height:31px; }
+  .experiment-mega-menu.compact-sports-menu { left:auto; right:-8px; width:min(440px,calc(100vw - 24px)); transform:none; }
+  .coupons-offers-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:560px) {
+  .experiment-topbar { min-height:64px !important; padding-inline:10px !important; }
+  .experiment-brand { gap:7px; }
+  .experiment-brand .brand-mark { width:34px; height:34px; }
+  .experiment-brand-copy { font-size:17px; }
+  .experiment-top-actions .experiment-header-location { max-width:105px; padding:3px 5px; gap:4px; }
+  .experiment-header-area-dropdown .ff-bootstrap-dropdown { min-width:60px; }
+  .experiment-header-area-dropdown .ff-dropdown-toggle { font-size:10px; }
+  .experiment-mobile-toggle { width:34px; height:34px; }
+  .experiment-directory .venue-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:15px 10px !important; }
+  .experiment-directory .venue-photo { height:112px !important; }
+  .experiment-directory .venue-info.venue-info-minimal { padding:9px 9px 10px !important; }
+  .experiment-directory .venue-info.venue-info-minimal h3 { font-size:12px !important; line-height:1.18; }
+  .experiment-directory .venue-card-area { margin-bottom:7px !important; font-size:9px !important; }
+  .experiment-directory .venue-card-meta > span { font-size:8px !important; }
+  .experiment-directory .photo-arrow { top:7px !important; right:7px !important; width:27px !important; height:27px !important; }
+  .checkout-layer { padding:7px 7px max(7px,env(safe-area-inset-bottom)) !important; }
+  .checkout-modal { width:100% !important; max-height:calc(100dvh - 14px) !important; padding:16px 14px 18px !important; border-radius:15px !important; }
+  .checkout-modal-header { top:-16px; margin:-16px -1px 12px; padding:16px 1px 10px; }
+  .checkout-modal .checkout-venue { gap:9px; }
+  .checkout-modal .checkout-venue span { font-size:10px; }
+  .checkout-modal .rain-policy-summary { padding:12px; }
+  .checkout-modal .checkout-breakdown { margin:14px 0; }
+  .checkout-modal h3 { margin:12px 0 9px; font-size:14px; }
+  .checkout-modal .payment-options button { min-height:53px; padding:8px 10px; }
+  .checkout-modal .payment-disclaimer { margin:10px 0; font-size:10px; }
+  .checkout-modal .checkout-confirm-btn { min-height:45px; }
+  .coupons-offers-grid { grid-template-columns:1fr; gap:12px; }
+  .coupon-offer-card { padding:17px; }
+  .coupon-offer-card p { min-height:0; }
+  .mobile-bottom-nav { position:fixed; left:10px; right:10px; bottom:calc(8px + env(safe-area-inset-bottom)); z-index:125; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:4px; padding:7px; border:1px solid #383d2d; border-radius:17px; background:rgba(17,18,15,.96); box-shadow:0 13px 38px rgba(0,0,0,.25); backdrop-filter:blur(14px); }
+  .mobile-bottom-nav button { min-height:47px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; border:0; border-radius:11px; background:transparent; color:#c5c9b9; font-size:9px; font-weight:850; }
+  .mobile-bottom-nav button svg { color:#c7ff3e; }
+  .mobile-bottom-nav button.active { background:#c7ff3e; color:#11120f; }
+  .mobile-bottom-nav button.active svg { color:#11120f; }
+  .experiment-main { padding-bottom:118px !important; }
+  .experiment-mobile-panel { padding-bottom:20px; }
+}
+@media (max-width:370px) {
+  .experiment-directory .venue-grid { grid-template-columns:1fr !important; }
+  .experiment-directory .venue-photo { height:158px !important; }
+  .experiment-top-actions .experiment-header-location { max-width:90px; }
+}
+
+@media (min-width:390px) and (max-width:560px) { .experiment-profile-trigger strong { display:inline !important; font-size:10px; } .experiment-profile-trigger { padding-right:7px; } }
+@media (max-width:389px) { .experiment-profile-trigger strong { display:none !important; } }
+.checkout-layer { z-index:190 !important; }
+
+/* V17 layout correction: give sports tiles breathing room and balance the venue grid.
+   Five game columns keep the 19-game catalogue in balanced rows. */
+.experiment-sports-section .experiment-sport-grid {
+  display: grid !important;
+  width: 100%;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  column-gap: clamp(18px, 1.7vw, 26px) !important;
+  row-gap: clamp(20px, 2vw, 30px) !important;
+  align-items: stretch;
+  padding: 9px 5px 16px !important;
+}
+.experiment-sports-section .experiment-sport-card {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  aspect-ratio: 1.68 / 1;
+  margin: 0 !important;
+  border-radius: 17px !important;
+}
+
+/* Three columns show the initial nine venue results as a tidy 3 x 3 grid. */
+.experiment-directory .venue-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  column-gap: clamp(22px, 2.2vw, 32px) !important;
+  row-gap: clamp(25px, 2.5vw, 36px) !important;
+  align-items: stretch;
+}
+.experiment-directory .venue-card-wrap,
+.experiment-directory .venue-card {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+}
+.experiment-directory .venue-card-wrap { align-self: stretch; }
+.experiment-directory .venue-card { display: flex; flex-direction: column; }
+.experiment-directory .venue-info.venue-info-minimal { flex: 1 1 auto; }
+
+@media (max-width: 1199px) and (min-width: 821px) {
+  .experiment-sports-section .experiment-sport-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    column-gap: 18px !important;
+    row-gap: 22px !important;
+  }
+}
+@media (max-width: 820px) {
+  .experiment-sports-section .experiment-sport-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    column-gap: 16px !important;
+    row-gap: 19px !important;
+  }
+  .experiment-directory .venue-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: 17px !important;
+    row-gap: 22px !important;
+  }
+  /* Center an odd final venue card rather than leaving it against one edge. */
+  .experiment-directory .venue-grid > .venue-card-wrap:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    width: min(72%, 360px);
+    justify-self: center;
+  }
+}
+@media (max-width: 560px) {
+  .experiment-sports-section .experiment-sport-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: 14px !important;
+    row-gap: 17px !important;
+    padding-inline: 2px !important;
+  }
+  .experiment-sports-section .experiment-sport-card {
+    aspect-ratio: 1.48 / 1;
+    border-radius: 14px !important;
+  }
+  .experiment-directory .venue-grid {
+    column-gap: 12px !important;
+    row-gap: 17px !important;
+  }
+  .experiment-directory .venue-grid > .venue-card-wrap:last-child:nth-child(odd) {
+    width: min(78%, 300px);
+  }
+}
+
+/* V20: Motion Navigation Menu adaptation for SportiLand.
+   Uses the supplied component's shared viewport, direction-aware content changes,
+   hover/focus/click opening, outside click and Escape dismissal without new packages. */
+@media (min-width: 1121px) {
+  .experiment-topbar {
+    min-height: 82px !important;
+    gap: clamp(14px, 1.45vw, 22px) !important;
+    padding-inline: clamp(22px, 3.5vw, 56px) !important;
+  }
+  .experiment-nav.motion-navigation-root {
+    position: relative;
+    justify-content: center;
+    gap: clamp(13px, 1.2vw, 20px) !important;
+  }
+  .experiment-nav.motion-navigation-root .experiment-nav-link {
+    min-height: 50px;
+    padding-inline: clamp(5px, .55vw, 9px) !important;
+    font-size: clamp(10.5px, .78vw, 12px) !important;
+    gap: 6px;
+  }
+}
+
+.motion-navigation-root { position: relative; overflow: visible !important; }
+.motion-nav-trigger { transition: color .18s ease, border-color .18s ease, transform .18s ease; }
+.motion-nav-trigger.menu-open { color: #c7ff3e !important; border-bottom-color: #c7ff3e !important; }
+.motion-nav-trigger.menu-open > .motion-menu-chevron { transform: rotate(180deg); }
+.motion-nav-trigger > .motion-menu-chevron { transition: transform .24s cubic-bezier(.2,.8,.2,1); }
+.motion-nav-viewport {
+  position: absolute;
+  z-index: 420;
+  /* Anchor to the navigation edge and keep the transparent top padding
+     hoverable: the pointer can travel from a trigger into the dropdown
+     without crossing a dead gap that would close the menu. */
+  top: 100%;
+  left: 50%;
+  box-sizing: border-box;
+  width: min(840px, calc(100vw - 36px));
+  max-height: 0;
+  overflow: hidden;
+  padding-top: 10px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate3d(-50%, 12px, 0) scale(.985);
+  transform-origin: top center;
+  transition: max-height .32s cubic-bezier(.2,.75,.25,1), opacity .2s ease, transform .28s cubic-bezier(.2,.75,.25,1);
+  will-change: max-height, opacity, transform;
+}
+.motion-nav-viewport.is-open {
+  max-height: calc(min(72vh, 540px) + 10px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate3d(-50%, 0, 0) scale(1);
+}
+.motion-nav-panel {
+  display: grid;
+  grid-template-columns: minmax(185px, .72fr) minmax(0, 1.28fr);
+  align-items: stretch;
+  gap: 19px;
+  padding: 18px;
+  border: 1px solid #3b422d;
+  border-top: 3px solid #c7ff3e;
+  border-radius: 0 0 18px 18px;
+  background: #11120f;
+  box-shadow: 0 24px 58px rgba(0,0,0,.38);
+}
+.motion-nav-panel[data-direction="forward"] { animation: sporti-nav-content-forward .28s cubic-bezier(.2,.75,.2,1) both; }
+.motion-nav-panel[data-direction="backward"] { animation: sporti-nav-content-backward .28s cubic-bezier(.2,.75,.2,1) both; }
+@keyframes sporti-nav-content-forward {
+  from { opacity: 0; transform: translate3d(26px,0,0); }
+  to { opacity: 1; transform: translate3d(0,0,0); }
+}
+@keyframes sporti-nav-content-backward {
+  from { opacity: 0; transform: translate3d(-26px,0,0); }
+  to { opacity: 1; transform: translate3d(0,0,0); }
+}
+.motion-nav-layout { display: contents; }
+.motion-nav-intro {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 17px;
+  border: 1px solid #333a28;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #20251a, #171a13 75%);
+}
+.motion-nav-intro > span { color: #c7ff3e; font-size: 9px; font-weight: 950; letter-spacing: 1.4px; }
+.motion-nav-intro h3 { margin: 9px 0 7px; color: #f7f8ef; font: 850 clamp(20px,1.7vw,27px)/1.08 Manrope,sans-serif; letter-spacing: -.8px; }
+.motion-nav-intro p { margin: 0; color: #bec4b1; font-size: 11px; font-weight: 600; line-height: 1.55; }
+.motion-nav-intro > button {
+  min-height: 37px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 17px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 8px;
+  background: #c7ff3e;
+  color: #11120f;
+  font-size: 10px;
+  font-weight: 950;
+  transition: transform .18s ease, background .18s ease;
+}
+.motion-nav-intro > button:hover { background: #d5ff72; transform: translateY(-2px); }
+.motion-nav-demo-note { margin-top: 12px; color: #9da58b; font-size: 9px; line-height: 1.45; }
+.motion-nav-grid { min-width: 0; display: grid; align-content: start; gap: 8px; }
+.motion-nav-grid.sports-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+.motion-nav-grid.tournament-grid-menu,
+.motion-nav-grid.quick-sports-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.motion-nav-option {
+  position: relative;
+  min-width: 0;
+  min-height: 56px;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  align-content: center;
+  gap: 4px 7px;
+  padding: 10px 11px;
+  border: 1px solid #333a2b;
+  border-radius: 10px;
+  background: #1b1e17;
+  color: #f7f8ef;
+  text-align: left;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+.motion-nav-option:hover { transform: translateY(-2px); border-color: #9fc52f; background: #272d1c; }
+.motion-nav-option > span { min-width: 0; overflow: hidden; color: #f6f7ee; font-size: 11px; font-weight: 900; text-overflow: ellipsis; white-space: nowrap; }
+.motion-nav-option > small { min-width: 0; grid-column: 1; overflow: hidden; color: #aeb6a0; font-size: 9px; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
+.motion-nav-option > svg { grid-column: 2; grid-row: 1 / span 2; align-self: center; color: #c7ff3e; }
+.motion-nav-event {
+  min-width: 0;
+  min-height: 82px;
+  display: grid;
+  grid-template-columns: 76px minmax(0,1fr) 16px;
+  align-items: center;
+  gap: 10px;
+  padding: 7px;
+  border: 1px solid #333a2b;
+  border-radius: 11px;
+  background: #1b1e17;
+  color: #f7f8ef;
+  text-align: left;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+.motion-nav-event:hover { transform: translateY(-2px); border-color: #9fc52f; background: #252b1b; }
+.motion-nav-event img { width: 76px; height: 66px; border-radius: 7px; object-fit: cover; }
+.motion-nav-event > span { min-width: 0; display: grid; gap: 3px; }
+.motion-nav-event small { color: #c7ff3e; font-size: 8px; font-weight: 850; }
+.motion-nav-event strong { display: -webkit-box; overflow: hidden; color: #f7f8ef; font-size: 10px; font-weight: 900; line-height: 1.28; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.motion-nav-event em { overflow: hidden; color: #adb49e; font-size: 8px; font-style: normal; text-overflow: ellipsis; white-space: nowrap; }
+.motion-nav-event > svg { color: #c7ff3e; }
+
+/* Direction-aware event card loop: the card just passed rotates to the rear of the stack. */
+.hero-event-card.is-back {
+  z-index: 1;
+  top: 18%;
+  left: 17%;
+  right: auto;
+  bottom: auto;
+  width: 54%;
+  height: 52%;
+  opacity: .34;
+  transform: rotate(6deg) scale(.85);
+  pointer-events: none;
+}
+.hero-event-card.is-back .hero-event-card-copy { left: 9px; right: 9px; bottom: 9px; gap: 2px; }
+.hero-event-card.is-back .hero-event-card-copy > small,
+.hero-event-card.is-back .hero-event-card-copy > span,
+.hero-event-card.is-back .hero-event-card-copy > i { display: none; }
+.hero-event-card.is-back .hero-event-card-copy > strong { font-size: clamp(10px,1.1vw,14px); }
+.hero-event-card.is-back .hero-event-card-kind,
+.hero-event-card.is-back .hero-event-card-count { top: 7px; min-height: 21px; padding: 4px 6px; font-size: 6px; }
+.hero-event-deck[data-scroll-direction="backward"] .hero-event-card.is-back { transform: rotate(-6deg) scale(.85); left: 22%; }
+
+@media (max-width: 1120px) {
+  .motion-nav-viewport { display: none !important; }
+}
+@media (max-width: 760px) {
+  .motion-nav-panel { grid-template-columns: 1fr; gap: 10px; padding: 12px; }
+  .motion-nav-intro { padding: 14px; }
+  .motion-nav-grid.sports-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .motion-nav-event { grid-template-columns: 64px minmax(0,1fr) 14px; min-height: 72px; }
+  .motion-nav-event img { width: 64px; height: 58px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .motion-nav-viewport,
+  .motion-nav-panel,
+  .motion-nav-trigger,
+  .hero-event-card { animation: none !important; transition: none !important; }
+}
+
+/* V21: prevent the desktop navigation from compressing into the brand/location controls.
+   Mid-sized laptop widths switch to the accessible menu panel; full motion navigation
+   is reserved for wide desktop screens where every item has room to breathe. */
+.experiment-topbar {
+  grid-template-columns: minmax(190px, auto) minmax(0, 1fr) auto !important;
+  gap: clamp(14px, 1.6vw, 26px) !important;
+  padding-inline: clamp(22px, 3vw, 48px) !important;
+}
+.experiment-brand {
+  flex: 0 0 auto;
+  min-width: 190px !important;
+  white-space: nowrap;
+}
+.experiment-nav.motion-navigation-root {
+  min-width: 0;
+  width: 100%;
+  justify-content: center;
+  gap: clamp(8px, .85vw, 14px) !important;
+}
+.experiment-nav.motion-navigation-root .experiment-nav-link {
+  flex: 0 1 auto;
+  min-width: 0;
+  padding-inline: clamp(4px, .45vw, 8px) !important;
+  font-size: clamp(10px, .72vw, 11.5px) !important;
+}
+.experiment-top-actions {
+  flex: 0 0 auto;
+  min-width: max-content;
+  gap: 9px !important;
+}
+
+/* Collapse before the brand, nav labels and location picker run out of horizontal room. */
+@media (max-width: 1500px) {
+  .customer-shell .experiment-topbar {
+    min-height: 76px !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 14px !important;
+    padding-inline: clamp(18px, 2.5vw, 34px) !important;
+  }
+  .customer-shell .experiment-brand {
+    min-width: 0 !important;
+    justify-self: start;
+  }
+  .customer-shell .experiment-page-controls,
+  .customer-shell .experiment-nav.motion-navigation-root {
+    display: none !important;
+  }
+  .customer-shell .experiment-top-actions {
+    min-width: 0;
+    justify-content: flex-end;
+    gap: 9px !important;
+  }
+  .customer-shell .experiment-mobile-toggle {
+    display: grid !important;
+    flex: 0 0 40px;
+  }
+  .customer-shell .experiment-header-location {
+    max-width: 190px;
+  }
+  .customer-shell .experiment-mobile-panel {
+    top: 76px;
+    max-height: calc(100dvh - 76px);
+  }
+  .customer-shell .experiment-search-shortcut {
+    display: inline-flex;
+    width: 39px;
+    min-width: 39px;
+    padding: 0;
+    justify-content: center;
+  }
+  .customer-shell .experiment-search-shortcut span,
+  .customer-shell .experiment-search-shortcut kbd {
+    display: none;
+  }
+}
+
+@media (max-width: 820px) {
+  .customer-shell .experiment-topbar {
+    min-height: 70px !important;
+    padding-inline: 16px !important;
+    gap: 10px !important;
+  }
+  .customer-shell .experiment-mobile-panel {
+    top: 70px;
+    max-height: calc(100dvh - 70px);
+  }
+  .customer-shell .experiment-top-actions {
+    gap: 7px !important;
+  }
+  .customer-shell .experiment-top-actions .experiment-header-location {
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 560px) {
+  .customer-shell .experiment-topbar {
+    min-height: 64px !important;
+    padding-inline: 11px !important;
+    gap: 8px !important;
+  }
+  .customer-shell .experiment-brand {
+    gap: 7px;
+  }
+  .customer-shell .experiment-brand-copy {
+    font-size: 17px;
+    letter-spacing: -.6px;
+  }
+  .customer-shell .experiment-top-actions {
+    gap: 6px !important;
+  }
+  .customer-shell .experiment-top-actions .experiment-header-location {
+    max-width: 112px;
+    padding: 3px 6px;
+  }
+  .customer-shell .experiment-mobile-toggle {
+    flex-basis: 35px;
+    width: 35px;
+    height: 35px;
+  }
+  .customer-shell .experiment-mobile-panel {
+    top: 64px;
+    max-height: calc(100dvh - 64px);
+  }
+}
+
+@media (min-width: 1501px) {
+  .customer-shell .experiment-topbar {
+    grid-template-columns: minmax(185px, auto) minmax(0, 1fr) auto !important;
+    gap: clamp(16px, 1.5vw, 24px) !important;
+  }
+  .customer-shell .experiment-page-controls { display: none !important; }
+  .customer-shell .experiment-nav.motion-navigation-root { display: flex !important; }
+  .customer-shell .experiment-mobile-toggle { display: none !important; }
+  .customer-shell .experiment-search-shortcut { width: 39px; padding-inline: 0; justify-content: center; }
+  .customer-shell .experiment-search-shortcut span,
+  .customer-shell .experiment-search-shortcut kbd { display: none; }
+}
+
+
+/* V22: restore the full desktop Motion Navigation on normal laptop/desktop widths.
+   V21 hid it up to 1500px, which made the header look incomplete on common laptops. */
+@media (min-width: 1181px) {
+  .customer-shell .experiment-topbar {
+    display: grid !important;
+    grid-template-columns: 182px minmax(0, 1fr) max-content !important;
+    align-items: center !important;
+    column-gap: clamp(10px, 1.15vw, 17px) !important;
+    min-height: 78px !important;
+    padding-inline: clamp(18px, 2vw, 30px) !important;
+  }
+  .customer-shell .experiment-brand {
+    min-width: 0 !important;
+    width: 182px !important;
+    justify-self: start !important;
+  }
+  .customer-shell .experiment-page-controls { display: none !important; }
+  .customer-shell .experiment-nav.motion-navigation-root {
+    display: flex !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: clamp(3px, .42vw, 7px) !important;
+    overflow: visible !important;
+  }
+  .customer-shell .experiment-nav.motion-navigation-root .experiment-nav-link {
+    display: inline-flex !important;
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+    min-height: 46px !important;
+    padding-inline: clamp(3px, .38vw, 6px) !important;
+    gap: 3px !important;
+    font-size: clamp(9px, .70vw, 10.5px) !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+  }
+  .customer-shell .experiment-top-actions {
+    display: flex !important;
+    min-width: max-content !important;
+    width: auto !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 7px !important;
+  }
+  .customer-shell .experiment-top-actions .experiment-header-location {
+    display: inline-flex !important;
+    max-width: 142px !important;
+    min-width: 112px !important;
+    padding-inline: 8px !important;
+  }
+  .customer-shell .experiment-search-shortcut {
+    display: inline-flex !important;
+    width: 36px !important;
+    min-width: 36px !important;
+    height: 40px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+  }
+  .customer-shell .experiment-search-shortcut span,
+  .customer-shell .experiment-search-shortcut kbd { display: none !important; }
+  .customer-shell .experiment-profile-trigger {
+    min-width: 88px !important;
+    padding-inline: 8px !important;
+    gap: 5px !important;
+  }
+  .customer-shell .experiment-mobile-toggle { display: none !important; }
+}
+
+/* Keep the full navigation only while it fits; use the responsive menu below. */
+@media (max-width: 1180px) and (min-width: 821px) {
+  .customer-shell .experiment-topbar {
+    grid-template-columns: minmax(0, 1fr) max-content !important;
+    min-height: 74px !important;
+    padding-inline: 22px !important;
+  }
+  .customer-shell .experiment-nav.motion-navigation-root { display: none !important; }
+  .customer-shell .experiment-mobile-toggle { display: grid !important; }
+}
+
+/* V24 mobile-only refinement. Desktop/laptop layouts above remain unchanged. */
+@media (max-width: 760px) {
+  /* Keep the brand and the three useful header controls in one clean row. */
+  .customer-shell .experiment-topbar {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) max-content !important;
+    align-items: center !important;
+    min-height: 64px !important;
+    padding: 0 10px !important;
+    gap: 7px !important;
+    overflow: visible !important;
+  }
+  .customer-shell .experiment-brand {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: auto !important;
+    gap: 6px !important;
+    white-space: nowrap !important;
+  }
+  .customer-shell .experiment-brand .brand-mark {
+    width: 32px !important;
+    height: 32px !important;
+    flex: 0 0 32px !important;
+    border-radius: 9px !important;
+  }
+  .customer-shell .experiment-brand-copy {
+    min-width: 0 !important;
+    overflow: hidden !important;
+    font-size: 15px !important;
+    letter-spacing: -.55px !important;
+    text-overflow: ellipsis !important;
+  }
+  .customer-shell .experiment-brand-copy small { display: none !important; }
+  .customer-shell .experiment-page-controls,
+  .customer-shell .experiment-nav.motion-navigation-root,
+  .customer-shell .experiment-mobile-toggle,
+  .customer-shell .experiment-mobile-panel {
+    display: none !important;
+  }
+  .customer-shell .experiment-top-actions {
+    min-width: 0 !important;
+    width: auto !important;
+    display: flex !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 5px !important;
+    overflow: visible !important;
+    white-space: nowrap !important;
+  }
+  .customer-shell .experiment-top-actions .experiment-header-location {
+    display: inline-flex !important;
+    flex: 0 1 94px !important;
+    width: 94px !important;
+    min-width: 78px !important;
+    max-width: 94px !important;
+    padding: 2px 5px !important;
+    gap: 3px !important;
+    border-radius: 9px !important;
+  }
+  .customer-shell .experiment-header-location > svg {
+    width: 13px !important;
+    height: 13px !important;
+    flex: 0 0 13px !important;
+  }
+  .customer-shell .experiment-header-area-dropdown {
+    min-width: 0 !important;
+    width: 100% !important;
+    flex: 1 1 auto !important;
+  }
+  .customer-shell .experiment-header-area-dropdown .ff-bootstrap-dropdown {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-toggle {
+    min-width: 0 !important;
+    min-height: 31px !important;
+    padding: 0 !important;
+    gap: 2px !important;
+    font-size: 10px !important;
+  }
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-current {
+    max-width: 57px !important;
+    font-size: 10px !important;
+  }
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-toggle > svg {
+    width: 12px !important;
+    height: 12px !important;
+    flex: 0 0 12px !important;
+  }
+  .customer-shell .experiment-search-shortcut {
+    display: inline-flex !important;
+    flex: 0 0 33px !important;
+    width: 33px !important;
+    min-width: 33px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+    border-radius: 9px !important;
+  }
+  .customer-shell .experiment-search-shortcut span,
+  .customer-shell .experiment-search-shortcut kbd { display: none !important; }
+  .customer-shell .experiment-profile-menu-wrap { flex: 0 0 34px !important; width: 34px !important; }
+  .customer-shell .experiment-profile-trigger {
+    display: grid !important;
+    place-items: center !important;
+    width: 34px !important;
+    min-width: 34px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 2px !important;
+    border-radius: 50% !important;
+  }
+  .customer-shell .experiment-profile-trigger .avatar {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 11px !important;
+  }
+  .customer-shell .experiment-profile-trigger strong,
+  .customer-shell .experiment-profile-trigger > svg { display: none !important; }
+  .customer-shell .experiment-profile-menu {
+    position: fixed !important;
+    top: 72px !important;
+    right: 9px !important;
+    left: auto !important;
+    width: min(275px, calc(100vw - 18px)) !important;
+    max-height: calc(100dvh - 88px) !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    z-index: 500 !important;
+  }
+  .customer-shell .experiment-profile-menu .mobile-profile-only { display: flex !important; }
+
+  /* The header area menu is anchored to the viewport so it cannot open off-screen. */
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-menu {
+    position: fixed !important;
+    top: 72px !important;
+    right: 9px !important;
+    left: auto !important;
+    width: min(315px, calc(100vw - 18px)) !important;
+    max-width: calc(100vw - 18px) !important;
+    max-height: min(70dvh, 520px) !important;
+    overflow: hidden !important;
+    z-index: 480 !important;
+    border-radius: 14px !important;
+  }
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-options {
+    max-height: min(52dvh, 390px) !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+  }
+
+  /* Sports become a compact swipe rail instead of a tall two-column wall. */
+  .customer-shell .experiment-sports-section .experiment-sport-grid {
+    display: flex !important;
+    grid-template-columns: none !important;
+    flex-flow: row nowrap !important;
+    align-items: stretch !important;
+    gap: 11px !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 6px 3px 14px !important;
+    margin: 0 !important;
+    scroll-snap-type: x mandatory !important;
+    scroll-padding-inline: 3px !important;
+    overscroll-behavior-x: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+  .customer-shell .experiment-sports-section .experiment-sport-grid::-webkit-scrollbar { display: none !important; }
+  .customer-shell .experiment-sports-section .experiment-sport-card {
+    display: block !important;
+    flex: 0 0 136px !important;
+    width: 136px !important;
+    min-width: 136px !important;
+    max-width: 136px !important;
+    min-height: 0 !important;
+    height: 116px !important;
+    aspect-ratio: auto !important;
+    padding: 0 !important;
+    border-radius: 13px !important;
+    scroll-snap-align: start !important;
+  }
+  .customer-shell .experiment-sports-section .experiment-sport-symbol {
+    top: 7px !important;
+    left: 7px !important;
+    width: 25px !important;
+    height: 25px !important;
+    border-radius: 7px !important;
+    font-size: 13px !important;
+  }
+  .customer-shell .experiment-sports-section .experiment-sport-copy {
+    left: 9px !important;
+    right: 29px !important;
+    bottom: 8px !important;
+    gap: 2px !important;
+  }
+  .customer-shell .experiment-sports-section .experiment-sport-copy strong {
+    font-size: 12px !important;
+    line-height: 1.12 !important;
+  }
+  .customer-shell .experiment-sports-section .experiment-sport-copy small {
+    font-size: 8px !important;
+    line-height: 1.2 !important;
+  }
+  .customer-shell .experiment-sports-section .experiment-sport-arrow {
+    right: 7px !important;
+    bottom: 7px !important;
+    width: 21px !important;
+    height: 21px !important;
+  }
+
+  /* Remove the extra standalone venue search strip on phones; filtering remains available. */
+  .customer-shell .experiment-directory-tools {
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) !important;
+    gap: 0 !important;
+    margin-bottom: 10px !important;
+  }
+  .customer-shell .experiment-directory-tools > .search-field { display: none !important; }
+  .customer-shell .experiment-directory-tools .area-filter-dropdown {
+    width: 100% !important;
+    max-width: none !important;
+  }
+  .customer-shell .experiment-directory-tools .ff-dropdown-menu {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .customer-shell .experiment-topbar { padding-inline: 8px !important; gap: 5px !important; }
+  .customer-shell .experiment-brand .brand-mark { width: 30px !important; height: 30px !important; flex-basis: 30px !important; }
+  .customer-shell .experiment-brand-copy { font-size: 14px !important; }
+  .customer-shell .experiment-top-actions { gap: 4px !important; }
+  .customer-shell .experiment-top-actions .experiment-header-location { width: 88px !important; min-width: 78px !important; max-width: 88px !important; padding-inline: 4px !important; }
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-current { max-width: 49px !important; }
+  .customer-shell .experiment-search-shortcut { flex-basis: 31px !important; width: 31px !important; min-width: 31px !important; }
+  .customer-shell .experiment-profile-menu-wrap,
+  .customer-shell .experiment-profile-trigger { flex-basis: 32px !important; width: 32px !important; min-width: 32px !important; height: 32px !important; min-height: 32px !important; }
+  .customer-shell .experiment-sports-section .experiment-sport-card { flex-basis: 128px !important; width: 128px !important; min-width: 128px !important; max-width: 128px !important; height: 110px !important; }
+}
+
+/* Terms & Conditions is an account shortcut on mobile; desktop profile stays unchanged. */
+.experiment-profile-menu .mobile-profile-only { display: none; }
+
+@media (max-width: 760px) {
+  /* Search is available from the header icon, not as a permanent extra row. */
+  .customer-shell .mobile-search-overlay {
+    position: fixed !important;
+    top: 72px !important;
+    left: 9px !important;
+    right: 9px !important;
+    z-index: 470 !important;
+    display: block !important;
+    padding: 8px !important;
+    border: 1px solid #39402d !important;
+    border-radius: 13px !important;
+    background: #11120f !important;
+    box-shadow: 0 18px 40px rgba(0,0,0,.3) !important;
+  }
+  .customer-shell .mobile-search-box {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-height: 42px !important;
+    padding: 0 9px !important;
+    border: 1px solid #444b35 !important;
+    border-radius: 9px !important;
+    background: #20231b !important;
+    color: #c7ff3e !important;
+  }
+  .customer-shell .mobile-search-box input {
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    height: 40px !important;
+    border: 0 !important;
+    outline: 0 !important;
+    background: transparent !important;
+    color: #f7f8ef !important;
+    font-size: 12px !important;
+  }
+  .customer-shell .mobile-search-box input::placeholder { color: #aeb5a0 !important; }
+  .customer-shell .mobile-search-box button { display:grid !important; place-items:center !important; width:28px !important; height:28px !important; border:0 !important; border-radius:7px !important; background:transparent !important; color:#c7ff3e !important; }
+}
+
+/* V25 MOBILE-ONLY REFINEMENT — do not alter laptop/desktop layout. */
+@media (max-width: 760px) {
+  /* Header: keep logo + location + search + profile in one row. Remove the
+     redundant hamburger from the phone header; the bottom nav/profile menu
+     are the mobile navigation surfaces. */
+  .customer-shell .experiment-topbar {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) max-content !important;
+    align-items: center !important;
+    gap: 6px !important;
+    min-height: 60px !important;
+    padding: 0 9px !important;
+    overflow: visible !important;
+  }
+  .customer-shell .experiment-brand {
+    display: inline-flex !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: auto !important;
+    gap: 5px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+  }
+  .customer-shell .experiment-brand .brand-mark {
+    flex: 0 0 29px !important;
+    width: 29px !important;
+    height: 29px !important;
+    border-radius: 8px !important;
+  }
+  .customer-shell .experiment-brand-copy {
+    display: block !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: clip !important;
+    white-space: nowrap !important;
+    font-size: 13.5px !important;
+    line-height: 1 !important;
+    letter-spacing: -.45px !important;
+  }
+  .customer-shell .experiment-brand-copy small { display: none !important; }
+  .customer-shell .experiment-page-controls,
+  .customer-shell .experiment-nav.motion-navigation-root,
+  .customer-shell .experiment-mobile-toggle,
+  .customer-shell .experiment-mobile-panel { display: none !important; }
+  .customer-shell .experiment-mobile-toggle {
+    width: 0 !important;
+    min-width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
+  }
+  .customer-shell .experiment-top-actions {
+    display: flex !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 5px !important;
+    width: max-content !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+    white-space: nowrap !important;
+  }
+  .customer-shell .experiment-top-actions .experiment-header-location {
+    display: inline-flex !important;
+    flex: 0 0 86px !important;
+    width: 86px !important;
+    min-width: 86px !important;
+    max-width: 86px !important;
+    height: 34px !important;
+    padding: 2px 5px !important;
+    gap: 3px !important;
+    overflow: visible !important;
+    border-radius: 9px !important;
+  }
+  .customer-shell .experiment-top-actions .experiment-header-location > svg {
+    flex: 0 0 12px !important;
+    width: 12px !important;
+    height: 12px !important;
+  }
+  .customer-shell .experiment-header-area-dropdown,
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-field,
+  .customer-shell .experiment-header-area-dropdown .ff-bootstrap-dropdown {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-toggle {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 29px !important;
+    padding: 0 !important;
+    gap: 2px !important;
+    font-size: 9.5px !important;
+    line-height: 1 !important;
+  }
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-current {
+    display: block !important;
+    min-width: 0 !important;
+    max-width: 55px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    font-size: 9.5px !important;
+  }
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-toggle > svg {
+    flex: 0 0 11px !important;
+    width: 11px !important;
+    height: 11px !important;
+  }
+  .customer-shell .experiment-search-shortcut {
+    display: inline-flex !important;
+    flex: 0 0 31px !important;
+    width: 31px !important;
+    min-width: 31px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+    border-radius: 9px !important;
+  }
+  .customer-shell .experiment-search-shortcut span,
+  .customer-shell .experiment-search-shortcut kbd { display: none !important; }
+  .customer-shell .experiment-profile-menu-wrap {
+    flex: 0 0 32px !important;
+    width: 32px !important;
+    min-width: 32px !important;
+    height: 34px !important;
+  }
+  .customer-shell .experiment-profile-trigger {
+    display: grid !important;
+    place-items: center !important;
+    flex: 0 0 32px !important;
+    width: 32px !important;
+    min-width: 32px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    padding: 2px !important;
+    border-radius: 50% !important;
+  }
+  .customer-shell .experiment-profile-trigger .avatar {
+    width: 27px !important;
+    height: 27px !important;
+    font-size: 10px !important;
+  }
+  .customer-shell .experiment-profile-trigger strong,
+  .customer-shell .experiment-profile-trigger > svg { display: none !important; }
+
+  /* Profile: explicitly expose Terms & Conditions in the phone dropdown. */
+  .customer-shell .experiment-profile-menu {
+    position: fixed !important;
+    inset: 68px 8px auto auto !important;
+    width: min(280px, calc(100vw - 16px)) !important;
+    max-width: calc(100vw - 16px) !important;
+    max-height: calc(100dvh - 84px) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    z-index: 700 !important;
+  }
+  .customer-shell .experiment-profile-menu .mobile-profile-only { display: flex !important; }
+
+  /* Location menu: position relative to the viewport, never to the left edge
+     of the header dropdown wrapper. Keep the search and options scrollable. */
+  .customer-shell .experiment-topbar,
+  .customer-shell .experiment-top-actions,
+  .customer-shell .experiment-header-location,
+  .customer-shell .experiment-header-area-dropdown,
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-field,
+  .customer-shell .experiment-header-area-dropdown .ff-bootstrap-dropdown {
+    overflow: visible !important;
+  }
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-menu.dropdown-menu,
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-menu.dropdown-menu.show {
+    position: fixed !important;
+    inset: 68px 8px auto auto !important;
+    left: auto !important;
+    right: 8px !important;
+    width: min(300px, calc(100vw - 16px)) !important;
+    min-width: 0 !important;
+    max-width: calc(100vw - 16px) !important;
+    max-height: min(72dvh, 520px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    transform: none !important;
+    z-index: 680 !important;
+  }
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-search {
+    display: flex !important;
+    min-height: 46px !important;
+    padding: 9px 11px !important;
+  }
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-options {
+    max-height: min(56dvh, 405px) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-item.dropdown-item {
+    min-height: 43px !important;
+    padding: 9px 11px !important;
+    white-space: normal !important;
+  }
+
+  /* The directory's extra search strip is removed on phones. Search remains
+     accessible on demand from the magnifying-glass button in the header. */
+  .customer-shell .experiment-directory-tools > .search-field,
+  .customer-shell .experiment-directory-tools .search-field {
+    display: none !important;
+  }
+  .customer-shell .experiment-directory-tools {
+    display: block !important;
+    margin: 0 0 10px !important;
+  }
+  .customer-shell .mobile-search-overlay {
+    position: fixed !important;
+    top: 68px !important;
+    left: 8px !important;
+    right: 8px !important;
+    z-index: 660 !important;
+  }
+
+  /* Horizontal, touch-friendly sports rail; no two-column tall stack. */
+  .customer-shell .experiment-sports-section .experiment-sport-grid {
+    display: flex !important;
+    grid-template-columns: none !important;
+    grid-auto-flow: unset !important;
+    flex-flow: row nowrap !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 5px 2px 13px !important;
+    margin: 0 !important;
+    scroll-snap-type: x mandatory !important;
+    scroll-padding-inline: 2px !important;
+    overscroll-behavior-x: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+  .customer-shell .experiment-sports-section .experiment-sport-grid::-webkit-scrollbar { display: none !important; }
+  .customer-shell .experiment-sports-section .experiment-sport-card {
+    display: block !important;
+    flex: 0 0 126px !important;
+    width: 126px !important;
+    min-width: 126px !important;
+    max-width: 126px !important;
+    height: 108px !important;
+    min-height: 108px !important;
+    max-height: 108px !important;
+    aspect-ratio: auto !important;
+    padding: 0 !important;
+    scroll-snap-align: start !important;
+    border-radius: 12px !important;
+  }
+  .customer-shell .experiment-sports-section .experiment-sport-symbol {
+    top: 7px !important;
+    left: 7px !important;
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 12px !important;
+  }
+  .customer-shell .experiment-sports-section .experiment-sport-copy {
+    left: 8px !important;
+    right: 26px !important;
+    bottom: 7px !important;
+    gap: 2px !important;
+  }
+  .customer-shell .experiment-sports-section .experiment-sport-copy strong { font-size: 11px !important; line-height: 1.12 !important; }
+  .customer-shell .experiment-sports-section .experiment-sport-copy small { font-size: 7.5px !important; line-height: 1.15 !important; }
+  .customer-shell .experiment-sports-section .experiment-sport-arrow { right: 6px !important; bottom: 6px !important; width: 20px !important; height: 20px !important; }
+}
+
+@media (max-width: 390px) {
+  .customer-shell .experiment-topbar { padding-inline: 7px !important; gap: 4px !important; }
+  .customer-shell .experiment-brand { gap: 4px !important; }
+  .customer-shell .experiment-brand .brand-mark { flex-basis: 27px !important; width: 27px !important; height: 27px !important; }
+  .customer-shell .experiment-brand-copy { font-size: 12.5px !important; }
+  .customer-shell .experiment-top-actions { gap: 4px !important; }
+  .customer-shell .experiment-top-actions .experiment-header-location { flex-basis: 79px !important; width: 79px !important; min-width: 79px !important; max-width: 79px !important; padding-inline: 4px !important; }
+  .customer-shell .experiment-header-area-dropdown .ff-dropdown-current { max-width: 47px !important; }
+  .customer-shell .experiment-search-shortcut { flex-basis: 29px !important; width: 29px !important; min-width: 29px !important; }
+  .customer-shell .experiment-profile-menu-wrap { flex-basis: 30px !important; width: 30px !important; min-width: 30px !important; }
+  .customer-shell .experiment-profile-trigger { flex-basis: 30px !important; width: 30px !important; min-width: 30px !important; height: 30px !important; min-height: 30px !important; }
+  .customer-shell .experiment-sports-section .experiment-sport-card { flex-basis: 120px !important; width: 120px !important; min-width: 120px !important; max-width: 120px !important; height: 104px !important; min-height: 104px !important; }
+}
+
+/* V26 mobile venue gallery + sports catalogue: two-row horizontal swipe rail. */
+@media (max-width: 760px) {
+  .customer-shell .experiment-sports-section .experiment-sport-grid {
+    display: grid !important;
+    grid-auto-flow: column !important;
+    grid-template-columns: none !important;
+    grid-template-rows: repeat(2, 82px) !important;
+    grid-auto-columns: clamp(88px, 26vw, 102px) !important;
+    gap: 8px 9px !important;
+    width: 100% !important;
+    height: 185px !important;
+    max-height: 185px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 5px 3px 8px !important;
+    margin: 0 !important;
+    scroll-snap-type: x mandatory !important;
+    overscroll-behavior-x: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+  .customer-shell .experiment-sports-section .experiment-sport-grid::-webkit-scrollbar { display:none !important; }
+  .customer-shell .experiment-sports-section .experiment-sport-card {
+    display:block !important;
+    width:100% !important;
+    min-width:0 !important;
+    max-width:none !important;
+    height:82px !important;
+    min-height:82px !important;
+    max-height:82px !important;
+    aspect-ratio:auto !important;
+    padding:0 !important;
+    border-radius:11px !important;
+    scroll-snap-align:start !important;
+  }
+  .customer-shell .experiment-sports-section .experiment-sport-symbol { width:21px !important; height:21px !important; top:5px !important; left:5px !important; font-size:11px !important; }
+  .customer-shell .experiment-sports-section .experiment-sport-copy { left:6px !important; right:22px !important; bottom:6px !important; gap:1px !important; }
+  .customer-shell .experiment-sports-section .experiment-sport-copy strong { font-size:9px !important; line-height:1.1 !important; }
+  .customer-shell .experiment-sports-section .experiment-sport-copy small { font-size:6.5px !important; line-height:1.12 !important; }
+  .customer-shell .experiment-sports-section .experiment-sport-arrow { width:17px !important; height:17px !important; right:4px !important; bottom:4px !important; }
+  .customer-shell .experiment-sports-section .experiment-sport-arrow svg { width:12px !important; height:12px !important; }
+
+  /* Smaller landscape venue cover with a horizontal photo strip immediately below. */
+  .venue-detail-page { padding-bottom:100px !important; }
+  .venue-detail-gallery {
+    width:calc(100% - 28px) !important;
+    height:auto !important;
+    aspect-ratio:16 / 9 !important;
+    max-height:220px !important;
+    margin:8px auto 12px !important;
+    border-radius:15px !important;
+  }
+  .venue-detail-hero-image { display:block !important; width:100% !important; height:100% !important; padding:0 !important; border:0 !important; background:#171815 !important; cursor:zoom-in !important; }
+  .venue-detail-hero-image img { display:block !important; width:100% !important; height:100% !important; object-fit:cover !important; }
+  .venue-gallery-count { right:10px !important; top:10px !important; padding:6px 9px !important; font-size:9px !important; pointer-events:none !important; }
+  .venue-gallery-dots { display:none !important; }
+
+  .venue-gallery-strip-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; margin:0 0 9px; }
+  .venue-gallery-strip-heading h3 { margin:0 !important; color:#777a70 !important; font-size:10px !important; font-weight:900 !important; letter-spacing:1.7px !important; }
+  .venue-gallery-strip-heading span { color:#7b7f72; font-size:9px; font-weight:750; }
+  .venue-gallery-mobile-photos { display:flex; gap:9px; width:100%; overflow-x:auto; padding:0 0 4px; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  .venue-gallery-mobile-photos::-webkit-scrollbar { display:none; }
+  .venue-gallery-mobile-photos button { position:relative; flex:0 0 122px; width:122px; height:82px; padding:0; overflow:hidden; border:1px solid #d7ddc8; border-radius:11px; background:#151713; scroll-snap-align:start; }
+  .venue-gallery-mobile-photos button img { display:block; width:100%; height:100%; object-fit:cover; }
+  .venue-gallery-mobile-photos button span { position:absolute; right:5px; bottom:5px; display:flex; align-items:center; gap:3px; padding:3px 5px; border-radius:20px; background:#11120fcc; color:#c7ff3e; font-size:8px; font-weight:850; }
+  .venue-gallery-mobile-photos video { flex:0 0 160px; width:160px; height:82px; border-radius:11px; background:#111; object-fit:cover; }
+  .venue-gallery-owner-note { margin:7px 0 0; color:#828679; font-size:9px; line-height:1.4; }
+  .venue-detail-content { width:calc(100% - 30px) !important; }
+  .venue-detail-heading { padding-top:17px !important; }
+
+  /* Persistent book action is always available, including listings awaiting owner setup. */
+  .venue-detail-bookbar { position:fixed !important; right:14px !important; left:auto !important; bottom:max(14px, env(safe-area-inset-bottom)) !important; z-index:120 !important; width:auto !important; min-width:132px !important; min-height:46px !important; padding:0 17px !important; transform:none !important; border:0 !important; border-radius:999px !important; background:#c7ff3e !important; color:#11120f !important; box-shadow:0 10px 26px rgba(0,0,0,.25) !important; font-size:14px !important; font-weight:900 !important; }
+  .venue-detail-bookbar svg { color:#11120f !important; }
+}
+
+/* Full-screen photo viewer opened by tapping any venue gallery thumbnail. */
+.venue-photo-lightbox { position:fixed; inset:0; z-index:1000; display:flex; align-items:center; justify-content:center; gap:16px; padding:56px 20px 28px; background:rgba(7,8,6,.94); backdrop-filter:blur(8px); }
+.venue-photo-lightbox figure { display:flex; flex-direction:column; align-items:center; gap:12px; width:min(100%,1100px); max-height:100%; margin:0; }
+.venue-photo-lightbox figure img { display:block; max-width:100%; max-height:calc(100dvh - 130px); object-fit:contain; border-radius:13px; box-shadow:0 20px 60px #0008; }
+.venue-photo-lightbox figcaption { color:#f5f7ee; font-size:12px; font-weight:750; text-align:center; }
+.venue-lightbox-close,.venue-lightbox-nav { position:absolute; display:grid; place-items:center; border:1px solid #515747; border-radius:50%; background:#171a13; color:#c7ff3e; cursor:pointer; }
+.venue-lightbox-close { top:15px; right:16px; width:43px; height:43px; }
+.venue-lightbox-nav { top:50%; width:43px; height:43px; transform:translateY(-50%); }
+.venue-lightbox-nav.previous { left:16px; }
+.venue-lightbox-nav.next { right:16px; }
+@media (max-width:760px) {
+  .venue-photo-lightbox { padding:58px 12px 24px; }
+  .venue-photo-lightbox figure img { max-width:100%; max-height:calc(100dvh - 150px); border-radius:10px; }
+  .venue-lightbox-nav { width:36px; height:36px; }
+  .venue-lightbox-nav.previous { left:8px; }
+  .venue-lightbox-nav.next { right:8px; }
+}
+
+/* The main venue cover remains a full-width image outside the mobile breakpoint. */
+.venue-detail-hero-image { display:block; width:100%; height:100%; padding:0; overflow:hidden; border:0; border-radius:inherit; background:#171815; cursor:zoom-in; }
+.venue-detail-hero-image img { display:block; width:100%; height:100%; object-fit:cover; }
+
+
+/* V27: amenity-specific symbols and ensure the venue booking CTA is never hidden by mobile navigation. */
+.venue-amenities-grid span { align-items:center; }
+.venue-amenities-grid span svg { width:18px; height:18px; flex:0 0 18px; color:#719b16 !important; }
+.amenities-sheet p { display:flex; align-items:center; gap:14px; }
+.amenities-sheet p svg { width:20px; height:20px; flex:0 0 20px; color:#c7ff3e !important; }
+.mobile-bottom-nav.is-hidden { display:none !important; }
+.venue-detail-bookbar { display:inline-flex !important; align-items:center !important; justify-content:center !important; visibility:visible !important; opacity:1 !important; pointer-events:auto !important; z-index:100 !important; background:#c7ff3e !important; color:#11120f !important; }
+.venue-detail-bookbar:focus-visible { outline:3px solid #11120f; outline-offset:3px; }
+@media (max-width:760px) {
+  .venue-detail-page { padding-bottom:92px !important; }
+  .venue-detail-bookbar { right:14px !important; bottom:max(14px, env(safe-area-inset-bottom)) !important; min-width:140px !important; min-height:48px !important; padding:0 18px !important; font-size:14px !important; }
+}
+
+/* V28: balanced venue batches and scroll-direction-aware mobile quick navigation. */
+.experiment-directory .venue-grid {
+  grid-auto-flow: row !important;
+  grid-auto-rows: auto !important;
+  align-items: stretch !important;
+}
+.experiment-directory .venue-grid > .venue-card-wrap {
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: none;
+  justify-self: stretch;
+}
+@media (min-width: 1200px) {
+  .experiment-directory .venue-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    column-gap: clamp(18px, 1.7vw, 26px) !important;
+    row-gap: clamp(22px, 2vw, 30px) !important;
+  }
+  /* If the final data batch contains one venue, centre it instead of stretching it. */
+  .experiment-directory .venue-grid > .venue-card-wrap:last-child:nth-child(4n + 1) {
+    grid-column: 2 / span 2;
+    width: min(100%, 330px) !important;
+    justify-self: center !important;
+  }
+}
+@media (min-width: 821px) and (max-width: 1199px) {
+  .experiment-directory .venue-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    column-gap: 18px !important;
+    row-gap: 22px !important;
+  }
+  .experiment-directory .venue-grid > .venue-card-wrap:last-child:nth-child(3n + 1) {
+    grid-column: 2;
+    width: min(100%, 300px) !important;
+    justify-self: center !important;
+  }
+}
+@media (max-width: 820px) {
+  .experiment-directory .venue-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: 14px !important;
+    row-gap: 18px !important;
+  }
+  .experiment-directory .venue-grid > .venue-card-wrap:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    width: min(calc(50% - 7px), 320px) !important;
+    justify-self: center !important;
+  }
+}
+@media (max-width: 370px) {
+  .experiment-directory .venue-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: 9px !important;
+    row-gap: 14px !important;
+  }
+  .experiment-directory .venue-grid > .venue-card-wrap:last-child:nth-child(odd) {
+    width: min(calc(50% - 5px), 300px) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .mobile-bottom-nav {
+    left: 50% !important;
+    right: auto !important;
+    width: min(360px, 88vw) !important;
+    min-height: 64px !important;
+    padding: 6px !important;
+    transform: translateX(-50%) !important;
+    border-radius: 22px !important;
+    transition: width .28s cubic-bezier(.2,.75,.25,1),
+      min-height .28s ease, padding .28s ease, border-radius .28s ease,
+      bottom .28s ease, box-shadow .28s ease, transform .28s ease !important;
+    will-change: width, transform;
+  }
+  .mobile-bottom-nav button {
+    min-height: 50px !important;
+    border-radius: 15px !important;
+    transition: background .22s ease, color .22s ease, border-radius .22s ease,
+      min-height .22s ease, gap .22s ease !important;
+  }
+  .mobile-bottom-nav button span {
+    display: block !important;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity .18s ease, transform .18s ease;
+  }
+  .mobile-bottom-nav.is-expanded {
+    width: min(360px, 88vw) !important;
+    min-height: 64px !important;
+    border-radius: 22px !important;
+  }
+  .mobile-bottom-nav.is-expanded button.active {
+    background: #c7ff3e !important;
+    color: #11120f !important;
+  }
+  .mobile-bottom-nav.is-expanded button.active svg { color: #11120f !important; }
+  .mobile-bottom-nav.is-compact {
+    width: min(246px, 72vw) !important;
+    min-height: 58px !important;
+    padding: 5px !important;
+    border-radius: 999px !important;
+    bottom: calc(10px + env(safe-area-inset-bottom)) !important;
+    box-shadow: 0 12px 34px rgba(0,0,0,.34) !important;
+  }
+  .mobile-bottom-nav.is-compact button {
+    min-height: 46px !important;
+    border-radius: 999px !important;
+    gap: 0 !important;
+  }
+  .mobile-bottom-nav.is-compact button span {
+    display: none !important;
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  .mobile-bottom-nav.is-compact button svg {
+    width: 23px !important;
+    height: 23px !important;
+    color: #c7ff3e !important;
+    transition: transform .22s ease, color .22s ease;
+  }
+  .mobile-bottom-nav.is-compact button.active {
+    background: #343831 !important;
+    color: #f7f9f0 !important;
+  }
+  .mobile-bottom-nav.is-compact button.active svg { color: #c7ff3e !important; transform: scale(1.08); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobile-bottom-nav,
+  .mobile-bottom-nav button,
+  .mobile-bottom-nav button span,
+  .mobile-bottom-nav button svg { transition: none !important; }
+}
+
+/* V31 polish: darker checkout, clearer venue back control, separated event arrows,
+   compact mobile duration selector, and a working single-clear mobile search panel. */
+.customer-shell .checkout-modal {
+  background: #151812 !important;
+  color: #f7f8ef !important;
+  border: 1px solid #3a4330 !important;
+  box-shadow: 0 28px 90px rgba(0,0,0,.62) !important;
+}
+.customer-shell .checkout-modal h2,
+.customer-shell .checkout-modal h3,
+.customer-shell .checkout-modal .total-row,
+.customer-shell .checkout-modal .total-row strong { color: #f7f8ef !important; }
+.customer-shell .checkout-modal .section-kicker { color: #c7ff3e !important; }
+.customer-shell .checkout-modal-header {
+  background: #151812 !important;
+  border-bottom-color: #343a2c !important;
+}
+.customer-shell .checkout-modal-header .checkout-sub { color: #b9c0ad !important; }
+.customer-shell .checkout-modal-header .modal-close {
+  border-color: #414938 !important;
+  background: #242a1f !important;
+  color: #f7f8ef !important;
+}
+.customer-shell .checkout-venue {
+  background: #20251c !important;
+  border-color: #404a34 !important;
+}
+.customer-shell .checkout-venue strong,
+.customer-shell .checkout-venue > b { color: #f7f8ef !important; }
+.customer-shell .checkout-venue span { color: #b5bdab !important; }
+.customer-shell .checkout-breakdown > div { color: #c5cbbd !important; }
+.customer-shell .checkout-breakdown b { color: #f7f8ef !important; }
+.customer-shell .checkout-breakdown .discount-text { color: #c7ff3e !important; }
+.customer-shell .checkout-breakdown .total-row { border-top-color: #3b4332 !important; }
+.customer-shell .checkout-modal .rain-policy-summary {
+  border-color: #46563a !important;
+  background: linear-gradient(135deg, #20291b, #1b2418) !important;
+}
+.customer-shell .checkout-modal .rain-policy-fact span { color: #aab69b !important; }
+.customer-shell .checkout-modal .rain-policy-fact strong { color: #d9f4bd !important; }
+.customer-shell .checkout-modal .rain-policy-fact strong.unconfirmed { color: #f3c66f !important; }
+.customer-shell .checkout-modal .rain-policy-summary p { border-top-color: #3b4831 !important; color: #b7c1ab !important; }
+.customer-shell .checkout-modal .rain-policy-summary a { color: #c7ff3e !important; }
+.customer-shell .checkout-modal .payment-options button {
+  border-color: #414938 !important;
+  background: #20251c !important;
+  color: #e8ecdf !important;
+}
+.customer-shell .checkout-modal .payment-options button.active {
+  border-color: #c7ff3e !important;
+  background: #29351d !important;
+  box-shadow: inset 0 0 0 1px rgba(199,255,62,.2) !important;
+}
+.customer-shell .checkout-modal .payment-options button > svg { color: #c7ff3e !important; }
+.customer-shell .checkout-modal .payment-options b { color: #f7f8ef !important; }
+.customer-shell .checkout-modal .payment-options small { color: #aeb8a1 !important; }
+.customer-shell .checkout-modal .payment-options button > i { border-color: #8f9a7f !important; }
+.customer-shell .checkout-modal .payment-options button.active > i { border-color: #c7ff3e !important; }
+.customer-shell .checkout-modal .payment-disclaimer {
+  border-color: #65502a !important;
+  background: #2c2517 !important;
+  color: #f1d79f !important;
+}
+.customer-shell .checkout-confirm-btn { box-shadow: 0 -10px 20px rgba(21,24,18,.96) !important; }
+
+@media (max-width: 640px) {
+  .customer-shell .venue-detail-topbar button {
+    color: #11120f !important;
+    font-size: 13px !important;
+    font-weight: 950 !important;
+  }
+  .customer-shell .venue-detail-topbar button svg { color: #11120f !important; stroke-width: 2.7 !important; }
+
+  .customer-shell .slot-picker-duration {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    min-height: 62px !important;
+    margin: 0 0 18px !important;
+    padding: 9px 11px !important;
+    border-radius: 15px !important;
+  }
+  .customer-shell .slot-picker-duration > strong { font-size: 13px !important; white-space: nowrap; }
+  .customer-shell .slot-picker-duration .slot-duration-stepper {
+    flex: 0 1 158px !important;
+    width: auto !important;
+    min-width: 139px !important;
+    min-height: 39px !important;
+    gap: 5px !important;
+    padding: 3px 5px !important;
+    border-radius: 11px !important;
+  }
+  .customer-shell .slot-picker-duration .slot-duration-stepper button { width: 29px !important; height: 29px !important; }
+  .customer-shell .slot-picker-duration .slot-duration-stepper b { min-width: 42px !important; font-size: 14px !important; }
+  .customer-shell .slot-picker-time-heading { margin-bottom: 10px !important; }
+
+  .customer-shell .hero-event-deck-controls {
+    right: 8% !important;
+    bottom: -12px !important;
+    gap: 12px !important;
+    padding: 2px 4px !important;
+  }
+  .customer-shell .hero-event-deck-controls button { width: 31px !important; height: 31px !important; }
+  .customer-shell .hero-event-deck-hint { bottom: -8px !important; max-width: 61%; line-height: 1.35 !important; }
+  .customer-shell .experiment-hero-visual { min-height: 366px !important; }
+}
+
+@media (max-width: 380px) {
+  .customer-shell .slot-picker-duration { padding-inline: 8px !important; }
+  .customer-shell .slot-picker-duration .slot-duration-stepper { min-width: 132px !important; flex-basis: 145px !important; }
+  .customer-shell .slot-picker-duration .slot-duration-stepper b { min-width: 36px !important; }
+}
+
+/* Mobile venue search: one X control plus live, selectable venue results. */
+@media (max-width: 760px) {
+  .customer-shell .mobile-search-overlay {
+    position: fixed !important;
+    top: 68px !important;
+    left: 8px !important;
+    right: 8px !important;
+    z-index: 760 !important;
+    max-height: min(76dvh, 620px) !important;
+    overflow: hidden !important;
+    padding: 8px !important;
+    border: 1px solid #3c4431 !important;
+    border-radius: 15px !important;
+    background: #11120f !important;
+    box-shadow: 0 20px 48px rgba(0,0,0,.38) !important;
+  }
+  .customer-shell .mobile-search-panel-inner { display: grid; gap: 0; min-width: 0; }
+  .customer-shell .mobile-search-box { border-radius: 10px !important; }
+  .customer-shell .mobile-search-box button { flex: 0 0 30px !important; width: 30px !important; height: 30px !important; }
+  .customer-shell .mobile-search-results {
+    display: grid;
+    gap: 4px;
+    max-height: min(58dvh, 470px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 8px 2px 2px;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  .customer-shell .mobile-search-results-heading,
+  .customer-shell .mobile-search-results-footer {
+    padding: 6px 8px;
+    color: #aeb79f;
+    font-size: 10px;
+    font-weight: 800;
+  }
+  .customer-shell .mobile-search-result {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    min-height: 52px;
+    padding: 9px 10px;
+    border: 1px solid #31382a;
+    border-radius: 9px;
+    background: #1d2118;
+    color: #f7f8ef;
+    text-align: left;
+  }
+  .customer-shell .mobile-search-result > span { display: grid; gap: 3px; min-width: 0; }
+  .customer-shell .mobile-search-result strong { overflow: hidden; color: #f7f8ef; font-size: 12px; font-weight: 850; text-overflow: ellipsis; white-space: nowrap; }
+  .customer-shell .mobile-search-result small { overflow: hidden; color: #aeb79f; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+  .customer-shell .mobile-search-result > svg { flex: 0 0 auto; color: #c7ff3e; }
+  .customer-shell .mobile-search-result:active { border-color: #c7ff3e; background: #28331b; }
+  .customer-shell .mobile-search-empty { display: grid; gap: 4px; padding: 16px 10px; color: #aeb79f; font-size: 11px; }
+  .customer-shell .mobile-search-empty strong { color: #f7f8ef; font-size: 12px; }
+}
+
+/* V32: slot time periods, map-linked venue names, inline Google rating, and venue policies. */
+.venue-photo-trigger {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  text-align: left;
+  cursor: pointer;
+}
+.venue-card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 9px;
+  min-width: 0;
+}
+.experiment-directory .venue-card-title-row h3 {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0 0 8px;
+  overflow-wrap: anywhere;
+}
+.venue-card-title-row h3 a {
+  color: inherit;
+  text-decoration: none;
+  text-underline-offset: 3px;
+}
+.venue-card-title-row h3 a:hover,
+.venue-card-title-row h3 a:focus-visible {
+  color: #c7ff3e;
+  text-decoration: underline;
+}
+.venue-card-google-rating {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 7px;
+  color: #aeb3a4;
+  font-size: 10px;
+  font-weight: 850;
+  white-space: nowrap;
+}
+.venue-card-google-rating svg { color: #c7ff3e; }
+.venue-card-google-rating.is-rated { color: #eff8df; }
+.venue-card-meta { display: flex; align-items: center; justify-content: flex-start; }
+.venue-detail-heading h2 a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: inherit;
+  text-decoration: none;
+  text-underline-offset: 4px;
+}
+.venue-detail-heading h2 a:hover,
+.venue-detail-heading h2 a:focus-visible { color: #4e7616; text-decoration: underline; }
+.venue-detail-heading h2 a svg { color: #6e9e0d; flex: 0 0 auto; }
+
+.slot-picker-time-groups { display: grid; gap: 24px; }
+.slot-picker-time-group { min-width: 0; }
+.slot-picker-group-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #343630;
+}
+.slot-picker-group-heading h4 {
+  margin: 0;
+  color: #c7ff3e;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .2px;
+}
+.slot-picker-group-heading span { color: #aeb0a6; font-size: 10px; font-weight: 650; }
+
+.venue-policy-section { padding-top: 28px !important; }
+.venue-policy-links {
+  overflow: hidden;
+  padding: 0 18px;
+  border: 1px solid #d5dcc9;
+  border-radius: 18px;
+  background: #f6f8f1;
+}
+.venue-policy-link {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 34px minmax(0,1fr) 22px;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 4px;
+  border: 0;
+  border-bottom: 1px solid #dce2d4;
+  background: transparent;
+  color: #20251b;
+  text-align: left;
+}
+.venue-policy-link:last-child { border-bottom: 0; }
+.venue-policy-link > svg:first-child { color: #6e9e0d; }
+.venue-policy-link > svg:last-child { color: #7d8474; }
+.venue-policy-link span { display: grid; gap: 5px; min-width: 0; }
+.venue-policy-link strong { color: #151912; font-size: 14px; font-weight: 900; }
+.venue-policy-link small { color: #687061; font-size: 11px; font-weight: 600; line-height: 1.5; }
+.venue-policy-link:hover { background: #eef5e4; }
+.venue-policy-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  background: rgba(0,0,0,.62);
+  backdrop-filter: blur(5px);
+}
+.venue-policy-sheet {
+  width: min(760px, 100%);
+  max-height: min(78vh, 760px);
+  overflow: auto;
+  border: 1px solid #383a34;
+  border-bottom: 0;
+  border-radius: 26px 26px 0 0;
+  background: #20211f;
+  color: #f7f7f2;
+  box-shadow: 0 -20px 60px rgba(0,0,0,.42);
+  padding-bottom: max(18px, env(safe-area-inset-bottom));
+}
+.venue-policy-sheet header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 20px 24px;
+  border-bottom: 1px solid #393a36;
+  background: #20211f;
+}
+.venue-policy-sheet header h3 { margin: 0; color: #f7f7f2; font-size: 21px; font-weight: 850; }
+.venue-policy-sheet header button { display: grid; width: 38px; height: 38px; place-items: center; border: 0; border-radius: 50%; background: transparent; color: #c9ccc2; }
+.venue-policy-sheet ul { display: grid; gap: 17px; margin: 0; padding: 24px 28px 30px 50px; }
+.venue-policy-sheet li { padding-left: 5px; color: #b9bbb3; font-size: 14px; font-weight: 550; line-height: 1.55; }
+.venue-policy-sheet li::marker { color: #c7ff3e; font-size: 13px; }
+
+@media (max-width: 760px) {
+  .venue-card-title-row { align-items: flex-start; gap: 6px; }
+  .experiment-directory .venue-card-title-row h3 { font-size: 13px !important; line-height: 1.25; }
+  .venue-card-google-rating { font-size: 9px; padding-top: 1px; }
+  .venue-card-google-rating svg { width: 11px; height: 11px; }
+  .venue-detail-heading h2 a { gap: 5px; }
+  .venue-policy-section { padding: 20px 0 !important; }
+  .venue-policy-links { padding: 0 13px; border-radius: 15px; }
+  .venue-policy-link { grid-template-columns: 28px minmax(0,1fr) 18px; gap: 10px; padding: 17px 2px; }
+  .venue-policy-link > svg:first-child { width: 21px; height: 21px; }
+  .venue-policy-link strong { font-size: 13px; }
+  .venue-policy-link small { font-size: 10px; }
+  .venue-policy-sheet { max-height: 82vh; border-radius: 24px 24px 0 0; }
+  .venue-policy-sheet header { padding: 17px 20px; }
+  .venue-policy-sheet header h3 { font-size: 19px; }
+  .venue-policy-sheet ul { gap: 15px; padding: 21px 22px 28px 43px; }
+  .venue-policy-sheet li { font-size: 13px; }
+  .slot-picker-time-groups { gap: 20px; }
+  .slot-picker-group-heading h4 { font-size: 13px; }
+  .slot-picker-group-heading span { font-size: 9px; }
+}
+
+
+/* V33: tighten the transition into the local directory and simplify desktop profile control. */
+.experiment-home { gap: clamp(30px, 3.2vw, 48px); }
+@media (min-width: 761px) {
+  .experiment-profile-trigger {
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
+    min-height: 42px;
+    padding: 0;
+    border-radius: 50%;
+  }
+  .experiment-profile-trigger .avatar,
+  .experiment-profile-trigger strong,
+  .experiment-profile-trigger > svg:not(.profile-desktop-icon) { display: none !important; }
+  .experiment-profile-trigger .profile-desktop-icon { display: block; color: #c7ff3e; }
+}
+@media (max-width: 760px) {
+  .experiment-home { gap: 32px; }
+  .experiment-profile-trigger .profile-desktop-icon { display: none !important; }
+}
+
+
+/* V34: unified venue gallery directly beneath the hero photo on desktop and mobile. */
+.venue-gallery-strip {
+  display:block !important;
+  width:100%;
+  max-width:1060px;
+  margin:14px auto 22px;
+  padding:8px 0 18px;
+  border-bottom:1px solid #d9ddce;
+}
+.venue-gallery-strip-heading {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:0 0 11px;
+}
+.venue-gallery-strip-heading h3 {
+  margin:0;
+  color:#777a70;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:1.8px;
+}
+.venue-gallery-strip-heading span { color:#7b7f72; font-size:10px; font-weight:750; }
+.venue-gallery-strip-photos {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(145px,180px));
+  align-items:start;
+  gap:13px;
+  width:100%;
+}
+.venue-gallery-strip-photos button {
+  position:relative;
+  display:block;
+  width:100%;
+  height:116px;
+  padding:0;
+  overflow:hidden;
+  border:1px solid #d7ddc8;
+  border-radius:13px;
+  background:#151713;
+  cursor:zoom-in;
+}
+.venue-gallery-strip-photos button img { display:block; width:100%; height:100%; object-fit:cover; transition:transform .25s ease; }
+.venue-gallery-strip-photos button:hover img { transform:scale(1.045); }
+.venue-gallery-strip-photos button span {
+  position:absolute; right:6px; bottom:6px;
+  display:flex; align-items:center; gap:4px;
+  padding:4px 6px; border-radius:20px;
+  background:#11120fcc; color:#c7ff3e;
+  font-size:9px; font-weight:850;
+}
+.venue-gallery-strip-photos video { width:100%; height:116px; border-radius:13px; background:#111; object-fit:cover; }
+.venue-gallery-owner-note { margin:8px 0 0; color:#828679; font-size:10px; line-height:1.45; }
+.venue-gallery-desktop { display:none !important; }
+@media (max-width:760px) {
+  .venue-gallery-strip {
+    width:calc(100% - 30px) !important;
+    margin:0 auto 12px !important;
+    padding:6px 0 15px !important;
+  }
+  .venue-gallery-strip-photos {
+    display:flex !important;
+    gap:9px;
+    width:100%;
+    overflow-x:auto;
+    padding:0 0 4px;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .venue-gallery-strip-photos::-webkit-scrollbar { display:none; }
+  .venue-gallery-strip-photos button { flex:0 0 122px; width:122px; height:82px; scroll-snap-align:start; }
+  .venue-gallery-strip-photos video { flex:0 0 160px; width:160px; height:82px; }
 }
