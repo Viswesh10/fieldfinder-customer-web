@@ -5,7 +5,7 @@ import {
   IndianRupee, LocateFixed, LogOut, MapPin, Menu, Minus, Plus, Search,
   ShieldCheck, SlidersHorizontal, Sparkles, Star, Ticket, Trophy, UserRound,
   UserRoundPlus, Users, Wallet, X, Zap, Mail, Phone, PhoneCall, Globe, LockKeyhole, Eye,
-  CircleHelp, MapPinned, Medal, BellRing, Percent, Dumbbell, ClipboardList, Gamepad2, Mountain, Route, Images, Video, PersonStanding, ShoppingBag, ShoppingCart, Package, Truck, Trash2, ArrowDown, Download,
+  CircleHelp, MapPinned, Medal, BellRing, Percent, Dumbbell, ClipboardList, Gamepad2, Mountain, Route, Images, Video, PersonStanding, ShoppingBag, ShoppingCart, Package, Truck, Trash2, ArrowDown, Download, Backpack, Bath, Droplet, CarFront, Lightbulb, HeartPulse, Armchair, House,
 } from 'lucide-react'
 import { QRCodeCanvas } from 'qrcode.react'
 import { readDemo, writeDemo } from './services/demoStore'
@@ -17,7 +17,21 @@ import { fetchPublishedTurfs, mediaUrl } from './services/sharedContentApi'
 const RATE_PER_HOUR = 800
 const BOOKING_KEY = 'bookings'
 const INVITE_KEY = 'playerInvites'
-const SPORTS = ['All', 'Football', 'Cricket', 'Badminton', 'Running', 'Pickleball', 'Paintball', 'Boxing']
+const SPORTS = ['All', 'Football', 'Cricket', 'Badminton', 'Running', 'Pickleball', 'Paintball', 'Boxing', 'Swimming', 'Basketball', 'Tennis', 'Volleyball', 'Table Tennis', 'Skating', 'Hockey', 'Futsal', 'Squash', 'Silambam', 'Karate', 'Athletics']
+const DEMO_VENUE_AMENITIES = ['Equipments (Free)', 'Bring your own equipment', 'Washroom', 'Drinking water', 'Parking', 'Flood lights', 'First Aid', 'Seating Lounge']
+
+function getAmenityIcon(amenity) {
+  const value = String(amenity || '').toLowerCase()
+  if (/equipment.*free|equipments/.test(value)) return Dumbbell
+  if (/bring.*equipment|own equipment/.test(value)) return Backpack
+  if (/washroom|toilet|restroom/.test(value)) return Bath
+  if (/drinking water|water/.test(value)) return Droplet
+  if (/parking/.test(value)) return CarFront
+  if (/flood light|lighting/.test(value)) return Lightbulb
+  if (/first aid|medical/.test(value)) return HeartPulse
+  if (/seating|lounge/.test(value)) return Armchair
+  return Check
+}
 const SHOP_CATEGORIES = ['All gear', 'Cricket', 'Football', 'Badminton', 'Pickleball', 'Boxing', 'Training']
 const SHOP_PRODUCTS = [
   { id: 'cricket-bat-pro', name: 'Pro Cricket Bat', category: 'Cricket', price: 2899, compareAt: 3499, badge: 'Bestseller', icon: Trophy, tone: 'bat', description: 'Practice and match-ready bat for club play.' , image: 'https://www.gray-nicolls.co.uk/cdn/shop/files/CAAB26EnglishWillowBatsLegendPLATINUMEdition_FaceRight.jpg?v=1760957000&width=1600'},
@@ -61,6 +75,40 @@ const cleanMapLocation = value => {
     .trim()
 }
 
+let sportiGoogleMapsPromise = null
+function loadSportiGoogleMaps() {
+  const key = String(import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '').trim()
+  if (!key) return Promise.reject(new Error('Google Maps API key is not configured'))
+  if (window.google?.maps?.importLibrary) return Promise.resolve(window.google.maps)
+  if (!sportiGoogleMapsPromise) {
+    sportiGoogleMapsPromise = new Promise((resolve, reject) => {
+      const existing = document.getElementById('sportiland-google-maps-script')
+      if (existing) {
+        existing.addEventListener('load', () => window.google?.maps?.importLibrary ? resolve(window.google.maps) : reject(new Error('Google Maps library unavailable')), { once: true })
+        existing.addEventListener('error', () => reject(new Error('Google Maps script failed to load')), { once: true })
+        return
+      }
+      const script = document.createElement('script')
+      script.id = 'sportiland-google-maps-script'
+      script.async = true
+      script.defer = true
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&v=weekly`
+      script.onload = () => window.google?.maps?.importLibrary ? resolve(window.google.maps) : reject(new Error('Google Maps library unavailable'))
+      script.onerror = () => reject(new Error('Google Maps script failed to load'))
+      document.head.appendChild(script)
+    })
+  }
+  return sportiGoogleMapsPromise
+}
+function googleVenueNameScore(venueName, resultName) {
+  const normalize = value => String(value || '').toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(Boolean)
+  const left = new Set(normalize(venueName))
+  const right = new Set(normalize(resultName))
+  if (!left.size || !right.size) return 0
+  const intersection = [...left].filter(token => right.has(token)).length
+  return intersection / new Set([...left, ...right]).size
+}
+
 const googleMapsDirectionsUrl = venue => {
   const address = cleanMapLocation(venue.address)
   const area = cleanMapLocation(venue.area).split(/[·|]/)[0].trim()
@@ -77,12 +125,13 @@ const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${Stri
 const dateISO = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
 const prettyDate = value => new Date(`${value}T00:00:00`).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
 const prettyTime = value => { const [hh, mm] = value.split(':').map(Number); return `${hh % 12 || 12}:${String(mm).padStart(2,'0')} ${hh >= 12 ? 'PM' : 'AM'}` }
+const addHoursToTime = (value, hours) => { const [hh, mm] = value.split(':').map(Number); const total = hh * 60 + mm + hours * 60; return `${String(Math.floor(total / 60)).padStart(2,'0')}:${String(total % 60).padStart(2,'0')}` }
 const addDays = (date, count) => { const d = new Date(date); d.setDate(d.getDate() + count); return d }
 const seedDateSlots = (venueId, date) => {
   // Deterministic demo occupancy. This is intentionally labelled as sample inventory.
   const seed = [...`${venueId}-${date}`].reduce((sum, char) => sum + char.charCodeAt(0), 0)
-  const times = Array.from({ length: 16 }, (_, i) => `${String(i + 6).padStart(2,'0')}:00`)
-  return times.map((time, i) => ({ time, sampleBooked: ((seed + i * 7) % 11) === 2 || ((seed + i * 13) % 17) === 3 }))
+  const times = Array.from({ length: 32 }, (_, i) => `${String(6 + Math.floor(i / 2)).padStart(2,'0')}:${i % 2 ? '30' : '00'}`)
+  return times.map((time, i) => ({ time, sampleBooked: ((seed + i * 7) % 13) === 2 || ((seed + i * 13) % 19) === 3 }))
 }
 const startOfWeek = date => { const d = new Date(date); const day = (d.getDay() + 6) % 7; d.setDate(d.getDate() - day); d.setHours(0,0,0,0); return d }
 const tournamentEvents = () => {
@@ -126,13 +175,13 @@ const buildAdventureEvents = () => [
     date: '2026-12-04', dateLabel: 'Friday, 4 December 2026', startTime: 'Flag-off · 4:00 PM',
     duration: '600 km · ACP-sanctioned brevet',
     description: 'A 600 km Audax India brevet starting in Madurai. The official event page identifies the ride as ALAI 600.',
-    priceLabel: '₹1,750', priceNote: 'Displayed event fee; official page shows ₹2,000 as the earlier price', fee: 1750,
+    priceLabel: '₹1,750', priceNote: 'Official Audax India event page · listed fee per rider', fee: 1750,
     options: ['600 km brevet', 'Audax / ACP sanctioned', 'Long-distance endurance ride'],
     eventNotes: [
       'Registration closes on 30 November 2026 at 11:55 PM.',
-      'An early-bird offer is listed until 15 November 2026 at 11:55 PM for the first 25 registrations; check the organiser page for eligibility and current price.',
+      'The public event page lists registration closing on 30 November 2026 at 11:55 PM. Confirm availability and the current checkout amount on the organiser page.',
       'Flag-off is listed for 4:00 PM from Flying Wheels – The Cyclist Hub, Madurai.',
-      'Ride name: ALAI 600. Follow the official route map, ACP rules and Audax India rules.'
+      'Ride name: ALAI 600. The official page lists a ₹1,750 entry fee. Follow the route map, ACP rules and Audax India rules.'
     ],
     registrationNote: 'The official page lists registration through Audax India. Availability and the amount charged at checkout may change.',
     officialUrl: 'https://www.audaxindia.in/event-e-10515',
@@ -147,12 +196,12 @@ const buildAdventureEvents = () => [
     date: '2026-12-17', dateLabel: 'Thursday, 17 December 2026', startTime: 'Flag-off · 6:00 AM',
     duration: '1,000 km · ACP-sanctioned brevet',
     description: 'A 1,000 km Audax India brevet from Madurai, listed under the route name Enchanting South V2. Intended for experienced endurance riders.',
-    priceLabel: '₹3,500', priceNote: 'Displayed event fee; official page shows ₹4,000 as the earlier price', fee: 3500,
+    priceLabel: '₹3,600', priceNote: 'Official Audax India event page · listed fee per rider', fee: 3600,
     options: ['1,000 km brevet', 'Audax / ACP sanctioned', 'Experienced endurance riders'],
     eventNotes: [
       'Registration closes on 14 December 2026 at 11:55 PM.',
       'Flag-off is listed for 6:00 AM from Flying Wheels – The Cyclist Hub, Madurai.',
-      'Ride name: Enchanting South V2. The official page currently displays ₹3,500 as the event fee.',
+      'Ride name: Enchanting South V2. The official event page lists a ₹3,600 entry fee.',
       'Review the route instructions and the Audax India / ACP rules carefully before entry. Plan for a multi-day endurance ride.'
     ],
     registrationNote: 'Registration and payment are handled on the official Audax India page. Confirm the final fee and entry availability before payment.',
@@ -184,6 +233,25 @@ const buildAdventureEvents = () => [
     whatToCarry: ['Small daypack', 'Hiking boots or trail shoes', 'Reusable water bottle', 'Quick-dry clothing', 'Personal medication and ID', 'Sun / rain protection'],
     officialUrl: 'https://trektamilnadu.com/trail/thadagai-trail-kutladampatti-falls-sotharu',
     registrationUrl: 'https://trektamilnadu.com/trail/thadagai-trail-kutladampatti-falls-sotharu',
+    actionLabel: 'Check dates & book officially', sourceLabel: 'Trek Tamil Nadu · official trail page'
+  },
+  {
+    id: 'trek-kutladampatti-thadagai-easy-madurai', kind: 'Trekking', title: 'Kutladampatti Falls · Thadagai Easy Trail',
+    image: '/assets/events/kutladampatti-waterfall.webp',
+    organiser: 'Trek Tamil Nadu · Tamil Nadu Forest Department / TNWEC',
+    location: 'Kutladampatti · Madurai district (around 30 km from Madurai)',
+    date: null, dateLabel: 'Choose an available date on the official booking page',
+    startTime: 'Select the available slot on the official portal', duration: 'Easy trail · 4 km round trip · around 2 hours', difficulty: 'Easy',
+    description: 'A shorter guided forest-and-waterfall experience near Madurai, listed by the official Trek Tamil Nadu portal.',
+    priceLabel: '₹699 + 5% GST', priceNote: 'Official listed price for the easy 4 km trail · per person', fee: 699,
+    options: ['Easy', '4 km · around 2 hours', 'Forest stream and waterfall landscape'],
+    highlights: ['The official trail listing describes a 4 km two-way route with an approximate two-hour duration.', 'The trail is in the Kutladampatti Falls–Thadagai area, around 30 km from Madurai.'],
+    eventNotes: ['No fixed departure date is published in the public listing. Choose an available date and slot on the official portal.', 'The portal lists the easy trail at ₹699 plus 5% GST per person. Check the latest date availability and final amount before booking.', 'Bathing is prohibited at the trail and waterfall area; follow forest guide instructions.'],
+    inclusions: ['Trek permit fee', 'Guide service', 'Trek insurance within the route', 'Light refreshments / snacks'],
+    exclusions: ['Transport to the reception point', 'Anything not listed in the official inclusions'],
+    whatToCarry: ['Small daypack', 'Trail shoes', 'Reusable water bottle', 'Quick-dry clothing', 'Personal medication and ID', 'Sun / rain protection'],
+    officialUrl: 'https://trektamilnadu.com/public/trail/kutladampatti-falls-thadagai-trail-easy-trek',
+    registrationUrl: 'https://trektamilnadu.com/public/trail/kutladampatti-falls-thadagai-trail-easy-trek',
     actionLabel: 'Check dates & book officially', sourceLabel: 'Trek Tamil Nadu · official trail page'
   },
   {
@@ -314,11 +382,22 @@ function App() {
   const [page, setPage] = useState('discover')
   const pageHistoryRef = useRef([])
   const [mobileNav, setMobileNav] = useState(false)
-  const [sportsMenuOpen, setSportsMenuOpen] = useState(false)
+  const [mobileNavCompact, setMobileNavCompact] = useState(false)
+  const [activeNavMenu, setActiveNavMenu] = useState('')
+  const [motionMenuDirection, setMotionMenuDirection] = useState(1)
+  const [motionViewportX, setMotionViewportX] = useState(null)
+  const motionNavigationRef = useRef(null)
+  const motionMenuCloseTimer = useRef(null)
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false)
+  const profileMenuRef = useRef(null)
   const [search, setSearch] = useState('')
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
   const [sport, setSport] = useState('All')
   const [area, setArea] = useState('All areas')
+  const [headerLocation, setHeaderLocation] = useState(() => { const saved = readDemo('customerLocation', 'Madurai, Tamil Nadu'); return saved === 'Current location' ? 'Madurai, Tamil Nadu' : saved })
+  const [locationCoordinates, setLocationCoordinates] = useState(null)
   const [selectedVenue, setSelectedVenue] = useState(null)
+  const [venueDetail, setVenueDetail] = useState(null)
   const [bookingDate, setBookingDate] = useState(todayISO())
   const [duration, setDuration] = useState(1)
   const [selectedTime, setSelectedTime] = useState('')
@@ -345,7 +424,69 @@ function App() {
   const [announcementTarget, setAnnouncementTarget] = useState(null)
   const baseVenuesRef = useRef([])
   const publishedTurfsRef = useRef([])
-  const adventureEvents = useMemo(() => buildAdventureEvents(), [])
+  const adventureEvents = useMemo(() => buildAdventureEvents().filter(event => !event.date || event.date >= todayISO()), [])
+
+  useEffect(() => {
+    if (!activeNavMenu) {
+      setMotionViewportX(null)
+      return undefined
+    }
+    const root = motionNavigationRef.current
+    if (!root) return undefined
+    let frame = 0
+    const updatePosition = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        const currentRoot = motionNavigationRef.current
+        const trigger = currentRoot?.querySelector(`[data-motion-value="${activeNavMenu}"]`)
+        if (!currentRoot || !trigger) return
+        const rootRect = currentRoot.getBoundingClientRect()
+        const triggerRect = trigger.getBoundingClientRect()
+        const viewportWidth = Math.min(840, window.innerWidth - 36)
+        let center = triggerRect.left - rootRect.left + triggerRect.width / 2
+        const globalLeft = rootRect.left + center - viewportWidth / 2
+        const globalRight = globalLeft + viewportWidth
+        if (globalLeft < 18) center += 18 - globalLeft
+        else if (globalRight > window.innerWidth - 18) center -= globalRight - (window.innerWidth - 18)
+        setMotionViewportX(center)
+      })
+    }
+    updatePosition()
+    const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(updatePosition) : null
+    observer?.observe(root)
+    window.addEventListener('resize', updatePosition)
+    return () => {
+      cancelAnimationFrame(frame)
+      observer?.disconnect()
+      window.removeEventListener('resize', updatePosition)
+    }
+  }, [activeNavMenu])
+
+  useEffect(() => {
+    const handlePointerDown = event => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) setProfileMenuOpen(false)
+      if (motionNavigationRef.current && !motionNavigationRef.current.contains(event.target)) {
+        if (motionMenuCloseTimer.current) window.clearTimeout(motionMenuCloseTimer.current)
+        motionMenuCloseTimer.current = null
+        setActiveNavMenu('')
+      }
+    }
+    const handleKeyDown = event => {
+      if (event.key === 'Escape') {
+        setProfileMenuOpen(false)
+        if (motionMenuCloseTimer.current) window.clearTimeout(motionMenuCloseTimer.current)
+        motionMenuCloseTimer.current = null
+        setActiveNavMenu('')
+      }
+    }
+    document.addEventListener('pointerdown', handlePointerDown)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown)
+      document.removeEventListener('keydown', handleKeyDown)
+      if (motionMenuCloseTimer.current) window.clearTimeout(motionMenuCloseTimer.current)
+    }
+  }, [])
 
   // Browsing is public. Restore a server-authenticated customer only when a valid
   // HttpOnly SportiLand session cookie already exists.
@@ -392,6 +533,7 @@ function App() {
   useEffect(() => writeDemo('adventureRegistrations', adventureRegistrations), [adventureRegistrations])
   useEffect(() => writeDemo('shopCart', shopCart), [shopCart])
   useEffect(() => writeDemo('shopOrders', shopOrders), [shopOrders])
+  useEffect(() => writeDemo('customerLocation', headerLocation === 'Current location' ? 'Madurai, Tamil Nadu' : headerLocation), [headerLocation])
   useEffect(() => { if (!toast) return; const timer = setTimeout(() => setToast(''), 3000); return () => clearTimeout(timer) }, [toast])
   useEffect(() => {
     const openTerms = () => {
@@ -437,6 +579,24 @@ function App() {
     }
   }, [page])
   useEffect(() => {
+    // Mobile quick navigation follows scroll direction: compact while moving down,
+    // return to the labelled pill when moving up or when the page reaches the top.
+    let previousY = Math.max(0, window.scrollY || 0)
+    const onDirectionScroll = () => {
+      const currentY = Math.max(0, window.scrollY || 0)
+      if (currentY <= 28) setMobileNavCompact(false)
+      else if (currentY > previousY + 5) setMobileNavCompact(true)
+      else if (currentY < previousY - 5) setMobileNavCompact(false)
+      previousY = currentY
+    }
+    window.addEventListener('scroll', onDirectionScroll, { passive: true })
+    window.addEventListener('pageshow', onDirectionScroll)
+    return () => {
+      window.removeEventListener('scroll', onDirectionScroll)
+      window.removeEventListener('pageshow', onDirectionScroll)
+    }
+  }, [])
+  useEffect(() => {
     const nodes = Array.from(document.querySelectorAll('.experiment-shell [data-exp-reveal]'))
     if (!nodes.length) return undefined
     if (!('IntersectionObserver' in window)) {
@@ -457,8 +617,11 @@ function App() {
   const areas = useMemo(() => ['All areas', ...Array.from(new Set(venues.map(v => (v.area || '').split('·')[0].trim()).filter(Boolean))).sort()], [venues])
   const filteredVenues = useMemo(() => venues.filter(v => {
     const haystack = `${v.name} ${v.area} ${v.address} ${(v.sports || []).join(' ')}`.toLowerCase()
-    const matchesSearch = haystack.includes(search.toLowerCase())
-    const matchesSport = sport === 'All' || (v.sports || []).some(s => s.toLowerCase() === sport.toLowerCase())
+    // Match every query word independently so searches such as "JP Nagar football" work.
+    const searchTerms = search.trim().toLowerCase().split(/\s+/).filter(Boolean)
+    const matchesSearch = searchTerms.every(term => haystack.includes(term))
+    const selectedSports = Array.isArray(sport) ? sport : (sport === 'All' ? [] : [sport])
+    const matchesSport = !selectedSports.length || (v.sports || []).some(s => selectedSports.some(selected => s.toLowerCase() === selected.toLowerCase()))
     const matchesArea = area === 'All areas' || (v.area || '').toLowerCase().includes(area.toLowerCase())
     return matchesSearch && matchesSport && matchesArea
   }), [venues, search, sport, area])
@@ -466,8 +629,28 @@ function App() {
   const filteredBookings = customerBookings.filter(b => bookingFilter === 'All' || b.status === bookingFilter)
   const tournaments = useMemo(() => tournamentEvents().filter(e => tournamentSport === 'All' || e.sport === tournamentSport), [tournamentSport])
   const myInviteIds = new Set(invites.filter(i => i.customerId === user?.id).map(i => i.playerId))
+  const headerLocationOptions = [
+    { value: 'Madurai, Tamil Nadu', label: 'Madurai', description: 'All areas in Madurai' },
+    ...areas.filter(item => item !== 'All areas').map(item => ({ value: item, label: item, description: 'Madurai locality' })),
+    { value: '__current__', label: 'Use my location', description: 'Use your device location' }
+  ]
 
   function notify(message) { setToast(message) }
+  function chooseHeaderLocation(value) {
+    if (value === '__current__') {
+      if (!navigator.geolocation) { notify('Location access is not supported by this browser.'); return }
+      navigator.geolocation.getCurrentPosition(position => {
+        setLocationCoordinates({ lat: position.coords.latitude, lng: position.coords.longitude })
+        setHeaderLocation('Current location')
+        setArea('All areas')
+        notify('Using your current location for venue distances.')
+      }, () => notify('Location permission was not granted. Choose a Madurai area instead.'), { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 })
+      return
+    }
+    setLocationCoordinates(null)
+    setHeaderLocation(value)
+    setArea(value === 'Madurai, Tamil Nadu' ? 'All areas' : value)
+  }
   function updateAuth(key, value) { setAuthForm(prev => ({ ...prev, [key]: value })) }
   function continueAsDemoCustomer() {
     const demoAccount = {
@@ -553,7 +736,8 @@ function App() {
     pendingAuthAction.current = null
     notify('You have been signed out.')
   }
-  function openVenue(venue) { setSelectedVenue(venue); setBookingDate(todayISO()); setDuration(1); setSelectedTime(''); setCoupon(''); setAppliedCoupon(null); setCouponError(''); setCheckout(false) }
+  function openVenue(venue) { setVenueDetail(venue); if (page !== 'venue') pageHistoryRef.current.push(page); setPage('venue'); setMobileNav(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+  function startVenueBooking(venue) { setSelectedVenue(venue); setBookingDate(todayISO()); setDuration(1); setSelectedTime(''); setCoupon(''); setAppliedCoupon(null); setCouponError(''); setCheckout(false) }
   function getPrice() {
     const subtotal = duration * RATE_PER_HOUR
     let discountPercent = 0
@@ -582,14 +766,24 @@ function App() {
     const base = seedDateSlots(venue.id, date)
     const bookingsForDate = bookedForVenueDate(venue.id, date)
     const starts = base.filter(slot => {
-      const startHour = Number(slot.time.slice(0,2))
-      const range = Array.from({ length: hours }, (_,i) => `${String(startHour+i).padStart(2,'0')}:00`)
+      const [startHour, startMinute] = slot.time.split(':').map(Number)
+      const startMinutes = startHour * 60 + startMinute
+      const range = Array.from({ length: hours * 2 }, (_, i) => {
+        const minute = startMinutes + i * 30
+        return `${String(Math.floor(minute / 60)).padStart(2,'0')}:${String(minute % 60).padStart(2,'0')}`
+      })
       const hasSampleConflict = range.some(t => base.find(s => s.time === t)?.sampleBooked)
       const overlaps = bookingsForDate.some(b => {
-        const bStart = Number(b.time.slice(0,2)); const bEnd = bStart + b.duration
-        return range.some(t => { const h = Number(t.slice(0,2)); return h >= bStart && h < bEnd })
+        const [bookedHour, bookedMinute] = String(b.time).split(':').map(Number)
+        const bookedStart = bookedHour * 60 + (bookedMinute || 0)
+        const bookedEnd = bookedStart + b.duration * 60
+        return range.some(t => {
+          const [slotHour, slotMinute] = t.split(':').map(Number)
+          const slotMinutes = slotHour * 60 + slotMinute
+          return slotMinutes >= bookedStart && slotMinutes < bookedEnd
+        })
       })
-      return startHour + hours <= 22 && !hasSampleConflict && !overlaps
+      return startMinutes + hours * 60 <= 22 * 60 && !hasSampleConflict && !overlaps
     })
     return base.map(slot => ({ ...slot, available: starts.some(s => s.time === slot.time) }))
   }
@@ -710,7 +904,8 @@ function App() {
     if (item.page !== page) pageHistoryRef.current.push(page)
     setPage(item.page)
     setMobileNav(false)
-    setSportsMenuOpen(false)
+    setMobileNavCompact(false)
+    setActiveNavMenu('')
     window.scrollTo({ top: 0, behavior: 'auto' })
     if (item.page === 'discover' && item.sport) {
       window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
@@ -724,8 +919,10 @@ function App() {
     { id: 'bookings', label: 'My bookings', icon: CalendarDays },
     { id: 'players', label: 'Find players', icon: Users },
     { id: 'tournaments', label: 'Tournaments', icon: Trophy },
+    { id: 'matches', label: 'Book Tickets', icon: Ticket },
     { id: 'events', label: 'Events & adventures', icon: Route },
     { id: 'shop', label: 'Shop', icon: ShoppingBag },
+    { id: 'offers', label: 'Coupons & offers', icon: Percent },
     { id: 'profile', label: 'My profile', icon: UserRound },
     { id: 'terms', label: 'Terms & Conditions', icon: FileText }
   ]
@@ -734,7 +931,8 @@ function App() {
     const previousPage = pageHistoryRef.current.pop() || 'discover'
     setPage(previousPage)
     setMobileNav(false)
-    setSportsMenuOpen(false)
+    setActiveNavMenu('')
+    setProfileMenuOpen(false)
     setAnnouncementTarget(null)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -744,7 +942,9 @@ function App() {
       if (id !== page) pageHistoryRef.current.push(page)
       setPage(id)
       setMobileNav(false)
-      setSportsMenuOpen(false)
+      setMobileNavCompact(false)
+      setActiveNavMenu('')
+      setProfileMenuOpen(false)
       setAnnouncementTarget(null)
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
@@ -757,10 +957,65 @@ function App() {
     setArea('All areas')
     if (page !== 'discover') pageHistoryRef.current.push(page)
     setPage('discover')
-    setSportsMenuOpen(false)
+    setActiveNavMenu('')
+    setProfileMenuOpen(false)
     setMobileNav(false)
+    setMobileNavCompact(false)
     window.setTimeout(() => document.getElementById('venue-directory')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60)
   }
+
+  const motionMenuOrder = ['sports', 'events', 'tournaments', 'matches', 'players', 'shop']
+  function cancelMotionMenuClose() {
+    if (motionMenuCloseTimer.current) window.clearTimeout(motionMenuCloseTimer.current)
+    motionMenuCloseTimer.current = null
+  }
+  function scheduleMotionMenuClose() {
+    cancelMotionMenuClose()
+    motionMenuCloseTimer.current = window.setTimeout(() => {
+      setActiveNavMenu('')
+      motionMenuCloseTimer.current = null
+    }, 260)
+  }
+  function openMotionMenu(value) {
+    if (!value) return
+    cancelMotionMenuClose()
+    if (activeNavMenu && activeNavMenu !== value) {
+      setMotionMenuDirection(motionMenuOrder.indexOf(value) >= motionMenuOrder.indexOf(activeNavMenu) ? 1 : -1)
+    }
+    setActiveNavMenu(value)
+  }
+  function toggleMotionMenu(value) {
+    if (activeNavMenu === value) setActiveNavMenu('')
+    else openMotionMenu(value)
+  }
+
+  const motionMenuPanel = (() => {
+    if (activeNavMenu === 'sports') return <div className="motion-nav-layout">
+      <aside className="motion-nav-intro"><span>CHOOSE YOUR GAME</span><h3>Find your kind of play.</h3><p>Explore sports and discover places to play across Madurai.</p><button type="button" onClick={() => { setActiveNavMenu(''); navigatePage('discover'); window.setTimeout(() => document.getElementById('venue-directory')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80) }}>Browse venues <ArrowUpRight size={15}/></button></aside>
+      <div className="motion-nav-grid sports-grid">{SPORTS.slice(1).map(item => <button className="motion-nav-option" key={item} type="button" onClick={() => chooseExperimentSport(item)}><span>{item}</span><small>{venues.filter(v => (v.sports || []).some(value => value.toLowerCase() === item.toLowerCase())).length} venue listings</small><ArrowUpRight size={14}/></button>)}</div>
+    </div>
+    if (activeNavMenu === 'events') return <div className="motion-nav-layout">
+      <aside className="motion-nav-intro"><span>OUT THERE, AROUND HERE</span><h3>Events & adventures.</h3><p>Discover cycling brevets, guided trails and outdoor experiences around Madurai.</p><button type="button" onClick={() => navigatePage('events')}>Explore all events <ArrowUpRight size={15}/></button></aside>
+      <div className="motion-nav-grid event-grid">{adventureEvents.slice(0, 3).map(item => <button className="motion-nav-event" key={item.id} type="button" onClick={() => navigateFromAnnouncement({ page: 'events', id: item.id, title: item.title })}><img src={item.image} alt=""/><span><small>{item.kind} · {item.date ? prettyDate(item.date) : 'Date selection'}</small><strong>{item.title}</strong><em>{item.location}</em></span><ArrowUpRight size={14}/></button>)}</div>
+    </div>
+    if (activeNavMenu === 'tournaments') return <div className="motion-nav-layout">
+      <aside className="motion-nav-intro"><span>PLAY TOGETHER</span><h3>Local tournaments.</h3><p>Team competitions, doubles formats and friendly challenges.</p><button type="button" onClick={() => navigatePage('tournaments')}>View tournaments <ArrowUpRight size={15}/></button><small className="motion-nav-demo-note">Some schedules are demo previews.</small></aside>
+      <div className="motion-nav-grid tournament-grid-menu">{tournaments.slice(0, 4).map(item => <button className="motion-nav-option" key={item.id} type="button" onClick={() => { setTournamentSport(item.sport); navigatePage('tournaments') }}><span>{item.title}</span><small>{item.sport} · {prettyDate(item.date)} · {item.time}</small><ArrowUpRight size={14}/></button>)}</div>
+    </div>
+    if (activeNavMenu === 'matches') return <div className="motion-nav-layout">
+      <aside className="motion-nav-intro"><span>FEEL THE GAME DAY</span><h3>Book match tickets.</h3><p>Browse match-ticket previews across sports and keep your QR pass in one place.</p><button type="button" onClick={() => navigatePage('matches')}>Find a match <ArrowUpRight size={15}/></button><small className="motion-nav-demo-note">Fixture previews are sample data until connected to an organiser.</small></aside>
+      <div className="motion-nav-grid quick-sports-grid">{['Football', 'Cricket', 'Badminton', 'Basketball', 'Volleyball', 'Hockey'].map(item => <button className="motion-nav-option" key={item} type="button" onClick={() => navigatePage('matches')}><span>{item}</span><small>Match tickets</small><Ticket size={14}/></button>)}</div>
+    </div>
+    if (activeNavMenu === 'players') return <div className="motion-nav-layout">
+      <aside className="motion-nav-intro"><span>MEET YOUR TEAM</span><h3>Find players.</h3><p>Connect with nearby players, find a crew and organise your next game.</p><button type="button" onClick={() => navigatePage('players')}>Find players <ArrowUpRight size={15}/></button></aside>
+      <div className="motion-nav-grid quick-sports-grid">{['Football', 'Cricket', 'Badminton', 'Pickleball', 'Basketball', 'Tennis'].map(item => <button className="motion-nav-option" key={item} type="button" onClick={() => { setPlayerSport(item); navigatePage('players') }}><span>{item}</span><small>Find local players</small><Users size={14}/></button>)}</div>
+    </div>
+    if (activeNavMenu === 'shop') return <div className="motion-nav-layout">
+      <aside className="motion-nav-intro"><span>SPORTI LAND SHOP</span><h3>Gear up to play.</h3><p>Explore equipment for training, match day and your favourite sport.</p><button type="button" onClick={() => navigatePage('shop')}>Visit the shop <ArrowUpRight size={15}/></button></aside>
+      <div className="motion-nav-grid quick-sports-grid">{SHOP_CATEGORIES.map(item => <button className="motion-nav-option" key={item} type="button" onClick={() => navigatePage('shop')}><span>{item}</span><small>{item === 'All gear' ? `${SHOP_PRODUCTS.length} products` : 'Explore equipment'}</small><ShoppingBag size={14}/></button>)}</div>
+    </div>
+    return null
+  })()
 
   return <div className="customer-shell experiment-shell">
     <div className="experiment-scroll-progress" aria-hidden="true"/>
@@ -772,45 +1027,107 @@ function App() {
       <div className="experiment-page-controls" aria-label="Page navigation">
         <button className="experiment-page-control" type="button" onClick={navigateBack} disabled={pageHistoryRef.current.length === 0} aria-label="Go back" title="Go back"><ChevronLeft size={16}/><span>Back</span></button>
       </div>
-      <nav className="experiment-nav" aria-label="Main navigation">
+      <nav
+        className={`experiment-nav motion-navigation-root ${activeNavMenu ? 'has-open-menu' : ''}`}
+        aria-label="Main navigation"
+        ref={motionNavigationRef}
+        onPointerEnter={cancelMotionMenuClose}
+        onPointerLeave={event => { if (event.pointerType !== 'touch') scheduleMotionMenuClose() }}
+      >
         <button className={`experiment-nav-link ${page === 'discover' ? 'active' : ''}`} onClick={() => navigatePage('discover')}>Home</button>
-        <div className={`experiment-sports-nav ${sportsMenuOpen ? 'open' : ''}`}>
-          <button className="experiment-nav-link" type="button" aria-expanded={sportsMenuOpen} onClick={() => setSportsMenuOpen(value => !value)}>Sports <ChevronDown size={15}/></button>
-          {sportsMenuOpen && <div className="experiment-mega-menu">
-            <div className="experiment-mega-intro"><span className="section-kicker">FIND YOUR KIND OF PLAY</span><strong>Pick a sport.<br/>Find your place.</strong><p>Explore local facilities across Madurai.</p></div>
-            <div className="experiment-mega-options">{SPORTS.slice(1).map(item => <button key={item} type="button" onClick={() => chooseExperimentSport(item)}><span>{item}</span><small>{venues.filter(v => (v.sports || []).some(value => value.toLowerCase() === item.toLowerCase())).length} listings</small><ArrowUpRight size={15}/></button>)}</div>
-          </div>}
+        {[
+          { value: 'sports', label: 'Sports' },
+          { value: 'events', label: 'Events & adventures' },
+          { value: 'tournaments', label: 'Tournaments' },
+          { value: 'matches', label: 'Book Tickets', icon: Ticket },
+          { value: 'players', label: 'Find players' },
+          { value: 'shop', label: 'Shop', icon: ShoppingBag }
+        ].map(item => {
+          const Icon = item.icon
+          const current = activeNavMenu === item.value
+          return <button
+            key={item.value}
+            className={`experiment-nav-link motion-nav-trigger ${current ? 'menu-open' : ''} ${page === item.value ? 'active' : ''}`}
+            type="button"
+            aria-expanded={current}
+            aria-haspopup="true"
+            data-motion-value={item.value}
+            onPointerEnter={event => { if (event.pointerType === 'mouse') openMotionMenu(item.value) }}
+            onFocus={() => openMotionMenu(item.value)}
+            onClick={() => {
+              if (window.matchMedia?.('(hover: hover) and (pointer: fine)').matches) openMotionMenu(item.value)
+              else toggleMotionMenu(item.value)
+            }}
+          >{item.label}{Icon && <Icon size={13}/>}<ChevronDown className="motion-menu-chevron" size={13}/></button>
+        })}
+        <div
+          className={`motion-nav-viewport ${activeNavMenu ? 'is-open' : ''}`}
+          aria-hidden={!activeNavMenu}
+          style={{ left: motionViewportX === null ? '50%' : `${motionViewportX}px` }}
+          onPointerEnter={cancelMotionMenuClose}
+          onPointerLeave={event => { if (event.pointerType !== 'touch') scheduleMotionMenuClose() }}
+        >
+          <div key={activeNavMenu || 'closed'} className="motion-nav-panel" data-direction={motionMenuDirection < 0 ? 'backward' : 'forward'}>{motionMenuPanel}</div>
         </div>
-        <button className={`experiment-nav-link ${page === 'events' ? 'active' : ''}`} onClick={() => navigatePage('events')}>Events & adventures</button>
-        <button className={`experiment-nav-link ${page === 'tournaments' ? 'active' : ''}`} onClick={() => navigatePage('tournaments')}>Tournaments</button>
-        <button className={`experiment-nav-link ${page === 'players' ? 'active' : ''}`} onClick={() => navigatePage('players')}>Find players</button>
-        <button className={`experiment-nav-link ${page === 'shop' ? 'active' : ''}`} onClick={() => navigatePage('shop')}>Shop <ShoppingBag size={14}/>{shopCart.reduce((sum, item) => sum + item.quantity, 0) > 0 && <b className="shop-nav-count">{shopCart.reduce((sum, item) => sum + item.quantity, 0)}</b>}</button>
       </nav>
       <div className="experiment-top-actions">
-        <button className="experiment-search-shortcut" type="button" onClick={() => { if (page !== 'discover') navigatePage('discover'); window.setTimeout(() => document.getElementById('venue-search')?.focus(), 80) }}><Search size={16}/><span>Search venues</span><kbd>/</kbd></button>
-        {user ? <div className="dropdown customer-account-dropdown experiment-account"><button className="profile-mini dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span className="avatar">{(user.name || user.username || 'C').slice(0,1).toUpperCase()}</span><strong>{user.name || user.username}</strong></button><ul className="dropdown-menu dropdown-menu-end"><li><button className="dropdown-item" type="button" onClick={() => navigatePage('profile')}>My profile</button></li><li><button className="dropdown-item" type="button" onClick={() => navigatePage('bookings')}>My bookings</button></li><li><button className="dropdown-item" type="button" onClick={() => navigatePage('terms')}>Terms &amp; Conditions</button></li><li><hr className="dropdown-divider"/></li><li><button className="dropdown-item text-danger" type="button" onClick={logout}>Sign out</button></li></ul></div> : <><span className="guest-status">Browsing as guest</span><button className="guest-signin-btn" type="button" onClick={() => openCustomerAuth()}>Sign in</button></>}
+        <div className="experiment-header-location"><MapPin size={16}/><BootstrapDropdown label="Location" value={headerLocation === 'Current location' ? '__current__' : headerLocation} options={headerLocationOptions} onChange={chooseHeaderLocation} searchable placeholder="Choose area" className="experiment-header-area-dropdown"/></div>
+        <button className="experiment-search-shortcut" type="button" aria-label="Search venues" onClick={() => { if (page !== 'discover') navigatePage('discover'); if (window.matchMedia?.('(max-width: 760px)').matches) { setMobileSearchOpen(current => !current); return } window.setTimeout(() => document.getElementById('venue-search')?.focus(), 80) }}><Search size={16}/><span>Search venues</span><kbd>/</kbd></button>
+        <div className={`experiment-profile-menu-wrap ${profileMenuOpen ? 'is-open' : ''}`} ref={profileMenuRef}>
+          <button className="experiment-profile-trigger" type="button" aria-label="Open profile menu" title="Profile" aria-expanded={profileMenuOpen} aria-haspopup="menu" onClick={() => setProfileMenuOpen(value => !value)}>
+            <span className="avatar">{(user?.name || user?.username || 'P').slice(0,1).toUpperCase()}</span><UserRound className="profile-desktop-icon" size={19} aria-hidden="true"/><strong>Profile</strong><ChevronDown size={14}/>
+          </button>
+          {profileMenuOpen && <div className="experiment-profile-menu" role="menu">
+            {[{id:'bookings',label:'My Bookings',icon:CalendarDays},{id:'events',label:'Events & Adventures',icon:Route},{id:'matches',label:'Book Tickets',icon:Ticket},{id:'tournaments',label:'Tournament',icon:Trophy},{id:'players',label:'Find Players',icon:Users},{id:'offers',label:'Offers & Coupons',icon:Percent},{id:'terms',label:'Terms & Conditions',icon:FileText}].map(item => { const Icon=item.icon; return <button key={item.id} type="button" role="menuitem" onClick={() => { setProfileMenuOpen(false); navigatePage(item.id) }}><Icon size={16}/><span>{item.label}</span><ArrowUpRight size={13}/></button> })}
+            {!user ? <button type="button" role="menuitem" onClick={() => { setProfileMenuOpen(false); openCustomerAuth() }}><UserRound size={16}/><span>Sign in / Register</span><ArrowUpRight size={13}/></button> : <button type="button" role="menuitem" onClick={() => { setProfileMenuOpen(false); logout() }}><LogOut size={16}/><span>Sign out</span><ArrowUpRight size={13}/></button>}
+          </div>}
+        </div>
         <button className="experiment-mobile-toggle" type="button" aria-label={mobileNav ? 'Close navigation' : 'Open navigation'} aria-expanded={mobileNav} onClick={() => setMobileNav(value => !value)}>{mobileNav ? <X size={21}/> : <Menu size={21}/>}</button>
       </div>
     </header>
+    {mobileSearchOpen && <div className="mobile-search-overlay" role="search" onMouseDown={event => { if (event.target === event.currentTarget) setMobileSearchOpen(false) }}>
+      <div className="mobile-search-panel-inner">
+        <div className="mobile-search-box">
+          <Search size={17}/>
+          <input autoFocus value={search} onChange={event => setSearch(event.target.value)} placeholder="Search venue, sport or area" aria-label="Search venue, sport or area" onKeyDown={event => { if (event.key === 'Escape') setMobileSearchOpen(false) }}/>
+          <button type="button" aria-label={search.trim() ? 'Clear search' : 'Close search'} onClick={() => { if (search.trim()) setSearch(''); else setMobileSearchOpen(false) }}><X size={17}/></button>
+        </div>
+        <div className="mobile-search-results" aria-live="polite">
+          {search.trim() ? <>
+            <div className="mobile-search-results-heading">{filteredVenues.length} matching {filteredVenues.length === 1 ? 'venue' : 'venues'}</div>
+            {filteredVenues.length ? filteredVenues.slice(0, 8).map(venue => <button className="mobile-search-result" type="button" key={venue.id} onClick={() => { setMobileSearchOpen(false); setSearch(''); openVenue(venue) }}>
+              <span><strong>{venue.name}</strong><small>{venue.area || 'Madurai'}{(venue.sports || []).length ? ` · ${(venue.sports || []).slice(0, 2).join(', ')}` : ''}</small></span><ArrowUpRight size={16}/>
+            </button>) : <div className="mobile-search-empty"><strong>No matching venues found</strong><span>Try a venue name, sport or Madurai area.</span></div>}
+            {filteredVenues.length > 8 && <div className="mobile-search-results-footer">Showing 8 of {filteredVenues.length}. Refine your search to narrow the list.</div>}
+          </> : <div className="mobile-search-empty"><strong>Find your place to play</strong><span>Type a venue name, sport or Madurai area.</span></div>}
+        </div>
+      </div>
+    </div>}
     {mobileNav && <div className="experiment-mobile-panel">
+      <div className="experiment-mobile-location-row"><span><MapPin size={15}/> LOCATION</span><div className="experiment-header-location"><MapPin size={15}/><BootstrapDropdown label="Location" value={headerLocation === 'Current location' ? '__current__' : headerLocation} options={headerLocationOptions} onChange={chooseHeaderLocation} searchable placeholder="Choose area" className="experiment-header-area-dropdown"/></div></div>
+      {!user && <button type="button" onClick={() => { setMobileNav(false); openCustomerAuth() }}>Sign in <ArrowUpRight size={16}/></button>}
       <div className="experiment-mobile-caption">EXPLORE SportiLand</div>
-      {[{id:'discover',label:'Home'},{id:'events',label:'Events & adventures'},{id:'tournaments',label:'Tournaments'},{id:'players',label:'Find players'},{id:'shop',label:'Shop'},{id:'bookings',label:'My bookings'},{id:'profile',label:'My profile'},{id:'terms',label:'Terms & Conditions'}].map(item => <button key={item.id} type="button" onClick={() => navigatePage(item.id)}>{item.label}<ArrowUpRight size={16}/></button>)}
+      {[{id:'discover',label:'Home'},{id:'events',label:'Events & adventures'},{id:'tournaments',label:'Tournaments'},{id:'matches',label:'Book Tickets'},{id:'players',label:'Find players'},{id:'shop',label:'Shop'},{id:'offers',label:'Coupons & offers'},{id:'bookings',label:'My bookings'},{id:'profile',label:'My profile'},{id:'terms',label:'Terms & Conditions'}].map(item => <button key={item.id} type="button" onClick={() => navigatePage(item.id)}>{item.label}<ArrowUpRight size={16}/></button>)}
       <div className="experiment-mobile-caption">SPORTS</div>
       <div className="experiment-mobile-sports">{SPORTS.slice(1).map(item => <button key={item} type="button" onClick={() => chooseExperimentSport(item)}>{item}</button>)}</div>
     </div>}
     <main className="experiment-main">
-      {page !== 'discover' && <div className="experiment-breadcrumb"><button onClick={() => navigatePage('discover')}>SportiLand</button><span>/</span><strong>{nav.find(n => n.id === page)?.label}</strong></div>}
-      {page === 'discover' && <DiscoverPage venues={filteredVenues} total={venues.length} search={search} setSearch={setSearch} sport={sport} setSport={setSport} areas={areas} area={area} setArea={setArea} onOpen={openVenue} onGoPlayers={() => navigatePage('players')} adventureEvents={adventureEvents} onNavigateAnnouncement={navigateFromAnnouncement} onGoPage={navigatePage} />}
+      {page !== 'discover' && <div className="experiment-breadcrumb"><button onClick={() => navigatePage('discover')}>SportiLand</button><span>/</span><strong>{page === 'venue' ? venueDetail?.name || 'Venue details' : nav.find(n => n.id === page)?.label}</strong></div>}
+      {page === 'venue' && venueDetail && <VenueDetailsPage venue={venueDetail} onBack={() => navigatePage('discover')} onBook={() => startVenueBooking(venueDetail)} />}
+      {page === 'discover' && <DiscoverPage venues={filteredVenues} total={venues.length} search={search} setSearch={setSearch} sport={sport} setSport={setSport} areas={areas} area={area} setArea={value => { setArea(value); setLocationCoordinates(null); setHeaderLocation(value === 'All areas' ? 'Madurai, Tamil Nadu' : value) }} onOpen={openVenue} onGoPlayers={() => navigatePage('players')} adventureEvents={adventureEvents} onNavigateAnnouncement={navigateFromAnnouncement} onGoPage={navigatePage} selectedLocation={headerLocation} selectedLocationCoords={locationCoordinates} />}
       {page === 'bookings' && user && <BookingsPage bookings={filteredBookings} filter={bookingFilter} setFilter={setBookingFilter} onCancel={cancelBooking} onOpenPass={openBookingPass} />}
       {page === 'players' && <PlayersPage venues={venues} selectedVenueId={playerVenueId} setSelectedVenueId={setPlayerVenueId} sport={playerSport} setSport={setPlayerSport} search={playerSearch} setSearch={setPlayerSearch} invited={myInviteIds} onInvite={sendInvite} />}
       {page === 'tournaments' && <TournamentsPage events={tournaments} sport={tournamentSport} setSport={setTournamentSport} registrations={tournamentRegistrations.filter(r => r.customerId === user?.id)} onRegister={registerTournament} onRequireAuth={openCustomerAuth} focusAnnouncement={announcementTarget?.page === 'tournaments' ? announcementTarget : null} />}
+      {page === 'matches' && <MatchTicketsPage location={headerLocation === 'Current location' ? 'Madurai' : headerLocation} />}
       {page === 'events' && <AdventureEventsPage events={adventureEvents} focusAnnouncement={announcementTarget?.page === 'events' ? announcementTarget : null} />}
       {page === 'shop' && <ShopPage products={SHOP_PRODUCTS} cart={shopCart} onAdd={addShopItem} onQuantity={updateShopQuantity} onRemove={removeShopItem} onCheckout={beginShopCheckout} onContinueShopping={() => navigatePage('discover')} orders={shopOrders.filter(order => order.customerId === user?.id)} />}
+      {page === 'offers' && <CouponsOffersPage />}
       {page === 'terms' && <TermsConditionsPage />}
       {page === 'profile' && user && <ProfilePage user={user} bookings={customerBookings} invites={invites.filter(i => i.customerId === user.id)} onLogout={logout} />}
     </main>
-    <footer className="experiment-footer"><div className="experiment-footer-brand"><span className="brand-mark"><Trophy size={20}/></span><strong>SportiLand<span>.</span></strong></div><p>Find your place to play. Meet your team. Make time for the game.</p><div className="experiment-footer-links"><button onClick={() => navigatePage('discover')}>Home</button><button onClick={() => navigatePage('events')}>Events</button><button onClick={() => navigatePage('tournaments')}>Tournaments</button><button onClick={() => navigatePage('players')}>Find players</button><button onClick={() => navigatePage('shop')}>Shop</button><button onClick={() => navigatePage('terms')}>Terms & Conditions</button></div><small>© 2026 SportiLand · Madurai region</small></footer>
-    {selectedVenue && <BookingModal venue={selectedVenue} onFindPlayers={() => { setPlayerVenueId(selectedVenue.id); setPlayerSport((selectedVenue.sports || ['All'])[0]); setSelectedVenue(null); navigatePage('players') }} date={bookingDate} setDate={value => { setBookingDate(value); setSelectedTime(''); setAppliedCoupon(null); setCouponError('') }} duration={duration} setDuration={value => { setDuration(value); setAppliedCoupon(null); setCouponError('') }} selectedTime={selectedTime} setSelectedTime={setSelectedTime} slots={slotOptions(selectedVenue, bookingDate, duration)} coupon={coupon} setCoupon={setCoupon} appliedCoupon={appliedCoupon} couponError={couponError} applyCoupon={applyCoupon} price={getPrice()} onClose={() => { setSelectedVenue(null); setCheckout(false) }} onContinue={startBooking} />}
+    {page === 'discover' && <footer className="experiment-footer"><div className="experiment-footer-brand"><span className="brand-mark"><Trophy size={20}/></span><strong>SportiLand<span>.</span></strong></div><p>Find your place to play. Meet your team. Make time for the game.</p><div className="experiment-footer-links"><button onClick={() => navigatePage('discover')}>Home</button><button onClick={() => navigatePage('events')}>Events</button><button onClick={() => navigatePage('tournaments')}>Tournaments</button><button onClick={() => navigatePage('matches')}>Book Tickets</button><button onClick={() => navigatePage('players')}>Find players</button><button onClick={() => navigatePage('shop')}>Shop</button><button onClick={() => navigatePage('offers')}>Coupons &amp; offers</button><button onClick={() => navigatePage('terms')}>Terms & Conditions</button></div><small>© 2026 SportiLand · Madurai region</small></footer>}
+    <nav className={`mobile-bottom-nav ${mobileNavCompact ? 'is-compact' : 'is-expanded'} ${(page === 'venue' || selectedVenue || checkout || authModalOpen || shopCheckoutOpen) ? 'is-hidden' : ''}`} aria-label="Quick navigation"><button type="button" className={page === 'discover' ? 'active' : ''} onClick={() => { setMobileNavCompact(false); navigatePage('discover') }}><House size={19}/><span>Home</span></button><button type="button" className={page === 'profile' || page === 'bookings' ? 'active' : ''} onClick={() => { setMobileNavCompact(false); navigatePage(user ? 'profile' : 'profile') }}><UserRound size={19}/><span>Profile</span></button><button type="button" className={page === 'shop' ? 'active' : ''} onClick={() => { setMobileNavCompact(false); navigatePage('shop') }}><ShoppingBag size={19}/><span>Shop</span></button></nav>
+    {selectedVenue && <BookingModal venue={selectedVenue} date={bookingDate} setDate={value => { setBookingDate(value); setSelectedTime('') }} duration={duration} setDuration={value => setDuration(value)} selectedTime={selectedTime} setSelectedTime={setSelectedTime} slots={slotOptions(selectedVenue, bookingDate, duration)} onClose={() => { setSelectedVenue(null); setCheckout(false) }} onContinue={startBooking} />}
     {bookingPass && <BookingPassModal booking={bookingPass} onClose={() => setBookingPass(null)} />}
     {checkout && selectedVenue && <CheckoutModal venue={selectedVenue} date={bookingDate} time={selectedTime} duration={duration} price={getPrice()} paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} onBack={() => setCheckout(false)} onConfirm={completeBooking} />}
     {shopCheckoutOpen && <ShopCheckoutModal cart={shopCart} products={SHOP_PRODUCTS} user={user} onClose={() => setShopCheckoutOpen(false)} onConfirm={completeShopOrder} />}
@@ -818,205 +1135,6 @@ function App() {
     {toast && <div className="toast"><Check size={17}/>{toast}</div>}
     <div className="demo-ribbon"><ShieldCheck size={13}/> EXPERIMENTAL CUSTOMER EXPERIENCE · DEMO BOOKINGS & PAYMENTS · Owner-published media sync when the backend is running</div>
   </div>
-}
-
-function HomeAnnouncementMarquee({ adventureEvents, onNavigate }) {
-  const trackRef = useRef(null)
-  const stageRef = useRef(null)
-
-  useEffect(() => {
-    const track = trackRef.current
-    const stage = stageRef.current
-    if (!track || !stage) return undefined
-
-    const cards = Array.from(track.querySelectorAll('[data-stack-card]'))
-    if (!cards.length) return undefined
-
-    const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false
-    let frame = 0
-    let trackTop = 0
-    let trackHeight = 1
-    let stageHeight = 1
-    let stickyTop = 112
-    let travel = 1
-    let lastActiveStep = -1
-
-    const setStyle = (node, property, value) => {
-      if (node.style[property] !== value) node.style[property] = value
-    }
-    const setCssVar = (node, property, value) => {
-      if (node.style.getPropertyValue(property) !== value) node.style.setProperty(property, value)
-    }
-    const setAccess = (card, enabled) => {
-      const next = enabled ? '1' : '0'
-      if (card.dataset.stackAccess !== next) {
-        card.dataset.stackAccess = next
-        card.style.pointerEvents = enabled ? 'auto' : 'none'
-        card.tabIndex = enabled ? 0 : -1
-        card.setAttribute('aria-hidden', enabled ? 'false' : 'true')
-      }
-    }
-    const measure = () => {
-      const rect = track.getBoundingClientRect()
-      trackTop = rect.top + window.scrollY
-      trackHeight = track.offsetHeight || 1
-      stageHeight = stage.offsetHeight || 1
-      stickyTop = Number.parseFloat(window.getComputedStyle(stage).top) || 112
-      travel = Math.max(1, trackHeight - stageHeight)
-    }
-    const setImageWindow = activeStep => {
-      // Only keep the current card, the outgoing card and the next four images
-      // attached. The stack uses overlapping cards, so native lazy-loading alone
-      // treats every image as near-viewport and can decode the entire gallery.
-      const loadFrom = Math.max(0, activeStep - 1)
-      const loadTo = Math.min(cards.length - 1, activeStep + 4)
-      cards.forEach((card, index) => {
-        const img = card.querySelector('[data-stack-src]')
-        if (!img) return
-        const shouldLoad = index >= loadFrom && index <= loadTo
-        const currentSrc = img.getAttribute('src')
-        if (shouldLoad && !currentSrc) img.setAttribute('src', img.dataset.stackSrc)
-        else if (!shouldLoad && currentSrc) img.removeAttribute('src')
-      })
-    }
-
-    const updateStack = () => {
-      frame = 0
-      if (reduceMotion) {
-        cards.forEach((card, index) => {
-          const img = card.querySelector('[data-stack-src]')
-          if (img && !img.getAttribute('src')) img.setAttribute('src', img.dataset.stackSrc)
-          setStyle(card, 'opacity', '1')
-          setStyle(card, 'transform', 'none')
-          setStyle(card, 'zIndex', String(cards.length - index))
-          card.classList.remove('is-stack-moving')
-          setAccess(card, true)
-        })
-        setCssVar(track, '--stack-progress', '0')
-        return
-      }
-
-      // Read cached geometry and the scroll position only; no layout reads inside
-      // the per-card loop. Scroll updates are already coalesced to one RAF.
-      const progress = Math.min(1, Math.max(0, (window.scrollY + stickyTop - trackTop) / travel))
-      const position = progress * Math.max(0, cards.length - 1)
-      const activeStep = Math.floor(position)
-      if (activeStep !== lastActiveStep) {
-        lastActiveStep = activeStep
-        setImageWindow(activeStep)
-      }
-
-      cards.forEach((card, index) => {
-        const relative = index - position
-        let y = 0
-        let scale = 1
-        let rotation = 0
-        let opacity = 1
-        let zIndex
-
-        if (relative < -0.42) {
-          const distance = Math.min(1.5, Math.abs(relative) - 0.42)
-          y = -74 - distance * 118
-          scale = 0.96 - distance * 0.1
-          rotation = -1.2 - distance * 1.3
-          opacity = Math.max(0, 1 - distance * 1.7)
-          zIndex = 1 + index
-        } else {
-          const depth = Math.max(0, relative)
-          y = Math.min(76, depth * 19)
-          scale = 1 - Math.min(0.13, depth * 0.034)
-          rotation = Math.min(2.2, depth * 0.62)
-          opacity = depth > 3 ? Math.max(0, 1 - (depth - 3) * 1.45) : 1
-          zIndex = 100 - index
-        }
-
-        // Round values to avoid tiny sub-pixel style mutations on every frame.
-        const transform = `translate3d(0,${y.toFixed(1)}px,0) scale(${scale.toFixed(3)}) rotate(${rotation.toFixed(2)}deg)`
-        setStyle(card, 'transform', transform)
-        setStyle(card, 'opacity', opacity.toFixed(3))
-
-        // Accessibility, hit-testing and stacking order only change when a card
-        // crosses a threshold, not on every scroll frame.
-        const layer = relative < -0.42 ? 'outgoing' : 'front'
-        if (card.dataset.stackLayer !== layer) {
-          card.dataset.stackLayer = layer
-          setStyle(card, 'zIndex', String(zIndex))
-        }
-        setAccess(card, opacity > 0.35)
-
-        const shouldPromote = Math.abs(relative) < 3.5 && opacity > 0.01
-        if (card.classList.contains('is-stack-moving') !== shouldPromote) {
-          card.classList.toggle('is-stack-moving', shouldPromote)
-        }
-      })
-
-      setCssVar(track, '--stack-progress', progress.toFixed(4))
-      setCssVar(track, '--stack-active-index', String(Math.min(cards.length, activeStep + 1)))
-    }
-
-    const requestUpdate = () => {
-      if (!frame) frame = window.requestAnimationFrame(updateStack)
-    }
-    const onResize = () => {
-      measure()
-      requestUpdate()
-    }
-
-    measure()
-    updateStack()
-    window.addEventListener('scroll', requestUpdate, { passive: true })
-    window.addEventListener('resize', onResize, { passive: true })
-    window.addEventListener('orientationchange', onResize, { passive: true })
-    const resizeObserver = 'ResizeObserver' in window ? new ResizeObserver(onResize) : null
-    resizeObserver?.observe(track)
-    resizeObserver?.observe(stage)
-
-    return () => {
-      window.removeEventListener('scroll', requestUpdate)
-      window.removeEventListener('resize', onResize)
-      window.removeEventListener('orientationchange', onResize)
-      resizeObserver?.disconnect()
-      if (frame) window.cancelAnimationFrame(frame)
-    }
-  }, [adventureEvents.length])
-
-  return <section className="experiment-event-stack" aria-label="Events and adventures around Madurai">
-    <div className="experiment-event-stack-intro">
-      <span className="section-kicker">LOCAL PLAY · LOCAL ADVENTURES</span>
-      <h2>Make your next day<br/><em>one to remember.</em></h2>
-      <p>Scroll through upcoming rides and outdoor experiences. Each card opens its full event listing, details and official registration link.</p>
-      <button className="primary-btn" type="button" onClick={() => onNavigate({ page: 'events' })}>Explore all events <ArrowUpRight size={16}/></button>
-      <div className="experiment-stack-instruction"><span className="experiment-stack-mouse"><i/></span><span><strong>Scroll to explore</strong><small>{String(adventureEvents.length).padStart(2, '0')} experiences in the stack</small></span></div>
-    </div>
-
-    <div className="experiment-stack-track" ref={trackRef} style={{ '--stack-count': adventureEvents.length, '--stack-height': `${adventureEvents.length * 42 + 42}vh`, '--stack-height-tablet': `${adventureEvents.length * 37 + 38}vh`, '--stack-height-mobile': `${adventureEvents.length * 34 + 35}vh` }}>
-      <div className="experiment-stack-stage" ref={stageRef}>
-        {adventureEvents.map((event, index) => {
-          const EventIcon = event.kind === 'Cycling' ? Bike : event.kind === 'Marathon' ? PersonStanding : event.kind === 'Tournament' ? Trophy : Mountain
-          return <button
-            className="experiment-stack-card"
-            data-stack-card
-            type="button"
-            key={event.id}
-            style={{ '--stack-index': index }}
-            onClick={() => onNavigate({ page: 'events', id: event.id, title: event.title })}
-            aria-label={`Open ${event.title} in Events and adventures`}
-          >
-            <img className="experiment-stack-photo" src={index < 4 ? event.image : undefined} data-stack-src={event.image} alt={`${event.title} event`} loading={index < 4 ? 'eager' : 'lazy'} decoding="async" />
-            <span className="experiment-stack-shade" aria-hidden="true"/>
-            <span className="experiment-stack-card-top"><span><EventIcon size={14}/>{event.kind}</span><b>{String(index + 1).padStart(2, '0')} <i>/ {String(adventureEvents.length).padStart(2, '0')}</i></b></span>
-            <span className="experiment-stack-card-copy">
-              <small>{event.organiser || 'SportiLand · LOCAL EXPERIENCE'}</small>
-              <strong>{event.title}</strong>
-              <span className="experiment-stack-card-meta"><span><CalendarDays size={14}/>{event.dateLabel || (event.date ? prettyDate(event.date) : 'Date to be selected')}</span><span><MapPin size={14}/>{event.location}</span></span>
-              <span className="experiment-stack-card-action">View event details <ArrowUpRight size={16}/></span>
-            </span>
-          </button>
-        })}
-      </div>
-      <div className="experiment-stack-progress" aria-hidden="true"><span/></div>
-    </div>
-  </section>
 }
 
 function AdventureEventsPage({ events, focusAnnouncement }) {
@@ -1042,7 +1160,7 @@ function AdventureEventsPage({ events, focusAnnouncement }) {
 
   return <>
     <PageHeader kicker="MADURAI REGION · EVENTS & OUTDOOR EXPERIENCES" title="Events & adventures" description="Verified sports events in Madurai, plus official guided trails in nearby Dindigul and Theni." />
-    <div className="adventure-intro-strip"><Route size={18}/><span>Madurai region only · Information checked on 4 November 2026. No upcoming Madurai marathon with a verifiable open organiser listing was found; past August races are intentionally not shown. Cycling events below are listed by Audax India. Trek slots and payments are handled by Trek Tamil Nadu.</span></div>
+    <div className="adventure-intro-strip"><Route size={18}/><span>Madurai region only · Information checked on 16 November 2026. The carousel prioritises events with organiser or official booking pages. Past events are hidden from the upcoming feed. Cycling registrations are handled by Audax India; guided trail slots and payments are handled by Trek Tamil Nadu.</span></div>
     <div className="adventure-event-grid">{events.map(event => {
       const marathon = event.kind === 'Marathon'
       const isTrek = event.kind === 'Trekking'
@@ -1089,7 +1207,7 @@ function AdventureEventsPage({ events, focusAnnouncement }) {
         </div>
       </article>
     })}</div>
-    <div className="availability-note"><ShieldCheck size={16}/><span>This feed is limited to Madurai and nearby Dindigul / Theni routes. Event dates, registration deadlines and fees were checked on 4 November 2026 and can change. Audax India handles cycling entries; Trek Tamil Nadu handles guided-trail dates and bookings. Open the official source before paying or travelling. Trek listings do not show a fixed public departure date, so select a currently available slot on the official portal.</span></div>
+    <div className="availability-note"><ShieldCheck size={16}/><span>This feed is limited to Madurai and nearby Dindigul / Theni routes. Event dates, registration deadlines and fees were checked on 16 November 2026 and can change. Audax India handles cycling entries; Trek Tamil Nadu handles guided-trail dates and bookings. Open the official source before paying or travelling. Trek listings do not show a fixed public departure date, so select a currently available slot on the official portal.</span></div>
   </>
 }
 function AdventureRegistrationModal({ event, registration, onClose, onSubmit }) {
@@ -1212,14 +1330,124 @@ function CustomerAuthModal({ mode, setMode, form, update, onSubmit, onDemo, erro
   </div>
 }
 
-function DiscoverPage({ venues, total, search, setSearch, sport, setSport, areas, area, setArea, onOpen, onGoPlayers, adventureEvents, onNavigateAnnouncement, onGoPage }) {
-  const directoryRef = useRef(null)
-  const [visibleCount, setVisibleCount] = useState(9)
+function HeroEventDeck({ adventureEvents = [], onNavigate }) {
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [deckDirection, setDeckDirection] = useState(1)
+  const lastWheelAt = useRef(0)
+  const touchStart = useRef(null)
+  const count = adventureEvents.length
+
   useEffect(() => {
-    // Reset the page count only when the customer's filters change. Background
-    // refreshes of owner-published venue data should not collapse the list.
-    setVisibleCount(9)
-  }, [search, sport, area])
+    if (count < 2) return undefined
+    const timer = window.setInterval(() => {
+      setDeckDirection(1)
+      setActiveIndex(current => (current + 1) % count)
+    }, 2000)
+    return () => window.clearInterval(timer)
+  }, [count])
+
+  const move = direction => {
+    if (!count) return
+    const nextDirection = direction >= 0 ? 1 : -1
+    setDeckDirection(nextDirection)
+    setActiveIndex(current => (current + nextDirection + count) % count)
+  }
+
+  const handleWheel = event => {
+    if (!count || Math.abs(event.deltaY) < 24) return
+    const now = Date.now()
+    if (now - lastWheelAt.current < 420) return
+    lastWheelAt.current = now
+    // Native wheel down advances toward the front; wheel up walks back through the loop.
+    move(event.deltaY > 0 ? 1 : -1)
+  }
+
+  const handleTouchEnd = event => {
+    if (!touchStart.current || !event.changedTouches?.length) return
+    const deltaX = event.changedTouches[0].clientX - touchStart.current.x
+    const deltaY = event.changedTouches[0].clientY - touchStart.current.y
+    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 42) {
+      // A finger swipe up is the touch equivalent of scrolling the page down.
+      move(deltaY < 0 ? 1 : -1)
+    } else if (Math.abs(deltaX) > 44) {
+      move(deltaX < 0 ? 1 : -1)
+    }
+    touchStart.current = null
+  }
+
+  if (!count) return <div className="hero-event-deck hero-event-deck-empty"><span className="section-kicker">SPORTILAND · MADURAI</span><strong>Find your next event.</strong><p>Local rides, tournaments and outdoor experiences.</p></div>
+
+  return <div className="hero-event-deck" data-scroll-direction={deckDirection > 0 ? 'forward' : 'backward'} onWheel={handleWheel} onTouchStart={event => { const touch = event.touches?.[0]; touchStart.current = touch ? { x: touch.clientX, y: touch.clientY } : null }} onTouchEnd={handleTouchEnd}>
+    <div className="hero-event-deck-label"><span><i/> UPCOMING IN MADURAI</span><b>{String(activeIndex + 1).padStart(2, '0')} <em>/ {String(count).padStart(2, '0')}</em></b></div>
+    {adventureEvents.map((event, index) => {
+      const relative = (index - activeIndex + count) % count
+      let positionClass = 'is-hidden'
+      if (relative === 0) positionClass = 'is-active'
+      else if (deckDirection > 0) {
+        if (relative === 1) positionClass = 'is-next'
+        else if (relative === 2) positionClass = 'is-third'
+        else if (relative === count - 1) positionClass = 'is-back'
+      } else {
+        if (relative === count - 1) positionClass = 'is-next'
+        else if (relative === count - 2) positionClass = 'is-third'
+        else if (relative === 1) positionClass = 'is-back'
+      }
+      const isVisible = positionClass !== 'is-hidden'
+      const EventIcon = event.kind === 'Cycling' ? Bike : event.kind === 'Marathon' ? PersonStanding : event.kind === 'Tournament' ? Trophy : Mountain
+      return <button
+        className={`hero-event-card ${positionClass}`}
+        key={event.id}
+        type="button"
+        tabIndex={positionClass === 'is-active' || positionClass === 'is-next' ? 0 : -1}
+        aria-hidden={!isVisible || positionClass === 'is-back'}
+        aria-label={`Open ${event.title} event details`}
+        onClick={() => onNavigate({ page: 'events', id: event.id, title: event.title })}
+      >
+        <img src={event.image} alt="" loading={isVisible ? 'eager' : 'lazy'} decoding="async"/>
+        <span className="hero-event-card-shade"/>
+        <span className="hero-event-card-kind"><EventIcon size={13}/>{event.kind}</span>
+        <span className="hero-event-card-count">{String(index + 1).padStart(2, '0')}</span>
+        <span className="hero-event-card-copy">
+          <small>{event.organiser || 'SPORTILAND · LOCAL EXPERIENCE'}</small>
+          <strong>{event.title}</strong>
+          <span><CalendarDays size={12}/>{event.dateLabel || (event.date ? prettyDate(event.date) : 'Date to be selected')}</span>
+          <span><MapPin size={12}/>{event.location}</span>
+          <i>View event details <ArrowUpRight size={14}/></i>
+        </span>
+      </button>
+    })}
+    <div className="hero-event-deck-controls">
+      <button type="button" aria-label="Previous event" onClick={() => move(-1)}><ChevronLeft size={17}/></button>
+      <button type="button" aria-label="Next event" onClick={() => move(1)}><ChevronRight size={17}/></button>
+    </div>
+    <span className="hero-event-deck-hint">SCROLL DOWN · NEXT EVENT &nbsp; / &nbsp; SCROLL UP · PREVIOUS EVENT</span>
+  </div>
+}
+
+function DiscoverPage({ venues, total, search, setSearch, sport, setSport, areas, area, setArea, onOpen, onGoPlayers, adventureEvents, onNavigateAnnouncement, onGoPage, selectedLocation, selectedLocationCoords }) {
+  const directoryRef = useRef(null)
+  const [visibleCount, setVisibleCount] = useState(8)
+  const [visibleGameCount, setVisibleGameCount] = useState(10)
+  const [filterOpen, setFilterOpen] = useState(false)
+  const [filterTab, setFilterTab] = useState('Sort by')
+  const normalizeSports = value => Array.isArray(value) ? value : (value === 'All' || !value ? [] : [value])
+  const [appliedFilters, setAppliedFilters] = useState({ sort: '', sports: normalizeSports(sport), courtTypes: [], dimensions: [], rating: '' })
+  const [draftFilters, setDraftFilters] = useState(appliedFilters)
+  useEffect(() => {
+    setAppliedFilters(previous => ({ ...previous, sports: normalizeSports(sport) }))
+  }, [sport])
+  useEffect(() => {
+    // Reset pagination when a filter changes, but preserve it during background venue refreshes.
+    setVisibleCount(8)
+  }, [search, sport, area, appliedFilters.courtTypes, appliedFilters.dimensions, appliedFilters.rating, appliedFilters.sort])
+  useEffect(() => {
+    if (!filterOpen) return undefined
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKeyDown = event => { if (event.key === 'Escape') setFilterOpen(false) }
+    window.addEventListener('keydown', onKeyDown)
+    return () => { document.body.style.overflow = previousOverflow; window.removeEventListener('keydown', onKeyDown) }
+  }, [filterOpen])
   useEffect(() => {
     if (!('IntersectionObserver' in window) || !directoryRef.current) return undefined
     const cards = directoryRef.current.querySelectorAll('[data-reveal-card]')
@@ -1236,18 +1464,85 @@ function DiscoverPage({ venues, total, search, setSearch, sport, setSport, areas
   }, [venues, visibleCount])
   const areaOptions = areas.map(item => ({ value: item, label: item, description: item === 'All areas' ? 'Show every listed venue' : 'Madurai venue area' }))
   const sportTiles = [
-    { name: 'Football', sub: 'Turf & five-a-side', icon: '⚽', image: '/assets/sport-cards/football.webp', position: 'center 54%' },
-    { name: 'Cricket', sub: 'Nets & box cricket', icon: '🏏', image: '/assets/sport-cards/cricket.webp', position: 'center 52%' },
-    { name: 'Badminton', sub: 'Courts & academies', icon: '🏸', image: '/assets/sport-cards/badminton.webp', position: 'center 48%' },
-    { name: 'Running', sub: 'Tracks & endurance', icon: '🏃', image: '/assets/sport-cards/running.webp', position: 'center 55%' },
-    { name: 'Pickleball', sub: 'Find a court', icon: '🎾', image: '/assets/sport-cards/pickleball.webp', position: 'center 48%' },
-    { name: 'Paintball', sub: 'Action arenas', icon: '🎯', image: '/assets/sport-cards/paintball.webp', position: 'center 50%' },
-    { name: 'Boxing', sub: 'Training & fitness', icon: '🥊', image: '/assets/sport-cards/boxing.webp', position: 'center 48%' }
+    { name: 'Football', sub: 'Turfs & five-a-side', icon: '⚽', image: '/assets/sport-cards/football.webp', position: 'center 54%' },
+    { name: 'Cricket', sub: 'Nets, box cricket & stadiums', icon: '🏏', image: '/assets/sport-cards/cricket.webp', position: 'center 52%' },
+    { name: 'Badminton', sub: 'Indoor courts & academies', icon: '🏸', image: '/assets/sport-cards/badminton.webp', position: 'center 48%' },
+    { name: 'Running', sub: 'Tracks & public grounds', icon: '🏃', image: '/assets/sport-cards/running.webp', position: 'center 55%' },
+    { name: 'Pickleball', sub: 'Dedicated pickleball courts', icon: '🎾', image: '/assets/sport-cards/pickleball.webp', position: 'center 48%' },
+    { name: 'Paintball', sub: 'Team battles & action arenas', icon: '🎯', image: '/assets/sport-cards/paintball.webp', position: 'center 50%' },
+    { name: 'Boxing', sub: 'Boxing & combat fitness', icon: '🥊', image: '/assets/sport-cards/boxing.webp', position: 'center 48%' },
+    { name: 'Swimming', sub: 'Public pools & swim practice', icon: '🏊', image: 'https://images.pexels.com/photos/30550699/pexels-photo-30550699.jpeg?auto=compress&cs=tinysrgb&w=1200', position: 'center 50%' },
+    { name: 'Basketball', sub: 'Outdoor courts & hoops', icon: '🏀', image: 'https://images.pexels.com/photos/32463992/pexels-photo-32463992.jpeg?auto=compress&cs=tinysrgb&w=1200', position: 'center 50%' },
+    { name: 'Tennis', sub: 'Tennis courts & coaching', icon: '🎾', image: 'https://images.pexels.com/photos/37989204/pexels-photo-37989204.jpeg?auto=compress&cs=tinysrgb&w=1200', position: 'center 50%' },
+    { name: 'Volleyball', sub: 'Volleyball courts & coaching', icon: '🏐', image: 'https://images.pexels.com/photos/32681156/pexels-photo-32681156.jpeg?auto=compress&cs=tinysrgb&w=1200', position: 'center 50%' },
+    { name: 'Table Tennis', sub: 'Table-tennis courts & clubs', icon: '🏓', image: 'https://images.pexels.com/photos/29439338/pexels-photo-29439338.jpeg?auto=compress&cs=tinysrgb&w=1200', position: 'center 50%' },
+    { name: 'Skating', sub: 'Skating rinks & practice', icon: '🛼', image: 'https://images.pexels.com/photos/40431253/pexels-photo-40431253.jpeg?auto=compress&cs=tinysrgb&w=1200', position: 'center 50%' },
+    { name: 'Hockey', sub: 'Hockey stadium & turf', icon: '🏑', image: 'https://images.unsplash.com/photo-1734158661120-a0605f0cee48?auto=format&fit=crop&w=1200&q=80', position: 'center 50%' },
+    { name: 'Futsal', sub: 'Small-sided football', icon: '⚽', image: 'https://images.pexels.com/photos/11434111/pexels-photo-11434111.jpeg?auto=compress&cs=tinysrgb&w=1200', position: 'center 50%' },
+    { name: 'Squash', sub: 'Indoor squash courts', icon: '🎾', image: 'https://images.pexels.com/photos/7648084/pexels-photo-7648084.jpeg?auto=compress&cs=tinysrgb&w=1200', position: 'center 50%' },
+    { name: 'Silambam', sub: 'Traditional martial arts', icon: '🥋', image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Silambam.jpg?width=1200', position: 'center 50%' },
+    { name: 'Karate', sub: 'Martial arts training', icon: '🥋', image: 'https://images.pexels.com/photos/8054641/pexels-photo-8054641.jpeg?auto=compress&cs=tinysrgb&w=1200', position: 'center 50%' },
+    { name: 'Athletics', sub: 'Athletics coaching & training', icon: '🏅', image: 'https://images.pexels.com/photos/8820689/pexels-photo-8820689.jpeg?auto=compress&cs=tinysrgb&w=1200', position: 'center 50%' }
   ]
-  const visibleVenues = venues.slice(0, visibleCount)
-  const remainingVenues = Math.max(0, venues.length - visibleVenues.length)
+  const sportOptions = Array.from(new Set([...SPORTS.filter(item => item !== 'All'), ...venues.flatMap(v => v.sports || [])])).sort((a, b) => a.localeCompare(b))
+  const courtTypeOptions = Array.from(new Set(['Astro Turf', 'Turf', 'Indoor', 'Outdoor', 'Synthetic', 'Wooden', 'Artificial grass', 'Air-conditioned', ...venues.map(v => v.courtType || v.surfaceType || v.surface || v.coverType).filter(Boolean)])).sort((a, b) => a.localeCompare(b))
+  const dimensionOptions = ['10 vs 10', '11 vs 11', '4 vs 4', '5 vs 5', '6 vs 6', '7 vs 7', '8 vs 8', '9 vs 9', 'Baby pool', 'Double (2 v 2)', 'Full court', 'Half court']
+  const sortOptions = [
+    { value: 'price-low', label: 'Price: Low to High' },
+    { value: 'price-high', label: 'Price: High to Low' },
+    { value: 'rating-high', label: 'Rating: High to Low' },
+    { value: 'distance-near', label: 'Distance: Near to Far' }
+  ]
+  const toggleFilterValue = (key, value) => setDraftFilters(previous => ({ ...previous, [key]: previous[key].includes(value) ? previous[key].filter(item => item !== value) : [...previous[key], value] }))
+  const openFilters = () => {
+    setDraftFilters({ ...appliedFilters, sports: normalizeSports(sport) })
+    setFilterTab('Sort by')
+    setFilterOpen(true)
+  }
+  const clearFilterDraft = () => setDraftFilters({ sort: '', sports: [], courtTypes: [], dimensions: [], rating: '' })
+  const applyFilterDraft = () => {
+    setAppliedFilters(draftFilters)
+    setSport(draftFilters.sports.length ? draftFilters.sports : 'All')
+    setVisibleCount(8)
+    setFilterOpen(false)
+  }
+  const getVenueText = venue => JSON.stringify(venue).toLowerCase()
+  const getVenueNumber = (venue, keys) => {
+    for (const key of keys) {
+      const value = Number(venue?.[key])
+      if (Number.isFinite(value) && value > 0) return value
+    }
+    return null
+  }
+  const getVenuePrice = venue => {
+    const direct = getVenueNumber(venue, ['hourlyRate', 'pricePerHour', 'startingPrice', 'price'])
+    if (direct != null) return direct
+    const match = String(venue?.pricingInfo || '').match(/(?:₹|\bINR\s*)([\d,]+)/i)
+    return match ? Number(match[1].replace(/,/g, '')) : null
+  }
+  const filteredDirectoryVenues = useMemo(() => {
+    const filtered = venues.filter(venue => {
+      const text = getVenueText(venue)
+      const matchesCourt = !appliedFilters.courtTypes.length || appliedFilters.courtTypes.some(item => text.includes(item.toLowerCase()))
+      const matchesDimension = !appliedFilters.dimensions.length || appliedFilters.dimensions.some(item => text.includes(item.toLowerCase()))
+      const rating = getVenueNumber(venue, ['googleRating', 'rating', 'reviewRating'])
+      const threshold = appliedFilters.rating ? Number(appliedFilters.rating) : 0
+      const matchesRating = !threshold || (rating != null && rating >= threshold)
+      return matchesCourt && matchesDimension && matchesRating
+    })
+    const number = (venue, keys) => getVenueNumber(venue, keys) ?? Number.POSITIVE_INFINITY
+    if (appliedFilters.sort === 'price-low') filtered.sort((a, b) => (getVenuePrice(a) ?? Number.POSITIVE_INFINITY) - (getVenuePrice(b) ?? Number.POSITIVE_INFINITY))
+    if (appliedFilters.sort === 'price-high') filtered.sort((a, b) => (getVenuePrice(b) ?? Number.NEGATIVE_INFINITY) - (getVenuePrice(a) ?? Number.NEGATIVE_INFINITY))
+    if (appliedFilters.sort === 'rating-high') filtered.sort((a, b) => number(b, ['googleRating', 'rating', 'reviewRating']) - number(a, ['googleRating', 'rating', 'reviewRating']))
+    if (appliedFilters.sort === 'distance-near') filtered.sort((a, b) => number(a, ['distanceKm', 'distance']) - number(b, ['distanceKm', 'distance']))
+    return filtered
+  }, [venues, appliedFilters])
+  const visibleVenues = filteredDirectoryVenues.slice(0, visibleCount)
+  const remainingVenues = Math.max(0, filteredDirectoryVenues.length - visibleVenues.length)
+  const activeFilterCount = appliedFilters.sports.length + appliedFilters.courtTypes.length + appliedFilters.dimensions.length + (appliedFilters.rating ? 1 : 0) + (appliedFilters.sort ? 1 : 0)
   const scrollToDirectory = () => document.getElementById('venue-directory')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  const clearFilters = () => { setSearch(''); setSport('All'); setArea('All areas'); setVisibleCount(9) }
+  const clearFilters = () => { setSearch(''); setSport('All'); setArea('All areas'); setAppliedFilters({ sort: '', sports: [], courtTypes: [], dimensions: [], rating: '' }); clearFilterDraft(); setVisibleCount(8) }
+  const FilterChoice = ({ type, value, checked, onChange, label }) => <label className="sportiland-filter-choice"><input type={type} checked={checked} onChange={onChange}/><span className="sportiland-filter-control" aria-hidden="true" /><span>{label || value}</span></label>
   return <div className="experiment-home">
     <section className="experiment-hero">
       <div className="experiment-hero-text">
@@ -1256,37 +1551,56 @@ function DiscoverPage({ venues, total, search, setSearch, sport, setSport, areas
         <p>From quick turf matches to discovering a new sport. Find a place, bring your people and get out there.</p>
         <div className="experiment-hero-actions"><button className="primary-btn" onClick={scrollToDirectory}>Explore venues <ArrowRight size={17}/></button><button className="experiment-outline-btn" onClick={() => onGoPage('events')}>See local events <ArrowUpRight size={16}/></button></div>
       </div>
-      <div className="experiment-hero-visual" aria-label="Sports venues in the Madurai region">
-        <div className="experiment-hero-photo main-photo"><img data-scroll-parallax src="/assets/venues/jaypal-sports-center.webp" alt="Sports turf at Jaypal Sports Center"/><span className="experiment-photo-label"><small>START WITH A PLACE</small><strong>Make the first move.</strong></span></div>
-        <div className="experiment-hero-photo side-photo"><img data-scroll-parallax src="/assets/venues/sai-academy-of-badminton.webp" alt="Badminton court"/><span>COURTS · TURFS · ARENAS</span></div>
-        <div className="experiment-hero-sticker"><Trophy size={23}/><span><b>Game on.</b><small>Find your crew</small></span></div>
+      <div className="experiment-hero-visual" aria-label="Upcoming sports events around Madurai">
+        <HeroEventDeck adventureEvents={adventureEvents} onNavigate={onNavigateAnnouncement}/>
+        <div className="experiment-hero-sticker"><Trophy size={23}/><span><b>Game on.</b><small>Auto rotates every 2 seconds</small></span></div>
         <div className="experiment-hero-orbit orbit-one"/><div className="experiment-hero-orbit orbit-two"/>
-        <span className="experiment-hero-index">01 / PLAY MORE</span>
       </div>
     </section>
 
-    <HomeAnnouncementMarquee adventureEvents={adventureEvents} onNavigate={onNavigateAnnouncement}/>
-
-    <section className="directory-section experiment-directory" id="venue-directory" ref={directoryRef}>
-      <div className="experiment-section-heading directory-heading" data-exp-reveal><div><span className="section-kicker">THE LOCAL DIRECTORY</span><h2>Find a place to play.</h2><p>Explore all {total} listed venues, with photos, owner-published videos and contact options around Madurai.</p></div><span className="listing-count"><i/>{total} listings</span></div>
-      <div className="experiment-directory-tools"><div className="search-field"><Search size={18}/><input id="venue-search" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search venue, sport or area"/><button onClick={() => setSearch('')} aria-label="Clear search"><X size={15}/></button></div><div className="area-filter-dropdown"><BootstrapDropdown label="Filter by area" value={area} options={areaOptions} onChange={setArea} searchable placeholder="All Madurai areas"/></div></div>
-      <div className="filter-toolbar"><div className="sport-filters">{SPORTS.map(item => <button key={item} className={sport === item ? 'selected' : ''} onClick={() => setSport(item)}>{item === 'All' ? <SlidersHorizontal size={14}/> : null}{item}</button>)}</div></div>
-      <div className="venue-result-line"><span><b>{venues.length}</b> places to explore <small>· Showing {venues.length ? 1 : 0}–{visibleVenues.length} of {venues.length}</small></span><span>Owner-published media appears when available.</span></div>
-      <div className="venue-grid">{visibleVenues.map((venue, index) => <VenueCard key={venue.id} venue={venue} onClick={() => onOpen(venue)} revealIndex={index}/>)}{venues.length === 0 && <div className="empty-state"><Search size={28}/><strong>No venues found</strong><p>Try another search term, sport or area.</p><button className="secondary-btn" onClick={clearFilters}>Clear filters</button></div>}</div>
-      {venues.length > 9 && <div className="venue-pagination"><span>Showing {visibleVenues.length} of {venues.length} venues</span><div>{visibleCount > 9 && <button className="secondary-btn" type="button" onClick={() => { setVisibleCount(9); scrollToDirectory() }}>Show first 9</button>}{remainingVenues > 0 && <button className="primary-btn" type="button" onClick={() => setVisibleCount(current => Math.min(venues.length, current + 9))}>Show more venues <ArrowDown size={16}/></button>}</div></div>}
-    </section>
+    <div className="experiment-manifesto-marquee" aria-label="Play more. Explore more."><div className="experiment-manifesto-track">{Array.from({length: 2}, (_, index) => <span key={index}>PLAY MORE <i>✳</i> EXPLORE MORE <i>✳</i> FIND YOUR GAME <i>✳</i> MAKE IT HAPPEN <i>✳</i></span>)}</div></div>
 
     <section className="experiment-sports-section" data-exp-reveal>
-      <div className="experiment-section-heading"><div><span className="section-kicker">CHOOSE YOUR GAME</span><h2>One city. So many ways to play.</h2><p>Explore the sports and spaces that get you moving.</p></div><button className="experiment-text-link" onClick={scrollToDirectory}>Browse all venues <ArrowUpRight size={16}/></button></div>
-      <div className="experiment-sport-grid">{sportTiles.map((item, index) => <button className="experiment-sport-card" key={item.name} onClick={() => { setSport(item.name); scrollToDirectory() }} data-exp-reveal style={{'--reveal-index': index}} aria-label={`Explore ${item.name} venues`}><span className="experiment-sport-art"><img src={item.image} alt={`${item.name} activity`} loading="lazy" decoding="async" style={{objectPosition:item.position}}/></span><span className="experiment-sport-symbol" aria-hidden="true">{item.icon}</span><span className="experiment-sport-copy"><strong>{item.name}</strong><small>{item.sub}</small></span><span className="experiment-sport-arrow"><ArrowUpRight size={18}/></span></button>)}</div>
+      <div className="experiment-section-heading"><div><span className="section-kicker">CHOOSE YOUR GAME</span><h2>One city. So many ways to play.</h2><p>Explore the sports and spaces that get you moving.</p></div></div>
+      <div className="experiment-sport-grid">{sportTiles.slice(0, visibleGameCount).map((item, index) => <button className="experiment-sport-card" key={item.name} onClick={() => { setSport(item.name); scrollToDirectory() }} style={{'--reveal-index': index}} aria-label={`Explore ${item.name} venues`}><span className={`experiment-sport-art ${item.image ? 'has-photo' : 'sport-art-no-photo'}`} aria-hidden="true">{item.image && <img src={item.image} alt="" loading="lazy" decoding="async" style={{objectPosition:item.position}} onError={event => { event.currentTarget.style.display = 'none'; event.currentTarget.parentElement.classList.add('sport-art-image-failed') }}/>}<span className="experiment-sport-art-fallback">{item.icon}</span></span><span className="experiment-sport-symbol" aria-hidden="true">{item.icon}</span><span className="experiment-sport-copy"><strong>{item.name}</strong><small>{item.sub}</small></span><span className="experiment-sport-arrow"><ArrowUpRight size={18}/></span></button>)}</div>{sportTiles.length > 10 && <div className="games-show-more"><span>Showing {Math.min(visibleGameCount, sportTiles.length)} of {sportTiles.length} games</span><button type="button" className="primary-btn" onClick={() => setVisibleGameCount(count => count >= sportTiles.length ? 10 : sportTiles.length)}>{visibleGameCount >= sportTiles.length ? 'Show less' : 'Show more games'} <ArrowDown size={16}/></button></div>}
     </section>
+
+
+    <section className="directory-section experiment-directory" id="venue-directory" ref={directoryRef}>
+      <div className="experiment-section-heading directory-heading" data-exp-reveal><div><span className="section-kicker">THE LOCAL DIRECTORY</span><h2>Find a place to play.</h2></div></div>
+      <div className="experiment-directory-tools"><div className="search-field"><Search size={18}/><input id="venue-search" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search venue, sport or area"/><button onClick={() => setSearch('')} aria-label="Clear search"><X size={15}/></button></div><div className="area-filter-dropdown"><BootstrapDropdown label="Filter by area" value={area} options={areaOptions} onChange={setArea} searchable placeholder="All Madurai areas"/></div></div>
+      <div className="directory-filter-row">
+        <button type="button" className={`sportiland-open-filters ${activeFilterCount ? 'has-active' : ''}`} onClick={openFilters}><SlidersHorizontal size={17}/> <span>Filter by</span>{activeFilterCount > 0 && <b>{activeFilterCount}</b>}<ChevronDown size={15}/></button>
+        <div className="directory-active-filters">{activeFilterCount > 0 ? `${activeFilterCount} active filter${activeFilterCount === 1 ? '' : 's'}` : 'All venues'}</div>
+      </div>
+      <div className="venue-result-line"><span><b>{filteredDirectoryVenues.length}</b> places to explore <small>· Showing {filteredDirectoryVenues.length ? 1 : 0}–{visibleVenues.length} of {filteredDirectoryVenues.length}</small></span><span>Owner-published media appears when available.</span></div>
+      <div className="venue-grid">{visibleVenues.map((venue, index) => <VenueCard key={venue.id} venue={venue} onClick={() => onOpen(venue)} revealIndex={index} originLocation={selectedLocation === 'Current location' ? 'Madurai, Tamil Nadu, India' : `${selectedLocation || 'Madurai'}, Tamil Nadu, India`} originCoordinates={selectedLocationCoords}/>)}{filteredDirectoryVenues.length === 0 && <div className="empty-state"><Search size={28}/><strong>No matching venues</strong><p>Try removing a filter or changing your search.</p><button className="secondary-btn" onClick={clearFilters}>Clear filters</button></div>}</div>
+      {filteredDirectoryVenues.length > 8 && <div className="venue-pagination"><span>Showing {visibleVenues.length} of {filteredDirectoryVenues.length} venues</span><div>{visibleCount > 8 && <button className="secondary-btn" type="button" onClick={() => { setVisibleCount(8); scrollToDirectory() }}>Show first 8</button>}{remainingVenues > 0 && <button className="primary-btn" type="button" onClick={() => setVisibleCount(current => Math.min(filteredDirectoryVenues.length, current + 8))}>Show 8 more venues <ArrowDown size={16}/></button>}</div></div>}
+      {filterOpen && <div className="sportiland-filter-backdrop" role="presentation" onMouseDown={event => { if (event.target === event.currentTarget) setFilterOpen(false) }}>
+        <section className="sportiland-filter-sheet" role="dialog" aria-modal="true" aria-labelledby="sportiland-filter-title">
+          <header className="sportiland-filter-header"><div><span>REFINE YOUR SEARCH</span><h3 id="sportiland-filter-title">Filter by</h3></div><button type="button" aria-label="Close filters" onClick={() => setFilterOpen(false)}><X size={23}/></button></header>
+          <div className="sportiland-filter-main">
+            <nav className="sportiland-filter-tabs" aria-label="Filter categories">{['Sort by', 'Sports', 'Court Type', 'Dimension', 'Rating'].map(tab => <button type="button" key={tab} className={filterTab === tab ? 'active' : ''} onClick={() => setFilterTab(tab)}>{tab}{tab === 'Sports' && draftFilters.sports.length > 0 && <small>{draftFilters.sports.length}</small>}{tab === 'Court Type' && draftFilters.courtTypes.length > 0 && <small>{draftFilters.courtTypes.length}</small>}{tab === 'Dimension' && draftFilters.dimensions.length > 0 && <small>{draftFilters.dimensions.length}</small>}</button>)}</nav>
+            <div className="sportiland-filter-options">
+              {filterTab === 'Sort by' && <div className="sportiland-filter-option-list">{sortOptions.map(option => <FilterChoice key={option.value} type="radio" value={option.value} label={option.label} checked={draftFilters.sort === option.value} onChange={() => setDraftFilters(previous => ({ ...previous, sort: option.value }))}/>)}</div>}
+              {filterTab === 'Sports' && <div className="sportiland-filter-option-list">{sportOptions.map(option => <FilterChoice key={option} type="checkbox" value={option} checked={draftFilters.sports.includes(option)} onChange={() => toggleFilterValue('sports', option)}/>)}</div>}
+              {filterTab === 'Court Type' && <div className="sportiland-filter-option-list">{courtTypeOptions.map(option => <FilterChoice key={option} type="checkbox" value={option} checked={draftFilters.courtTypes.includes(option)} onChange={() => toggleFilterValue('courtTypes', option)}/>)}</div>}
+              {filterTab === 'Dimension' && <div className="sportiland-filter-option-list">{dimensionOptions.map(option => <FilterChoice key={option} type="checkbox" value={option} checked={draftFilters.dimensions.includes(option)} onChange={() => toggleFilterValue('dimensions', option)}/>)}</div>}
+              {filterTab === 'Rating' && <div className="sportiland-filter-option-list">{[{value:'4.5',label:'4.5 stars & above'},{value:'4',label:'4 stars & above'},{value:'3',label:'3 stars & above'}].map(option => <FilterChoice key={option.value} type="radio" value={option.value} label={option.label} checked={draftFilters.rating === option.value} onChange={() => setDraftFilters(previous => ({ ...previous, rating: option.value }))}/>)}</div>}
+              <p className="sportiland-filter-note">Filters use information published by the venue. Court dimensions and ratings may be unavailable for some listings.</p>
+            </div>
+          </div>
+          <footer className="sportiland-filter-footer"><button type="button" className="sportiland-clear-filter-btn" onClick={clearFilterDraft}>Clear all</button><button type="button" className="sportiland-apply-filter-btn" onClick={applyFilterDraft}>Apply filters <ArrowRight size={17}/></button></footer>
+        </section>
+      </div>}
+    </section>
+
+
 
     <section className="experiment-shop-promo" data-exp-reveal>
       <div className="shop-promo-copy"><span className="section-kicker">SportiLand SHOP · GAME DAY ESSENTIALS</span><h2>Got the game.<br/><em>Get the gear.</em></h2><p>Pick up bats, balls, rackets, paddles, gloves and training essentials for your next session.</p><button className="primary-btn" type="button" onClick={() => onGoPage('shop')}>Shop essentials <ShoppingBag size={16}/><ArrowRight size={16}/></button></div>
       <div className="shop-promo-items" aria-label="Popular sports essentials"><span><Trophy size={19}/> Cricket bat</span><span><CircleHelp size={19}/> Match balls</span><span><Activity size={19}/> Rackets & paddles</span><span><Dumbbell size={19}/> Training gear</span></div>
     </section>
-
-    <div className="experiment-manifesto-marquee" aria-label="Play more. Explore more."><div className="experiment-manifesto-track">{Array.from({length: 2}, (_, index) => <span key={index}>PLAY MORE <i>✳</i> EXPLORE MORE <i>✳</i> FIND YOUR GAME <i>✳</i> MAKE IT HAPPEN <i>✳</i></span>)}</div></div>
 
     <section className="experiment-story-section" data-exp-reveal>
       <div className="experiment-story-image" data-reveal-direction="left"><img data-scroll-parallax src="/assets/venues/bats-and-boots-turf.webp" alt="Football turf in Madurai" loading="lazy"/><span className="experiment-image-stamp">YOUR NEXT<br/>MOVE STARTS HERE</span></div>
@@ -1302,48 +1616,252 @@ function DiscoverPage({ venues, total, search, setSearch, sport, setSport, areas
   </div>
 }
 
-function VenueCard({ venue, onClick, revealIndex = 0 }) {
+function VenueCard({ venue, onClick, revealIndex = 0, originLocation = 'Madurai, Tamil Nadu, India', originCoordinates = null }) {
+  // Google Maps is optional. Keep venue cards fully renderable when no API key is configured.
+  const googleConfigured = Boolean(String(import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '').trim())
   const fallback = venue.photoIllustration ? `/${venue.photoIllustration.replace(/^\//,'')}` : '/assets/venue-illustrations/turf.svg'
   const [src, setSrc] = useState(venue.photoUrl || fallback)
   const [failed, setFailed] = useState(false)
+  const [googleData, setGoogleData] = useState(null)
+  const [googlePlace, setGooglePlace] = useState(null)
+  const [googleLookupVisible, setGoogleLookupVisible] = useState(false)
+  const cardRef = useRef(null)
   useEffect(() => { setSrc(venue.photoUrl || fallback); setFailed(false) }, [venue.photoUrl, fallback])
-  return <div className="venue-card-wrap" data-reveal-card style={{"--reveal-index": revealIndex % 3}}>
-    <button className="venue-card" onClick={onClick}>
-      <div className="venue-photo">
-        <img src={src} onError={() => { if (!failed) { setFailed(true); setSrc(fallback) } }} alt={`${venue.name} sports venue`} loading="lazy" decoding="async"/>
-        <span className="photo-badge">{venue.photoKind === 'venue-specific' ? 'VENUE PHOTO' : venue.photoKind === 'generated-illustration' ? 'ILLUSTRATIVE IMAGE' : venue.photoKind === 'activity-illustration' ? 'SPORT PREVIEW' : 'VENUE LISTING'}</span>
+  const area = String(venue.area || 'Madurai').replace(/\s*[·|].*$/, '').replace(/confirm exact address|exact location needs confirmation/ig, '').trim() || 'Madurai'
+  useEffect(() => {
+    if (!String(import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '').trim()) return undefined
+    const node = cardRef.current
+    if (!node || !('IntersectionObserver' in window)) { setGoogleLookupVisible(true); return undefined }
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) { setGoogleLookupVisible(true); observer.disconnect() }
+    }, { rootMargin: '220px' })
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [venue.id])
+  useEffect(() => {
+    let active = true
+    setGoogleData(null)
+    setGooglePlace(null)
+    if (!String(import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '').trim() || !googleLookupVisible) return () => { active = false }
+    const address = cleanMapLocation(venue.address) || area
+    loadSportiGoogleMaps().then(async maps => {
+      const { Place } = await maps.importLibrary('places')
+      const response = await Place.searchByText({
+        textQuery: `${venue.name}, ${address}, Madurai, Tamil Nadu, India`,
+        fields: ['id', 'displayName', 'formattedAddress', 'location', 'rating', 'userRatingCount', 'googleMapsURI'],
+        language: 'en-IN', region: 'IN', maxResultCount: 5
+      })
+      const match = (response.places || [])
+        .map(place => ({ place, score: googleVenueNameScore(venue.name, place.displayName) }))
+        .sort((a, b) => b.score - a.score)[0]
+      if (!match || match.score < 0.65) {
+        if (active) setGoogleData({ matched: false })
+        return
+      }
+      if (active) setGooglePlace({
+        place: match.place,
+        rating: match.place.rating ?? null,
+        ratingCount: match.place.userRatingCount ?? null,
+        mapsUrl: match.place.googleMapsURI || null
+      })
+    }).catch(() => { if (active) setGoogleData({ matched: false }) })
+    return () => { active = false }
+  }, [venue.id, venue.name, venue.address, area, googleLookupVisible])
+  useEffect(() => {
+    let active = true
+    if (!googlePlace) return () => { active = false }
+    setGoogleData({ matched: true, rating: googlePlace.rating, ratingCount: googlePlace.ratingCount, mapsUrl: googlePlace.mapsUrl, distanceKm: null })
+    loadSportiGoogleMaps().then(async maps => {
+      const { Route } = await maps.importLibrary('routes')
+      const route = await Route.computeRoutes({
+        origin: originCoordinates ? { lat: originCoordinates.lat, lng: originCoordinates.lng } : originLocation,
+        destination: googlePlace.place,
+        travelMode: 'DRIVING',
+        fields: ['distanceMeters']
+      })
+      const meters = route.routes?.[0]?.distanceMeters
+      if (active && Number.isFinite(meters)) setGoogleData(previous => ({ ...previous, distanceKm: meters / 1000 }))
+    }).catch(() => { /* Rating can still be shown if route calculation is unavailable. */ })
+    return () => { active = false }
+  }, [googlePlace, originLocation, originCoordinates?.lat, originCoordinates?.lng])
+
+  const distanceText = googleData?.distanceKm != null ? `${googleData.distanceKm.toFixed(1)} km away` : (googleData?.matched === false ? 'Google distance unavailable' : googleConfigured ? 'Loading Google distance…' : 'Google key needed')
+  const storedRating = Number(venue.googleRating ?? venue.rating ?? venue.reviewRating)
+  const liveRating = googleData?.matched && Number.isFinite(Number(googleData.rating)) && Number(googleData.rating) > 0 ? Number(googleData.rating) : null
+  const hasGoogleRating = liveRating !== null || (Number.isFinite(storedRating) && storedRating > 0)
+  const ratingValue = liveRating ?? (hasGoogleRating ? storedRating : null)
+  const ratingCount = googleData?.ratingCount ?? venue.googleReviewCount ?? venue.reviewCount ?? venue.ratingCount ?? null
+  const ratingText = hasGoogleRating ? `${ratingValue.toFixed(1)}${ratingCount != null ? ` · ${ratingCount}` : ''}` : '—'
+  const ratingTitle = hasGoogleRating
+    ? `${ratingValue.toFixed(1)} on Google${ratingCount != null ? ` · ${ratingCount} reviews` : ''}`
+    : (googleConfigured ? 'Google rating is not available for this listing' : 'Add a Google Places API key to show ratings')
+  const venueMapsUrl = googleData?.mapsUrl || googleMapsDirectionsUrl(venue)
+  return <div ref={cardRef} className="venue-card-wrap" data-reveal-card style={{"--reveal-index": revealIndex % 3}}>
+    <article className="venue-card">
+      <button type="button" className="venue-photo venue-photo-trigger" onClick={onClick} aria-label={`View ${venue.name} details`}>
+        <img src={src} onError={() => { if (!failed) { setFailed(true); setSrc(fallback) } }} alt={`${venue.name} venue`} loading="lazy" decoding="async"/>
+        <span className="photo-badge">{venue.photoKind === 'venue-specific' ? 'VENUE PHOTO' : 'SPORT PREVIEW'}</span>
         <span className="photo-arrow"><ArrowUpRight size={18}/></span>
+      </button>
+      <div className="venue-info venue-info-minimal">
+        <div className="venue-card-title-row">
+          <h3><a href={venueMapsUrl} target="_blank" rel="noreferrer" aria-label={`Open ${venue.name} in Google Maps`}>{venue.name}</a></h3>
+          <span className={`venue-card-google-rating${hasGoogleRating ? ' is-rated' : ''}`} title={ratingTitle} aria-label={ratingTitle}><Star size={13} fill="currentColor"/>{ratingText}</span>
+        </div>
+        <p className="venue-card-area">{area}, Madurai</p>
+        <div className="venue-card-meta">
+          <span className="venue-card-distance"><MapPin size={13}/>{distanceText}</span>
+        </div>
       </div>
-      <div className="venue-info">
-        <span className="venue-area"><MapPin size={13}/>{venue.area || 'Madurai'}</span>
-        <span className="verification-hint">{venue.externalListing ? (/official/i.test(venue.source || '') ? 'Official venue page · check availability' : 'Online listing · call to confirm') : 'Directory listing · details to verify'}</span>
-        <h3>{venue.name}</h3>
-        <p className="venue-summary">{venue.summary || venue.type || 'Sports venue listing'}</p>
-        <div className="sport-tags">{(venue.sports || []).slice(0,3).map(item => <span key={item}>{item}</span>)}</div>
-        <div className="venue-card-foot"><span>{venue.externalListing ? 'View details & contact' : 'View details & demo slots'}</span><ArrowRight size={16}/></div>
-      </div>
-    </button>
-    <a className="venue-directions-link" href={googleMapsDirectionsUrl(venue)} target="_blank" rel="noopener noreferrer" aria-label={`Get Google Maps directions to ${venue.name}`}>
-      <MapPinned size={15}/> Get directions <ArrowUpRight size={14}/>
-    </a>
+    </article>
   </div>
 }
 
-function BookingModal({ venue, onFindPlayers, date, setDate, duration, setDuration, selectedTime, setSelectedTime, slots, coupon, setCoupon, appliedCoupon, couponError, applyCoupon, price, onClose, onContinue }) {
-  return <div className="modal-backdrop" onMouseDown={e => e.target === e.currentTarget && onClose()}><div className="booking-modal"><button className="modal-close" onClick={onClose}><X/></button><div className="booking-modal-photo"><img src={venue.photoUrl || '/assets/venue-illustrations/turf.svg'} onError={e => { e.currentTarget.onerror = null; e.currentTarget.src = venue.photoIllustration ? `/${venue.photoIllustration}` : '/assets/venue-illustrations/turf.svg' }} alt={venue.name}/><span>{venue.photoKind === 'generated-illustration' ? 'ILLUSTRATIVE IMAGE · NOT A VERIFIED VENUE PHOTO' : venue.photoKind === 'activity-illustration' ? 'SPORT PREVIEW · ILLUSTRATION' : 'VENUE DETAILS'}</span></div><div className="booking-modal-content"><div className="modal-heading"><span className="section-kicker">FIELD FINDER VENUE</span><h2>{venue.name}</h2><p><MapPin size={15}/>{venue.address || venue.area}</p></div><a className="venue-modal-directions" href={googleMapsDirectionsUrl(venue)} target="_blank" rel="noopener noreferrer"><MapPinned size={17}/> Get directions in Google Maps <ArrowUpRight size={15}/></a><p className="venue-description">{venue.summary}</p><RainPolicySummary venue={venue}/><div className="sport-tags modal-sports">{(venue.sports || []).map(s => <span key={s}>{s}</span>)}</div><button className="find-players-link" type="button" onClick={onFindPlayers}><Users size={15}/> Find players for this game</button>{!venue.externalListing && <div className="demo-info"><ShieldCheck size={16}/><span>Sample availability only. Confirm the slot with the venue before relying on it.</span></div>}
-      {venue.media?.length > 0 && <section className="venue-media-gallery"><div className="gallery-heading"><h3><Images size={17}/> Venue photos & videos</h3><span>{venue.media.length} items</span></div><div className="venue-media-grid">{venue.media.map(item => <div className="venue-media-item" key={item.id}>{item.type === 'VIDEO' ? <video src={mediaUrl(item.url)} controls preload="metadata" playsInline/> : <img src={mediaUrl(item.url)} alt={item.caption || venue.name} loading="lazy"/>}<small>{item.caption || (item.type === 'VIDEO' ? 'Venue video' : 'Venue photo')}</small></div>)}</div></section>}
-      {venue.externalListing ? <section className="external-venue-panel"><div className="external-venue-banner"><ShieldCheck size={17}/><span>Venue-managed activity. SportiLand does not hold live slots or take payment for this listing.</span></div>
-        {venue.pricingInfo && <div className="external-venue-fact"><strong>Pricing</strong><p>{venue.pricingInfo}</p></div>}
-        {venue.openingHours && <div className="external-venue-fact"><strong>Hours / session information</strong><p>{venue.openingHours}</p></div>}
-        {venue.venueHighlights?.length > 0 && <div className="external-venue-fact"><strong>What is listed</strong><ul>{venue.venueHighlights.map(item => <li key={item}>{item}</li>)}</ul></div>}
-        <div className="external-venue-actions">{venue.contactPhone && <a className="primary-btn" href={`tel:${venue.contactPhone.replace(/[^+0-9]/g, '')}`}><PhoneCall size={16}/> Call venue</a>}{venue.bookingUrl && <a className="secondary-btn" href={venue.bookingUrl} target="_blank" rel="noopener noreferrer"><CalendarDays size={16}/> {venue.bookingUrl.includes('hudle.in') ? 'Book on Hudle' : venue.bookingUrl.includes('universaladventures') ? 'View activity listing' : 'Booking / enquiry'} <ArrowUpRight size={15}/></a>}{venue.websiteUrl && venue.websiteUrl !== venue.bookingUrl && <a className="secondary-btn" href={venue.websiteUrl} target="_blank" rel="noopener noreferrer"><Globe size={16}/> Venue website <ArrowUpRight size={15}/></a>}</div>
-        <small className="external-venue-source">Information source: {venue.source || 'Online listing'} · checked {venue.sourceChecked || 'recently'}. Details may change; contact the operator before travelling or paying.</small>
-      </section> : <><div className="booking-fields"><label><span>Booking date</span><input type="date" min={todayISO()} value={date} onChange={e => { setDate(e.target.value); setSelectedTime('') }}/></label><BootstrapDropdown label="Duration" value={String(duration)} options={[1,2,3,4].map(n => ({ value: String(n), label: `${n} ${n === 1 ? 'hour' : 'hours'}` }))} onChange={value => { setDuration(Number(value)); setSelectedTime('') }} inlineMenu/></div>
-      <div className="slot-heading"><div><strong>Available start times</strong><small>{prettyDate(date)} · {duration} hour{duration > 1 ? 's' : ''}</small></div><span className="slot-legend"><i/> Available <i className="busy-dot"/> Unavailable</span></div>
-      <div className="slot-grid">{slots.map(slot => <button key={slot.time} disabled={!slot.available} className={`${selectedTime === slot.time ? 'chosen' : ''} ${slot.available ? '' : 'unavailable'}`} onClick={() => setSelectedTime(slot.time)}>{prettyTime(slot.time)}{!slot.available && <small>Unavailable</small>}</button>)}</div>
-      <div className="price-coupon"><div className="coupon-input"><input value={coupon} onChange={e => setCoupon(e.target.value)} placeholder="Promo code (PLAY10)"/><button onClick={applyCoupon}>Apply</button></div>{couponError && <small className="coupon-error">{couponError}</small>}{appliedCoupon && <small className="coupon-success"><Check size={13}/>{appliedCoupon} applied</small>}<div className="price-line"><span>{duration} × {money(RATE_PER_HOUR)} / hour</span><strong>{money(price.subtotal)}</strong></div>{price.discount > 0 && <div className="price-line discount-line"><span>Discount ({price.discountPercent}%)</span><strong>−{money(price.discount)}</strong></div>}<div className="price-total"><span>Estimated total</span><strong>{money(price.total)}</strong></div><small className="rate-note">Demo rate: ₹800 per hour. Promo codes: PLAY10 (2+ hours), TEAM15 (3+ hours), WEEKDAY5. Availability and pricing are not live-verified.</small></div>
-      <button className="primary-btn full" disabled={!selectedTime} onClick={onContinue}>Continue to secure booking <ArrowRight size={17}/></button></>}
-    </div></div></div>
+function VenueDetailsPage({ venue, onBack, onBook }) {
+  const [amenitiesOpen, setAmenitiesOpen] = useState(false)
+  const [lightboxIndex, setLightboxIndex] = useState(null)
+  const [policyOpen, setPolicyOpen] = useState(null)
+  const gallery = [
+    { id: 'cover', url: venue.photoUrl || '/assets/venue-illustrations/turf.svg', caption: venue.name },
+    ...(venue.media || []).filter(item => item.type !== 'VIDEO').map(item => ({ id: item.id, url: mediaUrl(item.url), caption: item.caption || venue.name }))
+  ]
+  const videos = (venue.media || []).filter(item => item.type === 'VIDEO')
+  // Until owners publish their own facilities, use the requested reference amenity set as demo content.
+  const amenities = Array.isArray(venue.amenities) && venue.amenities.length ? venue.amenities : DEMO_VENUE_AMENITIES
+  const address = venue.address && !/exact address not confirmed|exact locality and address not confirmed|exact street address not published|address to confirm/i.test(venue.address) ? venue.address : `${venue.area || 'Madurai'}, Madurai, Tamil Nadu`
+  const directions = googleMapsDirectionsUrl(venue)
+  const activeLightboxPhoto = lightboxIndex === null ? null : gallery[lightboxIndex]
+  const moveLightbox = direction => setLightboxIndex(current => current === null ? 0 : (current + direction + gallery.length) % gallery.length)
+
+  useEffect(() => {
+    if (lightboxIndex === null) return undefined
+    const handleKey = event => {
+      if (event.key === 'Escape') setLightboxIndex(null)
+      if (event.key === 'ArrowRight' && gallery.length > 1) moveLightbox(1)
+      if (event.key === 'ArrowLeft' && gallery.length > 1) moveLightbox(-1)
+    }
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', handleKey)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', handleKey)
+    }
+  }, [lightboxIndex, gallery.length])
+
+  useEffect(() => {
+    if (!policyOpen) return undefined
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const handleKey = event => { if (event.key === 'Escape') setPolicyOpen(null) }
+    window.addEventListener('keydown', handleKey)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', handleKey)
+    }
+  }, [policyOpen])
+
+  const cancellationPolicy = [
+    'You can cancel your booking up to 24 hours before the slot start time for a full refund including the platform fees.',
+    'If you cancel between 12 and 24 hours before the slot start time, you’ll get a 50% refund including the platform fees.',
+    'Cancellations within 12 hours of the slot start time, or no-shows, are not eligible for a refund.',
+    'If a discount or offer was used on the booking, the refund will be adjusted accordingly.',
+    'You cannot cancel part of a booking — cancelling will cancel the entire booking.',
+    'Repeated last-minute cancellations or no-shows may lead to your account being reviewed or restricted to protect venue partners.',
+    'Rain-related cancellation or reschedule requests after the allowed windows are not eligible for a refund.'
+  ]
+  const reschedulePolicy = [
+    'You can reschedule your booking up to 2 hours before the slot start time.',
+    'You can reschedule your booking once.',
+    'Rescheduling is allowed only within the same facility.',
+    'Rescheduling is allowed only for the same sport.',
+    'The new slot must be of the same or longer duration.',
+    'Any price difference will be charged or refunded accordingly.',
+    'Platform fees will be recalculated based on the updated slot price and charged or refunded accordingly.',
+    'Rescheduled bookings are non-refundable.',
+    'Rain-related cancellation or reschedule requests after the allowed windows are not eligible for a refund.'
+  ]
+  const activePolicy = policyOpen === 'cancellation' ? { title: 'Cancellation Policy', items: cancellationPolicy } : policyOpen === 'reschedule' ? { title: 'Reschedule Policy', items: reschedulePolicy } : null
+
+  return <div className="venue-detail-page">
+    <div className="venue-detail-topbar"><button onClick={onBack}><ChevronLeft size={21}/> Back</button><h1>{venue.name}</h1><span/></div>
+    <div className="venue-detail-gallery">
+      <button type="button" className="venue-detail-hero-image" onClick={() => setLightboxIndex(0)} aria-label={`View ${venue.name} photo fullscreen`}>
+        <img src={gallery[0].url} alt={gallery[0].caption}/>
+      </button>
+      <span className="venue-gallery-count">01 / {String(gallery.length).padStart(2,'0')}</span>
+    </div>
+    {/* One responsive gallery is placed immediately below the cover image on both laptop and mobile. */}
+    <section className="venue-gallery-strip" aria-label="Venue photo gallery">
+      <div className="venue-gallery-strip-heading"><h3>GALLERY</h3><span>{gallery.length} {gallery.length === 1 ? 'photo' : 'photos'}</span></div>
+      <div className="venue-gallery-strip-photos">
+        {gallery.map((item, i) => <button type="button" key={item.id} onClick={() => setLightboxIndex(i)} aria-label={`Open gallery photo ${i + 1}`}>
+          <img src={item.url} alt={item.caption}/><span><Images size={13}/>{String(i + 1).padStart(2,'0')}</span>
+        </button>)}
+        {videos.map(item => <video key={item.id} src={mediaUrl(item.url)} controls playsInline preload="metadata"/>)}
+      </div>
+      {gallery.length === 1 && <p className="venue-gallery-owner-note">More venue photos will appear here when the owner adds them.</p>}
+    </section>
+    <div className="venue-detail-content">
+      <section className="venue-detail-heading"><div><h2><a href={directions} target="_blank" rel="noreferrer" aria-label={`Open ${venue.name} in Google Maps`}>{venue.name}<ArrowUpRight size={17}/></a></h2><p><MapPin size={15}/>{address}</p><small>{venue.verificationStatus || 'Venue listing · confirm details before visiting'}</small></div></section>
+      <section className="venue-detail-section"><h3>{(venue.sports || []).length} SPORTS AVAILABLE</h3><div className="venue-detail-sports">{(venue.sports || []).map(item=><span key={item}>{item}</span>)}</div></section>
+      <section className="venue-detail-section venue-amenities-section"><div className="venue-detail-section-title"><h3>AMENITIES AVAILABLE</h3><button onClick={()=>setAmenitiesOpen(true)}>View all <ChevronRight size={16}/></button></div><div className="venue-amenities-grid">{amenities.slice(0,6).map(item=>{const AmenityIcon=getAmenityIcon(item);return <span key={item}><AmenityIcon size={18} strokeWidth={1.9} aria-hidden="true"/>{item}</span>})}</div></section>
+      <section className="venue-detail-section venue-policy-section"><h3>MORE</h3><div className="venue-policy-links">
+        <button type="button" className="venue-policy-link" onClick={()=>setPolicyOpen('cancellation')}><IndianRupee size={25}/><span><strong>Cancellation policy</strong></span><ChevronRight size={22}/></button>
+        <button type="button" className="venue-policy-link" onClick={()=>setPolicyOpen('reschedule')}><CalendarRange size={25}/><span><strong>Reschedule policy</strong><small>You can reschedule your booking up to 2 hours before the slot start time.</small></span><ChevronRight size={22}/></button>
+      </div></section>
+    </div>
+    <button className="venue-detail-bookbar" onClick={onBook}>Book slots <ArrowRight size={16}/></button>
+    {activeLightboxPhoto && <div className="venue-photo-lightbox" role="dialog" aria-modal="true" aria-label={`${venue.name} photo viewer`} onMouseDown={event => { if (event.target === event.currentTarget) setLightboxIndex(null) }}>
+      <button type="button" className="venue-lightbox-close" onClick={() => setLightboxIndex(null)} aria-label="Close photo viewer"><X size={24}/></button>
+      {gallery.length > 1 && <button type="button" className="venue-lightbox-nav previous" onClick={() => moveLightbox(-1)} aria-label="Previous photo"><ChevronLeft size={27}/></button>}
+      <figure><img src={activeLightboxPhoto.url} alt={activeLightboxPhoto.caption}/><figcaption>{activeLightboxPhoto.caption} · {lightboxIndex + 1} / {gallery.length}</figcaption></figure>
+      {gallery.length > 1 && <button type="button" className="venue-lightbox-nav next" onClick={() => moveLightbox(1)} aria-label="Next photo"><ChevronRight size={27}/></button>}
+    </div>}
+    {amenitiesOpen && <div className="amenities-sheet-backdrop" onMouseDown={e=>e.target===e.currentTarget&&setAmenitiesOpen(false)}><section className="amenities-sheet"><header><h3>Amenities</h3><button onClick={()=>setAmenitiesOpen(false)} aria-label="Close amenities"><X/></button></header><div>{amenities.map((item,index)=>{const AmenityIcon=getAmenityIcon(item);return <p key={`${item}-${index}`}><AmenityIcon size={20} strokeWidth={1.9} aria-hidden="true"/>{item}</p>})}</div></section></div>}
+    {activePolicy && <div className="venue-policy-backdrop" role="presentation" onMouseDown={event=>event.target===event.currentTarget&&setPolicyOpen(null)}><section className="venue-policy-sheet" role="dialog" aria-modal="true" aria-label={activePolicy.title}><header><h3>{activePolicy.title}</h3><button type="button" onClick={()=>setPolicyOpen(null)} aria-label={`Close ${activePolicy.title}`}><X size={25}/></button></header><ul>{activePolicy.items.map((item,index)=><li key={`${policyOpen}-${index}`}>{item}</li>)}</ul></section></div>}
+  </div>
+}
+
+function BookingModal({ venue, date, setDate, duration, setDuration, selectedTime, setSelectedTime, slots, onClose, onContinue }) {
+  const [windowStart, setWindowStart] = useState(() => date || todayISO())
+  const dateOptions = Array.from({ length: 7 }, (_, index) => {
+    const value = dateISO(addDays(new Date(`${windowStart}T12:00:00`), index))
+    const d = new Date(`${value}T12:00:00`)
+    return { value, weekday: d.toLocaleDateString('en-IN', { weekday: 'short' }), day: d.getDate(), month: d.toLocaleDateString('en-IN', { month: 'short' }) }
+  })
+  const availableSlots = slots.filter(slot => slot.available)
+  const slotGroups = [
+    { label: 'Morning', range: '6:00 AM – 11:59 AM', slots: availableSlots.filter(slot => Number(slot.time.split(':')[0]) < 12) },
+    { label: 'Afternoon', range: '12:00 PM – 4:59 PM', slots: availableSlots.filter(slot => { const hour = Number(slot.time.split(':')[0]); return hour >= 12 && hour < 17 }) },
+    { label: 'Evening', range: '5:00 PM – 10:00 PM', slots: availableSlots.filter(slot => Number(slot.time.split(':')[0]) >= 17) }
+  ].filter(group => group.slots.length)
+  const moveDateWindow = direction => {
+    const nextStart = dateISO(addDays(new Date(`${windowStart}T12:00:00`), direction * 7))
+    if (nextStart < todayISO()) return
+    setWindowStart(nextStart)
+    setDate(nextStart)
+    setSelectedTime('')
+  }
+  const setAnotherDate = value => { setDate(value); setWindowStart(value); setSelectedTime('') }
+  const changeDuration = delta => { setDuration(current => Math.min(3, Math.max(1, Math.round((current + delta) * 2) / 2))); setSelectedTime('') }
+  return <div className="slot-picker-backdrop" onMouseDown={event => event.target === event.currentTarget && onClose()}>
+    <section className="slot-picker-modal" role="dialog" aria-modal="true" aria-label={`Book slots at ${venue.name}`}>
+      <header className="slot-picker-header"><div><span>{(venue.sports || ['Sports'])[0]}</span><h2>{venue.name}</h2></div><button type="button" onClick={onClose} aria-label="Close slot picker"><X size={22}/></button></header>
+      <div className="slot-picker-dates">
+        <span className="slot-picker-month">{new Date(`${date}T12:00:00`).toLocaleDateString('en-IN', { month: 'short' }).toUpperCase()}</span>
+        <button className="slot-date-nav" type="button" onClick={() => moveDateWindow(-1)} disabled={windowStart <= todayISO()} aria-label="Previous seven dates"><ChevronLeft size={18}/></button>
+        <div className="slot-picker-date-list">{dateOptions.map(item=><button key={item.value} type="button" className={date===item.value?'active':''} onClick={()=>{setDate(item.value);setSelectedTime('')}}><strong>{item.day}</strong><span>{item.weekday}</span></button>)}</div>
+        <button className="slot-date-nav" type="button" onClick={() => moveDateWindow(1)} aria-label="Next seven dates"><ChevronRight size={18}/></button>
+        <label className="slot-picker-calendar" aria-label="Choose another date"><CalendarDays size={17}/><input type="date" min={todayISO()} value={date} onChange={event=>setAnotherDate(event.target.value)}/></label>
+      </div>
+      <div className="slot-picker-duration"><strong>Duration</strong><div className="slot-duration-stepper"><button type="button" onClick={() => changeDuration(-0.5)} disabled={duration <= 1} aria-label="Decrease duration"><Minus size={17}/></button><b>{duration} {duration === 1 ? 'hr' : 'hrs'}</b><button type="button" onClick={() => changeDuration(0.5)} disabled={duration >= 3} aria-label="Increase duration"><Plus size={17}/></button></div></div>
+      <div className="slot-picker-time-heading"><h3>Time slots available</h3><span>{prettyDate(date)} · {duration} {duration === 1 ? 'hour' : 'hours'}</span></div>
+      {slotGroups.length ? <div className="slot-picker-time-groups">{slotGroups.map(group=><section className="slot-picker-time-group" key={group.label}><div className="slot-picker-group-heading"><h4>{group.label}</h4><span>{group.range}</span></div><div className="slot-picker-times">{group.slots.map(slot=><button type="button" key={slot.time} className={selectedTime===slot.time?'selected':''} onClick={()=>setSelectedTime(slot.time)}><strong>{prettyTime(slot.time)} – {prettyTime(addHoursToTime(slot.time, duration))}</strong><small>{duration} {duration===1?'hour':'hours'}</small></button>)}</div></section>)}</div> : <div className="slot-picker-empty">No sample slots are available for this date and duration. Try another date or reduce the duration.</div>}
+      <div className="slot-picker-footer"><span>{selectedTime ? `${prettyTime(selectedTime)} · ${duration} hr${duration===1?'':'s'}` : 'Select a time slot to continue'}</span><button type="button" disabled={!selectedTime} onClick={onContinue}>Continue <ArrowRight size={17}/></button></div>
+      <p className="slot-picker-note">Sample availability only. Live slot availability will be supplied by the venue owner.</p>
+    </section>
+  </div>
 }
 
 function RainPolicySummary({ venue }) {
@@ -1356,7 +1874,98 @@ function RainPolicySummary({ venue }) {
 }
 
 function CheckoutModal({ venue, date, time, duration, price, paymentMethod, setPaymentMethod, onBack, onConfirm }) {
-  return <div className="modal-backdrop checkout-layer"><div className="checkout-modal"><button className="modal-close" onClick={onBack}><X/></button><span className="section-kicker">DEMO CHECKOUT</span><h2>Review your booking</h2><p className="checkout-sub">Check the details before completing this demo booking.</p><div className="checkout-venue"><div><strong>{venue.name}</strong><span>{prettyDate(date)} · {prettyTime(time)} · {duration} hour{duration > 1 ? 's' : ''}</span></div><b>{money(price.total)}</b></div><RainPolicySummary venue={venue}/><div className="checkout-breakdown"><div><span>Slot subtotal</span><b>{money(price.subtotal)}</b></div><div><span>Discount</span><b className="discount-text">−{money(price.discount)}</b></div><div className="total-row"><span>Total to pay</span><strong>{money(price.total)}</strong></div></div><h3>Choose payment method</h3><div className="payment-options"><button className={paymentMethod === 'UPI demo' ? 'active' : ''} onClick={() => setPaymentMethod('UPI demo')}><Wallet/><span><b>UPI</b><small>Simulated demo payment</small></span><i/></button><button className={paymentMethod === 'Card demo' ? 'active' : ''} onClick={() => setPaymentMethod('Card demo')}><CreditCard/><span><b>Card</b><small>No card details collected</small></span><i/></button><button className={paymentMethod === 'Pay at venue (demo)' ? 'active' : ''} onClick={() => setPaymentMethod('Pay at venue (demo)')}><Banknote/><span><b>Pay at venue</b><small>Mark as pending in demo</small></span><i/></button></div><div className="payment-disclaimer"><ShieldCheck size={17}/><span>This is a payment-interface prototype. No bank, UPI or card transaction will occur.</span></div><button className="primary-btn full" onClick={onConfirm}>{paymentMethod === 'Pay at venue (demo)' ? 'Confirm demo booking' : 'Simulate successful payment'} <ArrowRight size={17}/></button></div></div>
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const handleKeyDown = event => { if (event.key === 'Escape') onBack() }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => { document.body.style.overflow = previousOverflow; document.removeEventListener('keydown', handleKeyDown) }
+  }, [onBack])
+  return <div className="modal-backdrop checkout-layer" role="presentation" onMouseDown={event => { if (event.target === event.currentTarget) onBack() }}>
+    <section className="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title" onMouseDown={event => event.stopPropagation()}>
+      <header className="checkout-modal-header"><div><span className="section-kicker">DEMO CHECKOUT</span><h2 id="checkout-title">Review your booking</h2><p className="checkout-sub">Check the details before completing this demo booking.</p></div><button className="modal-close" type="button" onClick={onBack} aria-label="Close checkout"><X/></button></header>
+      <div className="checkout-venue"><div><strong>{venue.name}</strong><span>{prettyDate(date)} · {prettyTime(time)} · {duration} hour{duration > 1 ? 's' : ''}</span></div><b>{money(price.total)}</b></div><RainPolicySummary venue={venue}/><div className="checkout-breakdown"><div><span>Slot subtotal</span><b>{money(price.subtotal)}</b></div><div><span>Discount</span><b className="discount-text">−{money(price.discount)}</b></div><div className="total-row"><span>Total to pay</span><strong>{money(price.total)}</strong></div></div><h3>Choose payment method</h3><div className="payment-options"><button type="button" className={paymentMethod === 'UPI demo' ? 'active' : ''} onClick={() => setPaymentMethod('UPI demo')}><Wallet/><span><b>UPI</b><small>Simulated demo payment</small></span><i/></button><button type="button" className={paymentMethod === 'Card demo' ? 'active' : ''} onClick={() => setPaymentMethod('Card demo')}><CreditCard/><span><b>Card</b><small>No card details collected</small></span><i/></button><button type="button" className={paymentMethod === 'Pay at venue (demo)' ? 'active' : ''} onClick={() => setPaymentMethod('Pay at venue (demo)')}><Banknote/><span><b>Pay at venue</b><small>Mark as pending in demo</small></span><i/></button></div><div className="payment-disclaimer"><ShieldCheck size={17}/><span>This is a payment-interface prototype. No bank, UPI or card transaction will occur.</span></div><button type="button" className="primary-btn full checkout-confirm-btn" onClick={onConfirm}>{paymentMethod === 'Pay at venue (demo)' ? 'Confirm demo booking' : 'Simulate successful payment'} <ArrowRight size={17}/></button>
+    </section>
+  </div>
+}
+
+const DEMO_MATCH_FIXTURES = [
+  { id: 'madurai-football-cup', sport: 'Football', title: 'Madurai City Football Cup', teams: 'Madurai United vs Vaigai FC', venue: 'Hatrick Sports Arena', area: 'Gomathipuram', dayOffset: 5, time: '6:00 PM', price: 120, image: '/assets/sport-cards/football.webp', note: 'Sample fixture for interface preview' },
+  { id: 'madurai-t20-night', sport: 'Cricket', title: 'Madurai Night T20', teams: 'Vaigai Strikers vs Pandya XI', venue: 'Jeyapal Sports Center', area: 'JP Nagar', dayOffset: 8, time: '7:00 PM', price: 150, image: '/assets/sport-cards/cricket.webp', note: 'Sample fixture for interface preview' },
+  { id: 'madurai-badminton-open', sport: 'Badminton', title: 'Madurai Doubles Open', teams: 'Open doubles · knockout rounds', venue: 'Blaze Badminton Academy', area: 'Madurai', dayOffset: 11, time: '10:00 AM', price: 80, image: '/assets/sport-cards/badminton.webp', note: 'Sample fixture for interface preview' },
+  { id: 'madurai-basketball-3x3', sport: 'Basketball', title: 'Madurai 3x3 Hoops Night', teams: 'District club exhibition', venue: 'Madurai Basketball Court', area: 'Madurai', dayOffset: 14, time: '5:30 PM', price: 100, image: 'https://images.pexels.com/photos/32463992/pexels-photo-32463992.jpeg?auto=compress&cs=tinysrgb&w=1200', note: 'Sample fixture for interface preview' },
+  { id: 'madurai-volleyball-league', sport: 'Volleyball', title: 'Vaigai Volleyball Challenge', teams: 'Six-a-side · league fixtures', venue: 'Indoor Sports Complex', area: 'Madurai', dayOffset: 18, time: '4:00 PM', price: 90, image: 'https://images.pexels.com/photos/32681156/pexels-photo-32681156.jpeg?auto=compress&cs=tinysrgb&w=1200', note: 'Sample fixture for interface preview' },
+  { id: 'madurai-hockey-cup', sport: 'Hockey', title: 'Madurai Hockey Cup', teams: 'District invitational · semifinals', venue: 'Race Course Hockey Ground', area: 'Madurai', dayOffset: 21, time: '5:00 PM', price: 70, image: 'https://images.unsplash.com/photo-1734158661120-a0605f0cee48?auto=format&fit=crop&w=1200&q=80', note: 'Sample fixture for interface preview' }
+]
+
+function CouponsOffersPage() {
+  const offers = [
+    { code: 'PLAY10', title: 'Play longer, save more', detail: '10% off eligible venue bookings of 2 hours or more.', condition: 'Minimum 2-hour booking' },
+    { code: 'TEAM15', title: 'Bring the whole team', detail: '15% off eligible venue bookings of 3 hours or more.', condition: 'Minimum 3-hour booking' },
+    { code: 'WEEKDAY5', title: 'Weekday play', detail: '5% off eligible Monday to Friday venue bookings.', condition: 'Monday–Friday only' }
+  ]
+  const [copiedCode, setCopiedCode] = useState('')
+  const copyCode = async code => {
+    try {
+      await navigator.clipboard.writeText(code)
+      setCopiedCode(code)
+    } catch {
+      setCopiedCode('')
+    }
+  }
+  return <div className="coupons-offers-page"><PageHeader kicker="SPORTILAND · MEMBER PERKS" title="Coupons & offers" description="Use an eligible demo code when you review your venue booking. Conditions are checked at checkout."/><div className="coupons-offers-grid">{offers.map(offer => <article className="coupon-offer-card" key={offer.code}><div className="coupon-offer-icon"><Percent size={20}/></div><span className="section-kicker">SPORTILAND OFFER</span><h2>{offer.title}</h2><p>{offer.detail}</p><small>{offer.condition}</small><div><code>{offer.code}</code><button type="button" className="secondary-btn" onClick={() => copyCode(offer.code)}>{copiedCode === offer.code ? 'Copied' : 'Copy code'}</button></div></article>)}</div><div className="availability-note"><ShieldCheck size={16}/><span>These are frontend demo coupons already recognised by the demo checkout. Final eligibility is recalculated using the selected date and booking duration.</span></div></div>
+}
+
+function MatchTicketsPage({ location }) {
+  const fixtures = useMemo(() => DEMO_MATCH_FIXTURES.map(item => ({ ...item, date: dateISO(addDays(new Date(`${todayISO()}T12:00:00`), item.dayOffset)) })), [])
+  const [sportFilter, setSportFilter] = useState('All')
+  const [activeMatch, setActiveMatch] = useState(null)
+  const [ticketQuantity, setTicketQuantity] = useState(1)
+  const [customer, setCustomer] = useState({ name: '', phone: '', email: '' })
+  const [bookingPass, setBookingPass] = useState(null)
+  const [passes, setPasses] = useState(() => readDemo('matchTicketBookings', []))
+  useEffect(() => writeDemo('matchTicketBookings', passes), [passes])
+  const sports = ['All', ...Array.from(new Set(fixtures.map(item => item.sport)))]
+  const visible = fixtures.filter(item => sportFilter === 'All' || item.sport === sportFilter)
+  const beginBooking = match => { setActiveMatch(match); setTicketQuantity(1); setCustomer({ name: '', phone: '', email: '' }) }
+  const confirmBooking = event => {
+    event.preventDefault()
+    if (!activeMatch || !customer.name.trim() || !/^[6-9]\d{9}$/.test(customer.phone.trim()) || !/^\S+@\S+\.\S+$/.test(customer.email.trim())) return
+    const pass = {
+      id: `SL-MT-${String(Date.now()).slice(-8)}`, matchId: activeMatch.id, matchTitle: activeMatch.title,
+      sport: activeMatch.sport, teams: activeMatch.teams, venue: activeMatch.venue,
+      date: activeMatch.date, time: activeMatch.time, quantity: ticketQuantity,
+      total: activeMatch.price * ticketQuantity, customer: { ...customer }, createdAt: new Date().toISOString(), status: 'Demo ticket reserved'
+    }
+    setPasses(previous => [pass, ...previous])
+    setActiveMatch(null)
+    setBookingPass(pass)
+  }
+  return <div className="match-tickets-page">
+    <PageHeader kicker="SPORTILAND · LIVE THE GAME" title="Book match tickets" description={`Find match-day experiences across sports around ${location}. Choose a fixture, reserve your seats and keep your QR ticket ready.`}/>
+    <div className="match-ticket-notice"><Ticket size={18}/><span><strong>Match ticket preview</strong> Fixtures, dates, venues and prices below are sample data to demonstrate the booking flow. They are not confirmed public events, and no payment or organiser notification is processed.</span></div>
+    <div className="match-ticket-filters">{sports.map(item => <button key={item} type="button" className={sportFilter === item ? 'active' : ''} onClick={() => setSportFilter(item)}>{item === 'All' ? 'All sports' : item}</button>)}</div>
+    <div className="match-ticket-grid">{visible.map(match => <article className="match-ticket-card" key={match.id}>
+      <div className="match-ticket-photo"><img src={match.image} alt={`${match.sport} match`} loading="lazy"/><span>{match.sport}</span><b>DEMO FIXTURE</b></div>
+      <div className="match-ticket-body"><span className="match-ticket-date"><CalendarDays size={14}/>{prettyDate(match.date)} · {match.time}</span><h2>{match.title}</h2><p className="match-ticket-teams">{match.teams}</p><p className="match-ticket-venue"><MapPin size={14}/>{match.venue} · {match.area}</p><div className="match-ticket-card-footer"><strong>{money(match.price)} <small>/ ticket</small></strong><button type="button" className="primary-btn" onClick={() => beginBooking(match)}>Book tickets <ArrowRight size={16}/></button></div>
+      </div>
+    </article>)}</div>
+    <div className="match-ticket-disclaimer"><ShieldCheck size={16}/><span>When connected to a verified fixtures and ticketing provider, this module can show real match schedules, seat inventory and organiser-issued ticket status.</span></div>
+    {passes.length > 0 && <section className="match-ticket-saved"><div className="match-ticket-section-title"><div><span className="section-kicker">YOUR DEMO RESERVATIONS</span><h2>My match tickets</h2></div><span>{passes.length} saved</span></div>{passes.map(pass => <button type="button" key={pass.id} onClick={() => setBookingPass(pass)}><Ticket size={17}/><span><strong>{pass.matchTitle}</strong><small>{prettyDate(pass.date)} · {pass.quantity} ticket{pass.quantity === 1 ? '' : 's'} · {pass.id}</small></span><ChevronRight size={17}/></button>)}</section>}
+    {activeMatch && <div className="match-booking-backdrop" onMouseDown={event => event.target === event.currentTarget && setActiveMatch(null)}><section className="match-booking-modal" role="dialog" aria-modal="true" aria-label={`Book tickets for ${activeMatch.title}`}>
+      <header><div><span>{activeMatch.sport} · MATCH TICKETS</span><h2>{activeMatch.title}</h2><p>{activeMatch.teams}</p></div><button type="button" onClick={() => setActiveMatch(null)} aria-label="Close"><X/></button></header>
+      <div className="match-booking-summary"><span><CalendarDays size={15}/>{prettyDate(activeMatch.date)} · {activeMatch.time}</span><span><MapPin size={15}/>{activeMatch.venue}, {activeMatch.area}</span><strong>{money(activeMatch.price)} per ticket</strong></div>
+      <form onSubmit={confirmBooking}>
+        <label className="match-ticket-field"><span>Customer name</span><input required maxLength={80} value={customer.name} onChange={event => setCustomer(prev => ({ ...prev, name: event.target.value }))} placeholder="Enter full name"/></label>
+        <div className="match-ticket-form-row"><label className="match-ticket-field"><span>Mobile number</span><input required inputMode="numeric" pattern="[6-9][0-9]{9}" maxLength={10} value={customer.phone} onChange={event => setCustomer(prev => ({ ...prev, phone: event.target.value.replace(/\D/g, '').slice(0, 10) }))} placeholder="10-digit mobile"/></label><label className="match-ticket-field"><span>Email address</span><input required type="email" maxLength={120} value={customer.email} onChange={event => setCustomer(prev => ({ ...prev, email: event.target.value }))} placeholder="you@example.com"/></label></div>
+        <div className="match-ticket-quantity"><div><strong>Number of tickets</strong><small>Maximum 10 per demo reservation</small></div><div><button type="button" onClick={() => setTicketQuantity(value => Math.max(1, value - 1))} disabled={ticketQuantity <= 1}><Minus size={16}/></button><b>{ticketQuantity}</b><button type="button" onClick={() => setTicketQuantity(value => Math.min(10, value + 1))} disabled={ticketQuantity >= 10}><Plus size={16}/></button></div></div>
+        <div className="match-ticket-total"><span>Total ticket amount</span><strong>{money(activeMatch.price * ticketQuantity)}</strong></div>
+        <button className="primary-btn full" type="submit">Reserve tickets <ArrowRight size={17}/></button>
+        <small className="match-ticket-form-note">Demo reservation only. No payment is collected and the organiser is not notified.</small>
+      </form>
+    </section></div>}
+    {bookingPass && <div className="match-pass-backdrop" onMouseDown={event => event.target === event.currentTarget && setBookingPass(null)}><section className="match-pass-modal" role="dialog" aria-modal="true" aria-label="Match ticket QR pass"><button className="match-pass-close" type="button" onClick={() => setBookingPass(null)} aria-label="Close"><X/></button><span className="section-kicker">SPORTILAND · MATCH TICKET</span><h2>{bookingPass.matchTitle}</h2><p>{bookingPass.teams}</p><div className="match-pass-qr"><QRCodeCanvas value={JSON.stringify({ passId: bookingPass.id, matchId: bookingPass.matchId, name: bookingPass.customer.name, tickets: bookingPass.quantity })} size={216} includeMargin level="M"/></div><strong className="match-pass-code">{bookingPass.id}</strong><div className="match-pass-facts"><span>{prettyDate(bookingPass.date)} · {bookingPass.time}</span><span>{bookingPass.venue}</span><span>{bookingPass.quantity} ticket{bookingPass.quantity === 1 ? '' : 's'} · {money(bookingPass.total)}</span><span>{bookingPass.customer.name}</span></div><div className="match-ticket-notice compact"><ShieldCheck size={16}/><span>This is a demo QR ticket. Live organiser scanning requires a shared verification backend.</span></div><button type="button" className="primary-btn full" onClick={() => setBookingPass(null)}>Done <Check size={16}/></button></section></div>}
+  </div>
 }
 
 function BookingsPage({ bookings, filter, setFilter, onCancel, onOpenPass }) {
@@ -1501,7 +2110,7 @@ function PlayersPage({ venues, selectedVenueId, setSelectedVenueId, sport, setSp
     { value: '', label: 'All Madurai areas', description: 'Show players across Madurai' },
     ...venues.map(item => ({ value: item.id, label: item.name, description: item.area || 'Madurai' }))
   ]
-  const sportOptions = ['All','Football','Cricket','Badminton','Pickleball','Paintball','Boxing'].map(item => ({ value: item, label: item === 'All' ? 'All sports' : item }))
+  const sportOptions = SPORTS.map(item => ({ value: item, label: item === 'All' ? 'All sports' : item }))
   const targetArea = venue?.area?.split('·')[0].trim().toLowerCase() || ''
   const filtered = demoPeople.filter(p => {
     const matchesSport = sport === 'All' || p.sports.includes(sport)
